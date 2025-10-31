@@ -1,0 +1,1457 @@
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>명예의 전당 일간 랭킹 : 2025.08.12 - 1page | 네이트 판</title>
+<link href="/favicon.ico?m=3.3.33" type="image/x-icon" rel="shortcut icon">
+<link href="/css/common_pann_v4.css?m=3.3.33" rel="stylesheet" type="text/css" media="all" charset="utf-8">
+	<link href="/css/aticle_v3.css?m=3.3.33" rel="stylesheet" type="text/css" media="all" charset="utf-8"><link href="/css/editor.css?m=3.3.33" rel="stylesheet" type="text/css" media="all" charset="utf-8">
+<link href="/css/submain_v2.css?m=3.3.33" rel="stylesheet" type="text/css" media="all" charset="utf-8"><link href="/css/list_v2.css?m=3.3.33" rel="stylesheet" type="text/css" media="all" charset="utf-8">
+<link href="/images/nate_pann.png?m=3.3.33" rel="apple-touch-icon-precomposed"><link href="/images/nate_pann.png?m=3.3.33" rel="apple-touch-icon"><script src="/js/common.js?m=2.2.13" type="text/javascript"></script>
+<script src="/js/jquery-3.7.1.min.js?m=2.2.13" type="text/javascript"></script>
+<script type="text/javascript">
+	var j$ = jQuery.noConflict();
+</script>
+<script src="/js/editor.js?m=2.2.13" type="text/javascript"></script>
+<script src="/flash/skiui.js?m=2.2.13" type="text/javascript"></script>
+<script src="//common.nate.com/textGNB/commonTextGNBV1?m=pann" type="text/javascript" charset="utf-8"></script><link rel="stylesheet" type="text/css" href="https://common.nate.com/css/common/SvcCommon_2020.css?v=2020120301"><script type="text/javascript" src="https://common.nate.com/js/CommonTextGNB_v20200305.js?ver=20250724_1" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+// <![CDATA[
+	// 로그인 여부
+	IS_LOGGED = false;
+	// 로그인 한 후 리다이렉트할 페이지
+	REQUEST_URL = "https:\/\/pann.nate.com\/talk\/ranking\/d";
+	// 판사용자 글쓰기 동의 여부
+	IS_USE_AGREE = false;
+	// 실명 확인 여부
+	CONFIRMED = "3";
+
+	// NDR
+	NDR_URL = 'npann_ndr.nate.com/today/dtalker_total';
+	NDRU = '';
+	NDRL = '';
+	NDRP = '';
+	NDRU3 = '';
+	NDRL3 = '';
+// ]]>
+</script>
+
+<link href="https://m.pann.nate.com/talk/ranking/d?rankingType=total&amp;stndDt=20250812" rel="alternate" media="only screen and (max-width: 640px)">
+<link href="https://pann.nate.com/talk/ranking/d?rankingType=total&amp;stdt=20250812" rel="canonical">
+<meta name="description" content="명예의 전당에서 &quot;여초회사 다 이러나요?&quot; 등 고수들의 톡을 만나보세요.">
+
+<meta property="og:title" content="명예의 전당 일간 랭킹 : 2025.08.12 - 1page">
+<meta property="og:description" content="명예의 전당에서 &quot;여초회사 다 이러나요?&quot; 등 고수들의 톡을 만나보세요.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="네이트 판">
+<meta property="og:locale" content="ko_KR">
+<link href="/css/bridge_v2.css?m=3.3.33" charset="utf-8" media="all" type="text/css" rel="stylesheet"><script type="text/javascript" charset="utf-8"> 
+//<![CDATA[
+function gopage(gb,stdt,page,type) {	
+	if (stdt < '20130101' || stdt > '20250812') {
+		alert("해당 일자에 명예의 전당 글이 없습니다.");
+		location.href='/talk/ranking';
+		return false;	
+	} 	
+	location.href='/talk/ranking/'+gb+'?stdt='+stdt+'&page='+page+'&rankingType='+type;
+}
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+function putZero(val) {
+	return (val.toString().length == 1)?"0"+val:val;
+}
+var Calendar = {
+  show: function(nMainID, val) {
+		var currDate = (arguments.length == 2)? new Date(val.substr(0,4), (val.substr(4,2)-1)) : new Date();
+		var today = new Date();		
+		var current = {
+			"year":currDate.getFullYear(),
+			"month":currDate.getMonth(),
+			"prev": putZero(currDate.getMonth()),
+			"next": putZero(currDate.getMonth()+2),
+			"pURL":"", "nURL":"","cURL":"",
+			"cLink":"/talk/ranking/d"
+		};
+
+		var strToday = today.getFullYear().toString() + putZero(today.getMonth()+1) + putZero(today.getDate());
+		
+		var editionDate = "20250812";
+
+		var dateFirst = new Date(current.year, current.month, 1); 
+		var startCellNum = dateFirst.getDay()+1;		
+		var dateLast = new Date(current.year, current.month+1, 0); 
+		var endDate = dateLast.getDate()-1 ;
+		var endCellNum = startCellNum + endDate;	
+		
+		if(current.prev == "00") { current.pURL = (current.year-1) + "12" ; }
+		else { current.pURL = current.year.toString() + current.prev; }
+	
+		if(current.next == "13") { current.nURL = (current.year+1) + "01"; }
+		else { current.nURL = current.year.toString() + current.next; }
+		
+		var lastmonth = new Date(currDate.getYear(), (currDate.getMonth()), '');
+		var lastmonthlastdate = lastmonth.getDate();
+		current.cURL = current.year.toString() + putZero(current.month+1) ;
+
+		var calHTML  = "";
+		calHTML +="<table class=\"calendar\" id=\"tbCalendar\"  summary=\"달력\">";
+		calHTML +="<caption>달력</caption>";
+		calHTML +="<colgroup>";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="	<col width=\"20\" />";
+		calHTML +="</colgroup>";
+		calHTML +="<thead>";
+		calHTML +="	<tr>";
+		calHTML +="		<th>일</th>";
+		calHTML +="		<th>월</th>";
+		calHTML +="		<th>화</th>";
+		calHTML +="		<th>수</th>";
+		calHTML +="		<th>목</th>";
+		calHTML +="		<th>금</th>";
+		calHTML +="		<th>토</th>";
+		calHTML +="	</tr>";
+		calHTML +="</thead>";
+		calHTML +="<tbody>";
+
+		for (var i=1; i<=42; i++) {
+			var day = i-startCellNum+1;
+			
+			if(i >= 1 && i%7 == 1) {
+				 calHTML += "<tr>";  
+			}
+			if (i>=startCellNum && i <= endCellNum) {
+				calHTML +="<td id='"+ current.cURL.toString() + putZero(day) +"'><a href='"+current.cLink+"?rankingType=total&stdt="+ current.cURL.toString() + putZero(day)+ "'>"+day+"</a></td>";
+			}
+			else {
+				if (day > endDate){
+					calHTML +="<td id='"+current.nURL.toString() + putZero(i-endCellNum) +"'><a href='"+current.cLink+"?rankingType=total&stdt="+current.nURL.toString() + putZero(i-endCellNum)+"'>"+(i-endCellNum)+"</a></td>";
+				}
+				else {
+					calHTML +="<td id='"+current.pURL.toString() + putZero(lastmonthlastdate-startCellNum+i+1) +"'><a href='"+current.cLink+"?rankingType=total&stdt="+current.pURL.toString() + putZero(lastmonthlastdate-startCellNum+i+1)+"'>"+ (lastmonthlastdate-startCellNum+i+1)+"</a></td>";
+				}
+			}
+
+			if(i > 1 && i%7 == 0) { 
+				calHTML += "</tr>";
+				if(i >= endCellNum) { break; }
+			}
+		}
+		calHTML += "</tbody></table>";
+		j$("div[name=calendar_body]")[0].innerHTML = calHTML;
+
+		j$("a[name=cPrev]").attr('href',"javascript:Calendar.show("+nMainID+",'"+current.pURL+"');");
+		j$("a[name=cNext]").attr('href',"javascript:Calendar.show("+nMainID+",'"+current.nURL+"');");
+		j$('strong[name=monthText]').html(current.year+"."+putZero(current.month+1));
+		
+		j$("td").each(function() {
+			if ( j$(this).attr("id") > 20250812 ||  j$(this).attr("id") < 20130101  ) {
+				j$(this).html('<span>'+j$(this).text() +'</span>');	
+			}
+		});    
+		j$('#'+strToday).html('<span class="today">' + j$('#'+strToday).text() + '</span>');
+		j$('#' + editionDate +'>' +'a').addClass("select");
+
+  }
+};
+
+j$(document).ready(function() {
+	if (1 <= 1 ){
+		j$('.bridge-paging  > #first').addClass('current');
+	}
+	else {
+		j$('.bridge-paging  > #last').addClass('current');
+	}
+});
+
+//]]>
+</script>
+<link rel="stylesheet" type="text/css" charset="utf-8" href="https://common.nate.com/css/common/SvcCommon_2020.css?v=2020120301"></head>	
+<body><div class="area_access"><a href="#container"><strong>본문 바로가기</strong></a></div>
+
+	<script type="text/javascript">
+	// <![CDATA[
+
+		function selectchg(obj,type){
+			document.getElementById("search_layer").style.display = "none";
+			document.getElementById("selectTxt").className = "";
+			document.getElementById("selectTxt").innerHTML = obj;
+			document.getElementById('searchType').value = type;
+		}
+
+		function searchValidate() {
+			if((document.getElementById('input_search').value).trim() == ''){
+				alert('검색어를 입력하십시오');
+				document.getElementById('input_search').focus();
+				return false;
+			}
+			return true;
+		}
+
+		function searchPann() {
+			vndr('NPG09');
+
+			if (searchValidate()) {
+				document.getElementById('search').submit();
+			}
+		}
+
+		var womanChannel = ['20022', '20024', '20025', '20027'];
+		var manChannel = ['20040', '20041'];
+		var sChannel = womanChannel.concat(manChannel);
+			
+		function checkGenderApi(cateCd, channelId) {
+ 
+			if (IS_LOGGED) {
+				if (!IS_USE_AGREE ) {				
+					window.open('/pannUser/pannAgree?redirectUrl='+REQUEST_URL,'user_agree','status=1,scrollbars=1,width=500,height=450');
+					return false;
+				}			
+				if ('M' === '' && womanChannel.indexOf(cateCd)  >= 0) {
+					alert("여성만 글쓰기가 가능한 카테고리입니다.");
+				}
+				else if ('F' === '' && manChannel.indexOf(cateCd)  >= 0) {
+					alert("남성만 글쓰기가 가능한 카테고리입니다.");
+				}
+				else if ('' === '' && sChannel.indexOf(cateCd) >= 0) {
+					if (confirm("성별 정보가 없는 회원입니다.\n성별 정보를 입력하시겠습니까?")) {								
+						genderApiPopup();		
+					}
+				}
+				else {
+					this.document.location.href="/talk/pann/write?cateCd=" + cateCd + '&channelId='+ channelId; 
+				}
+			}
+			else {		
+				checkLoginAndRedirect();
+			}
+		}
+		function genderApiPopup() {
+			var popUrl = "https://member.nate.com/modify/modifyInfo.sk"+'?type=G&rUrl='+REQUEST_URL;
+			var popOption = 'width=560, height=430, resizable=no, scrollbars=no, status=no;';
+			window.open(popUrl,'gender_popup',popOption);
+			window.onmessage = function(e){
+				if(e.origin === 'https://member.nate.com'){
+					alert(e.data);  
+					window.location.reload();
+				}
+			} 			
+		}
+
+	// ]]>
+
+	</script>
+
+	<div class="all_wrap">
+
+	<!-- Header -->
+	<div id="header" role="banner">
+	  <!-- svc -->
+	  <div class="svcwrap">
+		<div class="gnbWrap">
+		  		  <a href="//www.nate.com" class="natebi">NATE</a><a href="/" class="svcname">판</a>
+
+		  		  <ul class="relsvc">
+			<li class="svc1"><a href="//news.nate.com/" onclick="vndr('NPG11'); return true;">뉴스</a></li>
+			<li class="svc2"><a href="//sports.news.nate.com/index" onclick="vndr('NPG12'); return true;">스포츠</a></li>        
+			<li class="svc3"><a href="//news.nate.com/ent/index" onclick="vndr('NPG13'); return true;">연예</a></li>   
+		  </ul>
+		  
+		  <script type="text/javascript">
+			  var NateGNB = new classNateGNB('container');
+		  </script><div id="textGNB" class="nateGnb"> <div id="GnbWrap" class="">  <p class="nateLink"><a href="https://www.nate.com/?f=natesvc" title="네이트" target="_top" class="main_nate" onmousedown="NateTextGNB.clickStat('NCG01');">네이트 메인가기</a>  </p>  <div class="area_rtkwd type_alone" id="keywordRank">      <h3 class="nHide"><a href="#" title=""></a></h3>      <div class="kwd_list">          <ol>          </ol>      </div>  </div>  <dl class="gnbmenu">   <dt class="hidden">네이트 서비스 바로가기</dt>   <dd class="nate">    <ul>     <li><a href="https://mail3.nate.com/#index" target="_nate" title="메일" onmousedown="NateTextGNB.clickStat('NCG42');" id="linkMail">메일</a></li>     <li><a href="//news.nate.com/" target="_nate" title="뉴스" onmousedown="NateTextGNB.clickStat('NCG11');">뉴스</a></li>     <li><a href="https://pann.nate.com/" target="_nate" title="판" onmousedown="NateTextGNB.clickStat('NCG12');">판</a></li>     <li><a href="https://tv.nate.com/" target="_nate" title="TV" onmousedown="NateTextGNB.clickStat('NCG13');">TV</a></li>     <li><a href="https://pann.nate.com/talk/" target="_nate" title="톡톡" onmousedown="NateTextGNB.clickStat('NAA04');">톡톡</a></li>     <li><a href="https://toonnbook.nate.com/" target="_nate" title="만화" onmousedown="NateTextGNB.clickStat('NCG14');">만화</a></li>     <li><a href="http://game.nate.com/" target="_nate" title="게임" onmousedown="NateTextGNB.clickStat('NAA02');">게임</a></li>     <li><a href="//shopping.nate.com/" target="_nate" title="쇼핑" onmousedown="NateTextGNB.clickStat('NAA03');">쇼핑</a></li>    </ul>   </dd>   <dd class="moreList">    <a href="#" id="btnNateMoreServices" onclick="return false;" title="서비스 더보기" onmousedown="NateTextGNB.clickStat('NCG20');" class="moreList_lk">더보기</a>     <div id="gnbList" style="display:none;">      <div class="wrap">       <ul>        <li><a href="//sports.news.nate.com/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA01');">스포츠</a></li>        <li><a href="//news.nate.com/ent/index" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA02');">연예</a></li>        <li><a href="//news.nate.com/ent/idol24/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA03');">아이돌24</a></li>        <li><a href="//news.nate.com/rank/?mid=n1000" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA04');">랭킹뉴스</a></li>       </ul>       <ul>        <li><a href="https://pann.nate.com/fantalk/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA14');">팬톡</a></li>        <li><a href="//view.nate.com/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NCG30');">네이트뷰</a></li>        <li><a href="https://cartech.nate.com" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NCG31');">자동차</a></li>       </ul>       <ul>        <li><a href="//cash.nate.com/center/cashMain.sc" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA21');">네이트캐쉬</a></li>        <li><a href="https://fortune.nate.com/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NCG28');">운세</a></li>       </ul>       <ul class="last">        <li><a href="https://mail.nate.com/pims/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NBA23');">주소록</a></li>        <li><a href="//mobile.nate.com/" target="_nate" title="" onmousedown="NateTextGNB.clickStat('NCG29');">컬러링</a></li>       </ul>       <p class="common">         <a href="https://www.nate.com/sitemap/index.html" target="_top" title="전체보기" class="sitemap" onmousedown="NateTextGNB.clickStat('NCG52');">서비스 전체보기</a>       </p>       <a href="javascript:;" class="close" onclick="NateTextGNB.viewMoreServices(false);">서비스 더보기 레이어 닫기</a>      </div>     </div>   </dd>  </dl>  <div class="personalInfo">  <a href="https://xo.nate.com/Login.sk?redirect=https%3A//pann.nate.com/talk/ranking/d" class="login_nate" onclick="" onmousedown="NateTextGNB.clickStat('NCG04');"><span>로그인</span></a>  </div> </div></div>
+		  <noscript>
+		  <div id="noscript_gnb">
+			  <div>		
+				  <a href="//www.nate.com/"  title="네이트 메인으로">네이트 메인으로</a> <span>|</span>
+				  <a href="//www.nate.com/sitemap/"  title="사이트맵">사이트맵</a>
+			  </div>
+		  </div>
+		  </noscript>
+
+		  <!-- search -->
+		  <div id="searchWrap" data-set="search">
+
+			<form id="search" name="search" action="/search" method="get" class="srchform" onsubmit="return searchValidate()">
+				<input type="hidden" id="searchType" name="searchType" value="A">
+				 <fieldset>
+					 <legend>검색영역</legend>                 
+
+					  <div class="svcselect">
+						<a href="#" id="selectTxt" role="button" aria-haspopup="true" aria-expanded="false">전체</a>
+					  
+						<div id="search_layer" aria-hidden="true" style="display: none;">
+						  <ul class="select_list">
+							<li><a href="#" onclick="selectchg('전체','A');">전체</a></li>
+							<li><a href="#" onclick="selectchg('글쓴이','N');">글쓴이</a></li>
+						  </ul>
+						</div>
+						<script type="text/javascript">
+													</script>
+						
+					  </div>
+					 <input type="text" id="input_search" name="q" class="searchBox" title="검색어 입력" value="">
+					 <button type="submit" class="searchBtn"><span class="hide">검색</span></button>
+				 </fieldset>
+			 </form>
+		</div>
+
+		</div>
+	  </div>
+	  
+	  <!-- navigation -->
+	  <div class="navWrap">
+		<div class="snbArea" role="navigation">
+		  <ul>
+
+		  
+		<li class="on"><a href="/" onclick="vndr('NPG01'); return true;" aria-current="page">홈</a></li>
+		<li><a href="/talk" onclick="vndr('NPG07'); return true;">톡톡</a></li>
+		<li><a href="/fantalk" onclick="vndr('NPG72');return true;">팬톡</a></li>
+
+		  </ul>
+
+		  <div class="svcLink">
+			<a href="#" onclick="vndr('NPG14'); if(checkLoginAndRedirect()) { location.href = '/my'; } return true;" class="my">내가 쓴 글 보기</a>
+		  </div>
+          <div class="spcAd">
+              <script src="https://cyad1.nate.com/js.kti/nate/skt@psnb_x11" type="text/javascript" language="javascript"></script>
+          </div>
+		</div>
+	  </div>
+	</div>	  
+	<script type="text/javascript">
+	//searchBox common
+	j$(function(){
+	  j$('.searchBox, #searchWrap, #selectTxt, .searchBtn, #search_layer a').bind('mouseenter focus', function() {
+		j$('#searchWrap').addClass('on');
+	  })
+
+	  j$('.searchBox, #searchWrap, #selectTxt, .searchBtn, #search_layer a').bind('mouseleave blur', function() {
+		j$('#searchWrap').removeClass('on');
+	  })
+	  j$('#search_layer').bind('mouseenter mouseout', function() {
+		j$('#searchWrap').addClass('on');
+	  })
+	  
+	  j$('#selectTxt').bind('click', function() {        
+		
+		if( j$('#search_layer').css("display") == "none") {
+		  j$('#search_layer').show();
+		  j$('#selectTxt').addClass('tap');          
+		  j$('#search_layer').attr("aria-hidden", false);
+		  j$('#selectTxt').attr("aria-expanded", true);
+		  
+		  j$('#searchWrap').mouseleave(function() {
+			j$('#search_layer').hide();
+			j$('#selectTxt').removeClass('tap');           
+		  })
+		} else {
+		  j$('#search_layer').hide();
+		  j$('#selectTxt').removeClass('tap');
+		  j$('#selectTxt').attr("aria-expanded", false);       
+		  j$('#search_layer').attr("aria-hidden", true);
+		}
+	  })       
+	})
+
+	var selectchg = function(obj,type) {
+	  j$('#search_layer').hide();
+	  j$('#selectTxt').removeClass('tap');
+	  j$('#selectTxt').html(obj);
+	  j$('#searchType').val(type);
+
+	}
+	</script>
+	<!-- Header : E -->	
+
+		<hr>
+
+		
+<div class="f_clear" id="container">
+	<div id="pann_brandAdWrap" class="limited_ad_wrap has_brandAd" style="z-index:9999;">
+	<div class="limited_ad">
+							
+		<iframe src="/subbrand_ad.html?v=2" frameborder="0" scrolling="no" width="970" height="0" title="스폰서바" style="height: 90px;"></iframe>
+		<div id="ad_sponsorObj" style="position:absolute; top:0; right:0;padding:0; margin:0;"></div>
+		<div id="ad_sponsorBar_extend" style="position:absolute; top:0; left:0;"></div>
+				
+		<!-- S : 판 좌측 광고  -->
+		<div style="z-index:9999;"> 
+			<div class="limited_ad_side" id="ad_newsMarginCube_left"></div>
+			<iframe src="/pann_ad_left.html?v=1" frameborder="0" scrolling="no" width="0" height="0" title="좌측배너" class="call_right_ad" style="height: 0px;"></iframe>
+		</div> 
+		<!-- E : 판 좌측 광고 -->
+	</div>
+</div>
+<div id="psypannAd" class="limited_ad_side_right">
+	<iframe src="/pann_ad_right.html?v=1" frameborder="0" scrolling="no" width="120" height="600" title="우측배너"></iframe>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+	function hideSponsorWrap() {
+		j$('div#pann_brandAdWrap iframe').hide();
+		j$('div#ad_sponsorObj').hide();
+		j$('div#ad_sponsorBar_extend').hide();
+		try {
+			var top = parseInt(Number(j$("#ad_layer_sticker_obj").css('top').replace('px', ''))) - 80;
+			j$("#ad_layer_sticker_obj").css('top', top+'px');
+		} catch( e ) {}
+	}
+	function checkSponsorBanner() {	
+		if ('Y'!='Y') {	
+			hideSponsorWrap();
+		}
+	}
+	j$(document).ready(function(){
+		var agent = navigator.userAgent.toLowerCase();
+		if (agent.indexOf('msie') != -1 || agent.indexOf('rv:11') != -1) {
+			checkSponsorBanner();
+		}
+		
+		if ('Y'=='Y') {	
+    		var obj = j$("div#pann_brandAdWrap iframe");
+    		var ifr_height = obj.contents().find("body").height();
+//     		if (ifr_height <= 0) ifr_height = 90;
+//     		ifr_height += 5;
+    		obj.css("height", ifr_height+"px");
+		}
+	});
+//]]>
+</script>
+		<div class="content sub">
+			<div class="mainarea">
+								
+				<div class="bridgeTab"> 
+					<ul>
+												
+						<li class="tpann" id="tpann"><a href="/today/talk" onclick="vndr('BDW01');">오늘의 판</a></li>
+						<li class="tselect on" id="tselect"><h1><a href="/talk/ranking" onclick="vndr('BDW02');">톡커들의 선택 명예의 전당</a></h1></li>
+											</ul>
+				</div>				
+				<div class="tsCnt">
+					<!-- 실시간  -->
+					<div class="sortBox">
+						<div>
+							<div class="dateBox">
+								<button type="button" onclick="vndr('BDW26');gopage('d','20250811',1,'total');" class="arrow prev"><span>이전</span></button>
+								<span class="tdate">2025년 08월 12일 </span>
+								<button type="button" onclick="vndr('BDW26');gopage('d','20250813',1,'total');" class="arrow nextnone" disabled="disabled"><span>다음</span></button>
+								<button class="btn_c" type="button" id="btnDay" onclick="vndr('BDW27');j$('#calendar1').toggle();return false;"><span>달력보기</span></button>
+
+								<div id="calendar1" class="layer_calendar" style="display:none;">
+									<div class="select_month">
+										<strong name="monthText">2025.08</strong>
+										
+										<p class="month_prev"><a href="javascript:Calendar.show(10,'202507');" title="이전 달" name="cPrev">이전 달</a></p>
+										<p class="month_next"><a href="javascript:Calendar.show(10,'202509');" title="다음 달" name="cNext">다음 달</a></p>
+									</div>
+									<div name="calendar_body"><table class="calendar" id="tbCalendar" summary="달력"><caption>달력</caption><colgroup>	<col width="20">	<col width="20">	<col width="20">	<col width="20">	<col width="20">	<col width="20">	<col width="20"></colgroup><thead>	<tr>		<th>일</th>		<th>월</th>		<th>화</th>		<th>수</th>		<th>목</th>		<th>금</th>		<th>토</th>	</tr></thead><tbody><tr><td id="20250727"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250727">27</a></td><td id="20250728"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250728">28</a></td><td id="20250729"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250729">29</a></td><td id="20250730"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250730">30</a></td><td id="20250731"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250731">31</a></td><td id="20250801"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250801">1</a></td><td id="20250802"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250802">2</a></td></tr><tr><td id="20250803"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250803">3</a></td><td id="20250804"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250804">4</a></td><td id="20250805"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250805">5</a></td><td id="20250806"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250806">6</a></td><td id="20250807"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250807">7</a></td><td id="20250808"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250808">8</a></td><td id="20250809"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250809">9</a></td></tr><tr><td id="20250810"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250810">10</a></td><td id="20250811"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250811">11</a></td><td id="20250812"><a href="/talk/ranking/d?rankingType=total&amp;stdt=20250812" class="select">12</a></td><td id="20250813"><span class="today">13</span></td><td id="20250814"><span>14</span></td><td id="20250815"><span>15</span></td><td id="20250816"><span>16</span></td></tr><tr><td id="20250817"><span>17</span></td><td id="20250818"><span>18</span></td><td id="20250819"><span>19</span></td><td id="20250820"><span>20</span></td><td id="20250821"><span>21</span></td><td id="20250822"><span>22</span></td><td id="20250823"><span>23</span></td></tr><tr><td id="20250824"><span>24</span></td><td id="20250825"><span>25</span></td><td id="20250826"><span>26</span></td><td id="20250827"><span>27</span></td><td id="20250828"><span>28</span></td><td id="20250829"><span>29</span></td><td id="20250830"><span>30</span></td></tr><tr><td id="20250831"><span>31</span></td><td id="20250901"><span>1</span></td><td id="20250902"><span>2</span></td><td id="20250903"><span>3</span></td><td id="20250904"><span>4</span></td><td id="20250905"><span>5</span></td><td id="20250906"><span>6</span></td></tr></tbody></table></div>
+									<script type="text/javascript">Calendar.show(10,"20250812");</script>
+
+									<a href="/talk/ranking/d" onclick="vndr('BDW27');j$('#calendar1').toggle();return false;" class="close" title="달력 닫기">닫기</a>
+								</div>								
+
+							</div>
+						</div>							
+							
+												
+						<div class="sortTab">
+							<ul>
+								<li><a href="/talk/ranking" onclick="vndr('BDW21');">실시간</a></li>
+								<li class="on"><a href="/talk/ranking/d" onclick="vndr('BDW22');">일간</a></li>
+								<li><a href="/talk/ranking/w" onclick="vndr('BDW23');">주간</a></li>
+								<li><a href="/talk/ranking/m" onclick="vndr('BDW24');">월간</a></li>
+								<li><a href="/talk/ranking/y" onclick="vndr('BDW25');">연간</a></li>
+								
+							</ul>
+						</div>						
+					</div><!-- sortBox -->
+					<!-- // 랭킹타입별 -->
+					<div class="sort_rank">
+						<ul>
+							<li><a href="?rankingType=total&amp;stdt=20250812" onclick="vndr('BDW28');" class="on">전체 랭킹</a></li>
+							<li><a href="?rankingType=life&amp;stdt=20250812" onclick="vndr('BDW31');">일상톡 랭킹</a></li>
+							<li><a href="?rankingType=teens&amp;stdt=20250812" onclick="vndr('BDW34');">10대톡 랭킹 </a></li>
+							<li><a href="?rankingType=enter&amp;stdt=20250812" onclick="vndr('BDW37');">연예톡 랭킹 </a></li>
+
+						</ul>
+					</div>
+					<!-- // 랭킹타입별 -->
+					
+					<div class="cntList">
+						
+												
+						<ul class="post_wrap">
+							<li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675205" onclick="vndr('BDW29');" title="여초회사 다 이러나요?">여초회사 다 이러나요?</a></h2><span class="reple-num">(217)</span></dt>
+									<dd class="txt"><a href="/talk/374675205" onclick="vndr('BDW29');">원래 여초회사는 이런건가요?저희는 여자만 있고, 나이대도 비슷합니다. 이직했을때 정말 회사가...</a></dd>									<dd class="info"><span class="count">조회 99,619</span><span class="rcm">추천 194</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674124" onclick="vndr('BDW29');" title="남편의 실수 때문에 미치겠어요">남편의 실수 때문에 미치겠어요</a></h2><span class="reple-num">(190)</span></dt>
+									<dd class="txt"><a href="/talk/374674124" onclick="vndr('BDW29');">헉 댓글 이렇게나 달릴줄 몰랐는데 많은 조언 해주셔서 감사드려요 댓글 하나하나 답변은 못하지...</a></dd>									<dd class="info"><span class="count">조회 116,492</span><span class="rcm">추천 156</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675537" onclick="vndr('BDW29');" title="나 21살인데 나만 이렇게 사냐">나 21살인데 나만 이렇게 사냐</a></h2><span class="reple-num">(277)</span></dt>
+									<dd class="txt"><a href="/talk/374675537" onclick="vndr('BDW29');">술은 입에도 안대고 걍 집에서 넷플 보면서 비즈 보석십자수 하는게 젤 행복함 친구 만나도 술집...</a></dd>									<dd class="info"><span class="count">조회 174,106</span><span class="rcm">추천 616</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674246" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015035" width="71" height="70" alt="한국에 유학 온 학생이 적응 안된다는 것."></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674246" onclick="vndr('BDW29');" title="한국에 유학 온 학생이 적응 안된다는 것.">한국에 유학 온 학생이 적응 안된다는 것.</a></h2><span class="reple-num">(210)</span></dt>
+																		<dd class="info"><span class="count">조회 226,649</span><span class="rcm">추천 283</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no5"><span>5</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674444" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015137" width="71" height="70" alt="연애프로그램 나온 사람이 나 고소했대…"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674444" onclick="vndr('BDW29');" title="연애프로그램 나온 사람이 나 고소했대…">연애프로그램 나온 사람이 나 고소했대…</a></h2><span class="reple-num">(221)</span></dt>
+									<dd class="txt"><a href="/talk/374674444" onclick="vndr('BDW29');">뭐지 나 욕은 안 했던 것 같은데 무슨 댓글을 썼는지 기억도 안나 애초에 나 댓글에 ...</a></dd>									<dd class="info"><span class="count">조회 219,913</span><span class="rcm">추천 106</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no6"><span>6</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675470" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015636" width="71" height="70" alt="이거 진짜 개잘팬다"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675470" onclick="vndr('BDW29');" title="이거 진짜 개잘팬다">이거 진짜 개잘팬다</a></h2><span class="reple-num">(103)</span></dt>
+									<dd class="txt"><a href="/talk/374675470" onclick="vndr('BDW29');">ㅈㄴ웃김 맞는말임</a></dd>									<dd class="info"><span class="count">조회 112,372</span><span class="rcm">추천 499</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no7"><span>7</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374673640" onclick="vndr('BDW29');" title="엄빠들 아프다면서 병원 안가는거 ㅈㄴ이기적인듯">엄빠들 아프다면서 병원 안가는거 ㅈㄴ이기적인듯</a></h2><span class="reple-num">(94)</span></dt>
+									<dd class="txt"><a href="/talk/374673640" onclick="vndr('BDW29');">아프면 좀 병원가라고 제발  자꾸 아프다아프다.. 뭐 어떡하라는거야 그것도 매일   내가 의사도...</a></dd>									<dd class="info"><span class="count">조회 72,118</span><span class="rcm">추천 345</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no8"><span>8</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675757" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015788" width="71" height="70" alt="제니 앞머리 왜 이제 냈지"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675757" onclick="vndr('BDW29');" title="제니 앞머리 왜 이제 냈지">제니 앞머리 왜 이제 냈지</a></h2><span class="reple-num">(126)</span></dt>
+									<dd class="txt"><a href="/talk/374675757" onclick="vndr('BDW29');">내리니까 ㅈㄴ 훈녀됨 개이쁨..제니 블랙핑크 블핑</a></dd>									<dd class="info"><span class="count">조회 222,473</span><span class="rcm">추천 209</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no9"><span>9</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374673586" onclick="vndr('BDW29');" title="시어머니가 저희 집 살림을 시누이네랑 비교를해요">시어머니가 저희 집 살림을 시누이네랑 비교를해요</a></h2><span class="reple-num">(83)</span></dt>
+									<dd class="txt"><a href="/talk/374673586" onclick="vndr('BDW29');">결혼한 지 2년 차...시어머니가 가끔 집에 오시거든요?  근데 그럴 때마다 저희 집 살림을 하나...</a></dd>									<dd class="info"><span class="count">조회 67,648</span><span class="rcm">추천 188</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no0"><span>0</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674727" onclick="vndr('BDW29');" title="남자친구의 바람, 비참한 기분입니다..">남자친구의 바람, 비참한 기분입니다..</a></h2><span class="reple-num">(78)</span></dt>
+									<dd class="txt"><a href="/talk/374674727" onclick="vndr('BDW29');">남자친구가 바람핀걸 저한테 들켜서 결국 지난주에 헤어졌어요 아직도 심장이 두근거려서 어디든...</a></dd>									<dd class="info"><span class="count">조회 99,841</span><span class="rcm">추천 308</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no1"><span>1</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675818" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015816" width="71" height="70" alt="카리나 ㅈㄴ부러운게"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675818" onclick="vndr('BDW29');" title="카리나 ㅈㄴ부러운게">카리나 ㅈㄴ부러운게</a></h2><span class="reple-num">(90)</span></dt>
+									<dd class="txt"><a href="/talk/374675818" onclick="vndr('BDW29');">+걍 내 의견임 악플달면 추녀인증하는걸로 알게  목긴거랑 두상 이쁜것도 지리지만 얼...</a></dd>									<dd class="info"><span class="count">조회 135,246</span><span class="rcm">추천 140</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no2"><span>2</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674212" onclick="vndr('BDW29');" title="남편이 회식한다 거짓말하고 친구랑 놀러갔어요">남편이 회식한다 거짓말하고 친구랑 놀러갔어요</a></h2><span class="reple-num">(67)</span></dt>
+									<dd class="txt"><a href="/talk/374674212" onclick="vndr('BDW29');">결혼 4년 차인데 이번에 남편 때문에 너무 속상한 일이 있어서요  지난주 저녁에 남편이 회식 있...</a></dd>									<dd class="info"><span class="count">조회 71,501</span><span class="rcm">추천 114</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no3"><span>3</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674134" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014949" width="71" height="70" alt="스물셋, 1천만 원 모았다.. 나 칭찬해주실 분 ㅠ"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674134" onclick="vndr('BDW29');" title="스물셋, 1천만 원 모았다.. 나 칭찬해주실 분 ㅠ">스물셋, 1천만 원 모았다.. 나 칭찬해주실 분 ㅠ</a></h2><span class="reple-num">(76)</span></dt>
+									<dd class="txt"><a href="/talk/374674134" onclick="vndr('BDW29');">2025년 8월 11일,   오늘 제 통장에 드디어 ‘천만 원’이라는 숫자가 찍혔어요...!!!  ...</a></dd>									<dd class="info"><span class="count">조회 24,347</span><span class="rcm">추천 187</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no4"><span>4</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674128" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014933" width="71" height="70" alt="아이브 키키 대우"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674128" onclick="vndr('BDW29');" title="아이브 키키 대우">아이브 키키 대우</a></h2><span class="reple-num">(133)</span></dt>
+									<dd class="txt"><a href="/talk/374674128" onclick="vndr('BDW29');">키키 컨셉도 좋고 노래도 좋아서 좋은데 스타쉽이 너무.. 키키는 웹사이트 있는데 아...</a></dd>									<dd class="info"><span class="count">조회 100,243</span><span class="rcm">추천 59</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no5"><span>5</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675828" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015821" width="71" height="70" alt="일본에서 말하는 트위터 여자"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675828" onclick="vndr('BDW29');" title="일본에서 말하는 트위터 여자">일본에서 말하는 트위터 여자</a></h2><span class="reple-num">(53)</span></dt>
+																		<dd class="info"><span class="count">조회 86,199</span><span class="rcm">추천 170</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no6"><span>6</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675583" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015731" width="71" height="70" alt="워홀 인식 안좋은 이유가 뭐임"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675583" onclick="vndr('BDW29');" title="워홀 인식 안좋은 이유가 뭐임">워홀 인식 안좋은 이유가 뭐임</a></h2><span class="reple-num">(139)</span></dt>
+									<dd class="txt"><a href="/talk/374675583" onclick="vndr('BDW29');">댓글에서 양양같은 이미지라는데 진짜 궁금한데 호주가 어케 양양같은 이미지인거임? ...</a></dd>									<dd class="info"><span class="count">조회 58,267</span><span class="rcm">추천 46</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no7"><span>7</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675591" onclick="vndr('BDW29');" title="술 좋아하는 애들이랑 ㅈㄴ안맞아">술 좋아하는 애들이랑 ㅈㄴ안맞아</a></h2><span class="reple-num">(39)</span></dt>
+									<dd class="txt"><a href="/talk/374675591" onclick="vndr('BDW29');">기승전 술임</a></dd>									<dd class="info"><span class="count">조회 42,504</span><span class="rcm">추천 134</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no8"><span>8</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674233" onclick="vndr('BDW29');" title="30대 모쏠 어때">30대 모쏠 어때</a></h2><span class="reple-num">(124)</span></dt>
+									<dd class="txt"><a href="/talk/374674233" onclick="vndr('BDW29');">나야나.. 아무 경험도 추억도 없는 모쏠..이러면 다 서툰데 좋아해주려나? 답답할텐데</a></dd>									<dd class="info"><span class="count">조회 55,828</span><span class="rcm">추천 40</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no1"><span>1</span></span><span class="no9"><span>9</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674310" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015070" width="71" height="70" alt="투바투 연준 도배글 챗지피티가 결론내줌"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674310" onclick="vndr('BDW29');" title="투바투 연준 도배글 챗지피티가 결론내줌">투바투 연준 도배글 챗지피티가 결론내줌</a></h2><span class="reple-num">(108)</span></dt>
+									<dd class="txt"><a href="/talk/374674310" onclick="vndr('BDW29');">365일 24시간 투바투 연준으로 도배하면서 팀킬하는 도배녀... 투바투 그룹명만 빼고 ...</a></dd>									<dd class="info"><span class="count">조회 16,712</span><span class="rcm">추천 20</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no0"><span>0</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675926" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015852" width="71" height="70" alt="ㅈㅈ하게 엄지훈이 더 훈남임"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675926" onclick="vndr('BDW29');" title="ㅈㅈ하게 엄지훈이 더 훈남임">ㅈㅈ하게 엄지훈이 더 훈남임</a></h2><span class="reple-num">(39)</span></dt>
+																		<dd class="info"><span class="count">조회 70,913</span><span class="rcm">추천 254</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no1"><span>1</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674787" onclick="vndr('BDW29');" title="어제 헌포 처음으로 가봤는데…">어제 헌포 처음으로 가봤는데…</a></h2><span class="reple-num">(26)</span></dt>
+									<dd class="txt"><a href="/talk/374674787" onclick="vndr('BDW29');">최악임 진짜 왜가는지 이해 x… 스물일곱 처먹고 헌포나댕기는것도 웃긴데 무슨 말할때마다 귀엽...</a></dd>									<dd class="info"><span class="count">조회 45,181</span><span class="rcm">추천 107</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no2"><span>2</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675872" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015835" width="71" height="70" alt="힙한 현대카드 광고 촬영 중 목이 부러진 가장의 절규]"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675872" onclick="vndr('BDW29');" title="힙한 현대카드 광고 촬영 중 목이 부러진 가장의 절규]">힙한 현대카드 광고 촬영 중 목이 부러진 가장의 절규]</a></h2><span class="reple-num">(32)</span></dt>
+									<dd class="txt"><a href="/talk/374675872" onclick="vndr('BDW29');">[힙한 광고 뒤에 숨겨진 비극, 현대카드 광고 촬영 중 목이 부러진 가장의 절규]  작...</a></dd>									<dd class="info"><span class="count">조회 85,174</span><span class="rcm">추천 464</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no3"><span>3</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374673425" onclick="vndr('BDW29');" title="출근 시간 남편과의 말싸움">출근 시간 남편과의 말싸움</a></h2><span class="reple-num">(147)</span></dt>
+									<dd class="txt"><a href="/talk/374673425" onclick="vndr('BDW29');">오늘 출근 시간 일임.맞벌이고 중딩 아들 키우고 있음.출근 남편차로 같이 함.방학 중이라 아침...</a></dd>									<dd class="info"><span class="count">조회 40,764</span><span class="rcm">추천 19</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no4"><span>4</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675861" onclick="vndr('BDW29');" title="트위터에서 투어스 한진 플로우 돌던데">트위터에서 투어스 한진 플로우 돌던데</a></h2><span class="reple-num">(38)</span></dt>
+									<dd class="txt"><a href="/talk/374675861" onclick="vndr('BDW29');">얼굴만 알다가 이번에 알티타는 걸로 영상 처음봤는데 솔직히 ㄹㅇ놀람 악의는 없어보이는데 순...</a></dd>									<dd class="info"><span class="count">조회 24,125</span><span class="rcm">추천 102</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no5"><span>5</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374673546" onclick="vndr('BDW29');" title="공동명의 이거맞음?">공동명의 이거맞음?</a></h2><span class="reple-num">(65)</span></dt>
+									<dd class="txt"><a href="/talk/374673546" onclick="vndr('BDW29');">요즘 공동명의 이슈가 뉴스에 나올정도로 심각하던데..딱 그 상황입니다.파혼해야 할까요?집가격...</a></dd>									<dd class="info"><span class="count">조회 12,598</span><span class="rcm">추천 40</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no6"><span>6</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675736" onclick="vndr('BDW29');" title="솔직히 장카유설 얼굴로만 따지면">솔직히 장카유설 얼굴로만 따지면</a></h2><span class="reple-num">(124)</span></dt>
+									<dd class="txt"><a href="/talk/374675736" onclick="vndr('BDW29');">장원영 설윤 유나 카리나 순으로 예쁘지 않냐</a></dd>									<dd class="info"><span class="count">조회 20,148</span><span class="rcm">추천 41</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no7"><span>7</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674784" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015306" width="71" height="70" alt="지수 Your Love 뮤비 티저"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674784" onclick="vndr('BDW29');" title="지수 Your Love 뮤비 티저">지수 Your Love 뮤비 티저</a></h2><span class="reple-num">(26)</span></dt>
+									<dd class="txt"><a href="/talk/374674784" onclick="vndr('BDW29');">비주얼 뭐야 ㄷㄷ 수록곡중에 젤좋음  https://youtu.be/cl66al6twR8  블랙핑크 지수</a></dd>									<dd class="info"><span class="count">조회 40,868</span><span class="rcm">추천 65</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no8"><span>8</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374673887" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014767" width="71" height="70" alt="얼굴이 대서사이자 예술 작품인 남돌 커버"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374673887" onclick="vndr('BDW29');" title="얼굴이 대서사이자 예술 작품인 남돌 커버">얼굴이 대서사이자 예술 작품인 남돌 커버</a></h2><span class="reple-num">(20)</span></dt>
+									<dd class="txt"><a href="/talk/374673887" onclick="vndr('BDW29');">방탄소년단 뷔 x 셀린느 W코리아 6종 커버 나옴 ㅎㄷㄷㄷ일단 걍 비주얼+분위기 미쳤...</a></dd>									<dd class="info"><span class="count">조회 22,563</span><span class="rcm">추천 83</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no2"><span>2</span></span><span class="no9"><span>9</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674973" onclick="vndr('BDW29');" title="친구가 식탐있어서 정떨어짐">친구가 식탐있어서 정떨어짐</a></h2><span class="reple-num">(42)</span></dt>
+									<dd class="txt"><a href="/talk/374674973" onclick="vndr('BDW29');">같이 하이디라오를 먹으러갔는데  알다시피 훠궈 자체가 생고기를 탕에 조금 담궈두고 먹는 식이...</a></dd>									<dd class="info"><span class="count">조회 24,182</span><span class="rcm">추천 100</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no0"><span>0</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675348" onclick="vndr('BDW29');" title="결혼 포기..">결혼 포기..</a></h2><span class="reple-num">(51)</span></dt>
+									<dd class="txt"><a href="/talk/374675348" onclick="vndr('BDW29');">지금 30대중으로 가고있는데 대학졸업하고 26때 갑자기 집에 빨간딱지 붙어서 쫓기듯 당장 모은...</a></dd>									<dd class="info"><span class="count">조회 29,263</span><span class="rcm">추천 70</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no1"><span>1</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674480" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015163" width="71" height="70" alt="아이브 가을 이번 컨셉 너무 잘 어올림"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674480" onclick="vndr('BDW29');" title="아이브 가을 이번 컨셉 너무 잘 어올림">아이브 가을 이번 컨셉 너무 잘 어올림</a></h2><span class="reple-num">(23)</span></dt>
+									<dd class="txt"><a href="/talk/374674480" onclick="vndr('BDW29');">아이브 가을 이번 컨셉 진짜 잘 어올리는것 같다가을이 천사 컨셉 게임이나 만화에 나...</a></dd>									<dd class="info"><span class="count">조회 41,972</span><span class="rcm">추천 62</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no2"><span>2</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675216" onclick="vndr('BDW29');" title="너라는 밤">너라는 밤</a></h2><span class="reple-num">(27)</span></dt>
+									<dd class="txt"><a href="/talk/374675216" onclick="vndr('BDW29');">난 그날 이후로 항상 네가 어려웠다. 내 마음을 들키지 않으려 애써 관심 없는 척 널 대하는 것...</a></dd>									<dd class="info"><span class="count">조회 9,612</span><span class="rcm">추천 41</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no3"><span>3</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675561" onclick="vndr('BDW29');" title="시어머니 결혼전 후가 다른 사람 같아요...">시어머니 결혼전 후가 다른 사람 같아요...</a></h2><span class="reple-num">(68)</span></dt>
+									<dd class="txt"><a href="/talk/374675561" onclick="vndr('BDW29');">저희 시어머니 결혼 전에는 쿨하고 편안한 스타일이라 생각했는데 제 착각이였을까요?  결혼 전...</a></dd>									<dd class="info"><span class="count">조회 43,360</span><span class="rcm">추천 5</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no4"><span>4</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374673692" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014584" width="71" height="70" alt="일본에서 활동할 때마다 반응 난리인 여돌"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374673692" onclick="vndr('BDW29');" title="일본에서 활동할 때마다 반응 난리인 여돌">일본에서 활동할 때마다 반응 난리인 여돌</a></h2><span class="reple-num">(15)</span></dt>
+									<dd class="txt"><a href="/talk/374673692" onclick="vndr('BDW29');">관련 짤이나 영상 뜰때마다 팬들 난리난 안유진 일본 활동 스타일링 ㅠㅠ그럴만하네 ...</a></dd>									<dd class="info"><span class="count">조회 35,250</span><span class="rcm">추천 62</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no5"><span>5</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674919" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015377" width="71" height="70" alt="잘생쁨 여돌 누구 생각나?"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674919" onclick="vndr('BDW29');" title="잘생쁨 여돌 누구 생각나?">잘생쁨 여돌 누구 생각나?</a></h2><span class="reple-num">(48)</span></dt>
+									<dd class="txt"><a href="/talk/374674919" onclick="vndr('BDW29');">ㅈㄱㄴ</a></dd>									<dd class="info"><span class="count">조회 14,462</span><span class="rcm">추천 5</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no6"><span>6</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374674942" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015383" width="71" height="70" alt="솔직히 안유진 급 아니냐?"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374674942" onclick="vndr('BDW29');" title="솔직히 안유진 급 아니냐?">솔직히 안유진 급 아니냐?</a></h2><span class="reple-num">(62)</span></dt>
+									<dd class="txt"><a href="/talk/374674942" onclick="vndr('BDW29');">장원영 급은 아니어도 안유진, 이서 급은 되지 않냐?</a></dd>									<dd class="info"><span class="count">조회 41,375</span><span class="rcm">추천 21</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no7"><span>7</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675328" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015557" width="71" height="70" alt="전소연은 뇌절이 심해짐"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675328" onclick="vndr('BDW29');" title="전소연은 뇌절이 심해짐">전소연은 뇌절이 심해짐</a></h2><span class="reple-num">(13)</span></dt>
+									<dd class="txt"><a href="/talk/374675328" onclick="vndr('BDW29');">데뷔곡 라타타 때부터  수진이 탈퇴하고난 뒤 톰보이로 부활한거까지는 다 좋았음  한...</a></dd>									<dd class="info"><span class="count">조회 21,049</span><span class="rcm">추천 53</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no8"><span>8</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675214" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015495" width="71" height="70" alt="장원영 잘난척이 너무 심하다..."></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675214" onclick="vndr('BDW29');" title="장원영 잘난척이 너무 심하다...">장원영 잘난척이 너무 심하다...</a></h2><span class="reple-num">(35)</span></dt>
+									<dd class="txt"><a href="/talk/374675214" onclick="vndr('BDW29');">행운을 가져다 주는 수줍은 얼굴의 미소가 본인이라는거야?</a></dd>									<dd class="info"><span class="count">조회 25,060</span><span class="rcm">추천 33</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no3"><span>3</span></span><span class="no9"><span>9</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675610" onclick="vndr('BDW29');" title="우리집 강아지가 사람 ㄹㅇ 잘거름">우리집 강아지가 사람 ㄹㅇ 잘거름</a></h2><span class="reple-num">(12)</span></dt>
+									<dd class="txt"><a href="/talk/374675610" onclick="vndr('BDW29');">멍청해보여서 미안해 화난 너희들은 내 강아지가 싫오할 것 같아</a></dd>									<dd class="info"><span class="count">조회 23,580</span><span class="rcm">추천 48</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no0"><span>0</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374676618" onclick="vndr('BDW29');" title="이력서 넣을 때 사진 없이 내는 사람들은 왜 그런거야???">이력서 넣을 때 사진 없이 내는 사람들은 왜 그런거야???</a></h2><span class="reple-num">(124)</span></dt>
+									<dd class="txt"><a href="/talk/374676618" onclick="vndr('BDW29');">그냥 내가 옛날 사람이라 그런듯,,,, 사진으로 다 판단할 순 없지만 막 브이하고 찍은 사진은 모...</a></dd>									<dd class="info"><span class="count">조회 59,410</span><span class="rcm">추천 89</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no1"><span>1</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374675017" onclick="vndr('BDW29');" title="ㅌㅇㅅ 조롱 너무 심해 진짜">ㅌㅇㅅ 조롱 너무 심해 진짜</a></h2><span class="reple-num">(42)</span></dt>
+									<dd class="txt"><a href="/talk/374675017" onclick="vndr('BDW29');">ㅎㅈ 짹보면 너무 까이는걸 모자라서 조롱을 심하게 해 보는사람도 기분나쁘게  자칫 멤버눈에라...</a></dd>									<dd class="info"><span class="count">조회 15,410</span><span class="rcm">추천 11</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no2"><span>2</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374676104" onclick="vndr('BDW29');" title="재결합  포기하는게 맞겠죠">재결합  포기하는게 맞겠죠</a></h2><span class="reple-num">(52)</span></dt>
+									<dd class="txt"><a href="/talk/374676104" onclick="vndr('BDW29');">전 남자친구랑 헤어진 지 5개월쯤 됐어요 서로 애정이 식은 것도 아닌데 한번 크게 싸운 이후로 ...</a></dd>									<dd class="info"><span class="count">조회 32,275</span><span class="rcm">추천 7</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no3"><span>3</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374676313" onclick="vndr('BDW29');" title="이혼하고싶은데 소송이 안돼요">이혼하고싶은데 소송이 안돼요</a></h2><span class="reple-num">(58)</span></dt>
+									<dd class="txt"><a href="/talk/374676313" onclick="vndr('BDW29');">35살 여자입니다 아이가 둘 있구요 아직 많이 어려요 그냥 이것저것 다 떠나서 남편이 너무 싫습...</a></dd>									<dd class="info"><span class="count">조회 37,679</span><span class="rcm">추천 12</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no4"><span>4</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374676081" onclick="vndr('BDW29');" title="사회생활 안해봐서 그렇다합니다">사회생활 안해봐서 그렇다합니다</a></h2><span class="reple-num">(55)</span></dt>
+									<dd class="txt"><a href="/talk/374676081" onclick="vndr('BDW29');">저는 전업주부입니다.  신혼초 회사 술자리에 간 남편이 밤늦게까지 전화를 안받아서 계속 전화...</a></dd>									<dd class="info"><span class="count">조회 22,189</span><span class="rcm">추천 3</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no5"><span>5</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374676228" onclick="vndr('BDW29');" title="시어머니의 농담이 듣기 싫어요...">시어머니의 농담이 듣기 싫어요...</a></h2><span class="reple-num">(47)</span></dt>
+									<dd class="txt"><a href="/talk/374676228" onclick="vndr('BDW29');">원래도 시부모님 집과 거리가 가깝기는 했는데 이사하면서 더 가까워져서 자연스럽게 만나는 횟...</a></dd>									<dd class="info"><span class="count">조회 25,285</span><span class="rcm">추천 7</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no6"><span>6</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374676335" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015957" width="71" height="70" alt="골든 핫백 1위 했네"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374676335" onclick="vndr('BDW29');" title="골든 핫백 1위 했네">골든 핫백 1위 했네</a></h2><span class="reple-num">(87)</span></dt>
+									<dd class="txt"><a href="/talk/374676335" onclick="vndr('BDW29');">여러모로 테디 전성기인듯</a></dd>									<dd class="info"><span class="count">조회 24,984</span><span class="rcm">추천 114</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no7"><span>7</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374675811" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69015810" width="71" height="70" alt="방금 윈터 홈마사진 보고 왔는데"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374675811" onclick="vndr('BDW29');" title="방금 윈터 홈마사진 보고 왔는데">방금 윈터 홈마사진 보고 왔는데</a></h2><span class="reple-num">(21)</span></dt>
+									<dd class="txt"><a href="/talk/374675811" onclick="vndr('BDW29');">보정 안한 프리뷰 사진보고 헉..했는데 이게 진짜 훠어어어얼씬 예쁜데… 눈을 이상하...</a></dd>									<dd class="info"><span class="count">조회 38,240</span><span class="rcm">추천 34</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no8"><span>8</span></span></div>
+																<dl>
+									<dt><h2><a href="/talk/374674616" onclick="vndr('BDW29');" title="짝남짝녀 특징 써보자">짝남짝녀 특징 써보자</a></h2><span class="reple-num">(26)</span></dt>
+									<dd class="txt"><a href="/talk/374674616" onclick="vndr('BDW29');">ㅈㄱㄴ</a></dd>									<dd class="info"><span class="count">조회 10,907</span><span class="rcm">추천 12</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no4"><span>4</span></span><span class="no9"><span>9</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374673883" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014760" width="71" height="70" alt="빅히트 방탄 투바투 직속 신인 아이돌 코르티스"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374673883" onclick="vndr('BDW29');" title="빅히트 방탄 투바투 직속 신인 아이돌 코르티스">빅히트 방탄 투바투 직속 신인 아이돌 코르티스</a></h2><span class="reple-num">(17)</span></dt>
+									<dd class="txt"><a href="/talk/374673883" onclick="vndr('BDW29');">코르티스 어리지만 실력있는 친구들이야 .많관부            방탄 투바투 스트레이키...</a></dd>									<dd class="info"><span class="count">조회 7,741</span><span class="rcm">추천 30</span></dd>
+								</dl> 
+							</li><li>
+
+								<div class="rankNum"><span class="no5"><span>5</span></span><span class="no0"><span>0</span></span></div>
+								<div class="thumb">
+									<a href="/talk/374673481" onclick="vndr('BDW29');"><img src="https://thumb.pann.com/tc_100x100/http://fimg6.pann.com/new/download.jsp?FileID=69014416" width="71" height="70" alt="하츠투하츠 KB국민은행 모델"></a>
+								</div>								<dl>
+									<dt><h2><a href="/talk/374673481" onclick="vndr('BDW29');" title="하츠투하츠 KB국민은행 모델">하츠투하츠 KB국민은행 모델</a></h2><span class="reple-num">(22)</span></dt>
+																		<dd class="info"><span class="count">조회 10,685</span><span class="rcm">추천 26</span></dd>
+								</dl> 
+							</li>						</ul> 
+
+						<div class="bridge-paging">
+														<button type="button" id="first" onclick="vndr('BDW30');gopage('d','20250812',1,'total');" class="first current">1-50위</button>	
+																					<button type="button" id="last" onclick="vndr('BDW30');gopage('d','20250812',2,'total');" class="last">51-100위</button>
+													</div>
+						<div class="plus-nav">
+							<a href="/talk" class="" onclick="vndr('BDW08');">톡톡 홈으로</a><a href="#" onclick="vndr('BDW09');j$('document').scrollTo(0);return false;" class="gotop">맨 위로</a>
+						</div>
+					</div>					
+				</div><!--tsCnt -->			
+
+			</div><!-- mainarea --> 
+			<div class="sidearea">				
+								<!-- 진행 중 이벤트 -->
+										<!-- 진행 중 이벤트 -->
+
+				<!-- 우측영역 전체 카테고리 -->
+								<div class="bridge_category">
+					<div class="">
+						<dl class="all">
+							<dt>판 전체 카테고리</dt>
+							<dd id="categoryArea">
+							<div class="cate_talk_wrap">
+								<p class="category_tit_talk">톡톡</p>
+								<ul class="odd">
+									<li><a href="/talk/c20001" onclick="vndr('BDC03'); return true;">사는얘기</a></li>
+									<li><a href="/talk/c20038" onclick="vndr('BDC03'); return true;">10대 이야기</a></li>
+									<li><a href="/talk/c20002" onclick="vndr('BDC03'); return true;">20대 이야기</a></li>
+									<li><a href="/talk/c20003" onclick="vndr('BDC03'); return true;">30대 이야기</a></li>
+									<li><a href="/talk/c20004" onclick="vndr('BDC03'); return true;">40대 이야기</a></li>
+									<li><a href="/talk/c20005" onclick="vndr('BDC03'); return true;">50대 이야기</a></li>
+									<li class="line"><a href="/talk/c20047" onclick="vndr('BDC03'); return true;">싱글톡</a></li>									
+									
+									<li><a href="/talk/c20048" onclick="vndr('BDC03'); return true;">훈훈한이야기</a></li>
+									<li><a href="/talk/c20012" onclick="vndr('BDC03'); return true;">세상에 이런일이</a></li>
+									<li><a href="/talk/c20013" onclick="vndr('BDC03'); return true;">나 억울해요</a></li>
+									<li><a href="/talk/c20015" onclick="vndr('BDC03'); return true;">묻고 답하기</a></li>
+									<li><a href="/talk/c20016" onclick="vndr('BDC03'); return true;">대한민국 이슈</a></li>
+									<li><a href="/talk/c20017" onclick="vndr('BDC03'); return true;">개념 상실한 사람들</a></li>
+									<li class="line"><a href="/talk/c20018" onclick="vndr('BDC03'); return true;">믿음과 신앙</a></li>
+																		
+									<li><a href="/talk/c20050" onclick="vndr('BDC03'); return true;">TV톡</a></li>
+									<li><a href="/talk/c20028" onclick="vndr('BDC03'); return true;" class="talk">엔터톡</a></li>
+									<li><a href="/talk/c20029" onclick="vndr('BDC03'); return true;">스타/스포츠</a></li>
+									<li><a href="/talk/c20030" onclick="vndr('BDC03'); return true;">배꼽조심 유머</a></li>
+									<li><a href="/talk/c20031" onclick="vndr('BDC03'); return true;">웃기는 사진/동영상</a></li>
+									<li><a href="/talk/c20032" onclick="vndr('BDC03'); return true;">엽기&amp;호러</a></li>
+									<li class="line"><a href="/talk/c20033" onclick="vndr('BDC03'); return true;">웹툰&amp;카툰</a></li>
+									
+									<li><a href="/talk/c20043" onclick="vndr('BDC03'); return true;">야구야구</a></li>
+									<li><a href="/talk/c20055" onclick="vndr('BDC03'); return true;">판춘문예</a></li>
+									
+								</ul>
+								<ul class="even">
+									<li><a href="/talk/c20023" onclick="vndr('BDC03'); return true;">남편 VS 아내</a></li>
+									<li><a href="/talk/c20040" onclick="vndr('BDC03'); return true;">남자들끼리만</a></li>
+									<li><a href="/talk/c20024" onclick="vndr('BDC03'); return true;">여자들끼리만</a></li>									
+									<li><a href="/talk/c20025" onclick="vndr('BDC03'); return true;">결혼/시집/친정</a></li>
+									<li><a href="/talk/c20026" onclick="vndr('BDC03'); return true;">맞벌이 부부 이야기</a></li>
+									<li><a href="/talk/c20027" onclick="vndr('BDC03'); return true;">임신/출산/육아</a></li>
+									<li class="line"><a href="/talk/c20041" onclick="vndr('BDC03'); return true;">남자들의 속깊은 이야기</a></li>
+																	
+									<li><a href="/talk/c20006" onclick="vndr('BDC03'); return true;">사랑과 이별</a></li>
+									<li><a href="/talk/c20007" onclick="vndr('BDC03'); return true;">해석 남/여</a></li>
+									<li><a href="/talk/c20008" onclick="vndr('BDC03'); return true;">사랑,고백해도 될까요?</a></li>
+									<li><a href="/talk/c20009" onclick="vndr('BDC03'); return true;">지금은 연애중</a></li>
+									<li><a href="/talk/c20011" onclick="vndr('BDC03'); return true;">헤어진 다음날</a></li>
+									<li><a href="/talk/c20010" onclick="vndr('BDC03'); return true;">군화와 고무신</a></li>
+									<li class="line"><a href="/talk/c20049" onclick="vndr('BDC03'); return true;">군대일기</a></li>
+									
+									<li><a href="/talk/c20019" onclick="vndr('BDC03'); return true;">회사생활</a></li>
+									<li><a href="/talk/c20054" onclick="vndr('BDC03'); return true;">취업과 면접</a></li>	
+									<li><a href="/talk/c20020" onclick="vndr('BDC03'); return true;">알바 경험담</a></li>
+									<li class="line"><a href="/talk/c20021" onclick="vndr('BDC03'); return true;">백수&amp;백조이야기</a></li>
+									
+									<li><a href="/talk/c20042" onclick="vndr('BDC03'); return true;">동물사랑방</a></li>
+									<li><a href="/talk/c20051" onclick="vndr('BDC03'); return true;">요리&amp;레시피</a></li>
+									<li><a href="/talk/c20052" onclick="vndr('BDC03'); return true;">뷰티&amp;스타일</a></li>
+									<li><a href="/talk/c20053" onclick="vndr('BDC03'); return true;">건강/다이어트</a></li>
+									<li><a href="/talk/c20034" onclick="vndr('BDC03'); return true;">여행을 떠나요</a></li>
+									<li><a href="/talk/c20035" onclick="vndr('BDC03'); return true;">포토 스토리</a></li>
+									<li><a href="/talk/c20064" onclick="vndr('BDC03'); return true;">생활/노하우</a></li>
+									
+								</ul>
+								</div>
+							</dd>
+						</dl>
+					</div>
+				</div><!-- category 끝 -->				<!-- 우측영역 전체 카테고리 -->
+
+
+					<div class="sidebar sidebar_banner">
+	<script src="https://cyad1.nate.com/js.kti/nate/pann@rectangle_Middle2" type="text/javascript" language="javascript"></script><script src="//cdn-aitg.widerplanet.com/js/adr.js" type="text/javascript"></script>
+</div>
+					<!-- 엔터톡 -->
+					<script type="text/javascript">
+var curEnterTalkId	= 0;
+function nextEnterTalk()
+{
+	j$("#enter_talk"+curEnterTalkId).hide();
+	curEnterTalkId++;
+	curEnterTalkId = curEnterTalkId == 2 ? 0 : curEnterTalkId;
+	j$("#enter_talk"+curEnterTalkId).show();
+	j$("#enterTalkPage").text(curEnterTalkId+1);
+}
+
+function prevEnterTalk()
+{
+	j$("#enter_talk"+curEnterTalkId).hide();
+	curEnterTalkId--;
+	curEnterTalkId = curEnterTalkId == -1 ? 1 : curEnterTalkId;
+	j$("#enter_talk"+curEnterTalkId).show();
+	j$("#enterTalkPage").text(curEnterTalkId+1);
+}
+//click code
+function clickEnterTalk(){
+	switch('T')
+	{
+	case'I':		
+		vndr('JCD05');
+		break;
+	case'T':
+		vndr('TCD01');
+		break;
+	case'V':
+		vndr('VCD06');
+		break;
+	case 'P':
+		vndr('PPT23');
+		break;
+	case 'F':
+		vndr('TFM10');
+		break;
+	}
+}
+j$(document).ready(function(){
+	if (mt_rand(1, 2) > 1) {
+		nextEnterTalk();
+	}
+});
+</script>
+<div class="sidebar enter-talk">
+	<h3>엔터톡</h3>
+	<ul class="side-list" id="enter_talk0">
+		<li>
+		<a href="/talk/374677657" title="팬들 반응 좋다는 남돌 컴백 티저 사진 " onclick="clickEnterTalk();" class="point">팬들 반응 좋다는 남돌 컴백 티..</a>
+		<span class="reple-num">
+		(8)
+		</span>		</li><li>
+		<a href="/talk/374677949" title="7명인데 비빔면 5개도 다 못 먹고 남긴다고? " onclick="clickEnterTalk();" class="">7명인데 비빔면 5개도 다 못 먹..</a>
+		<span class="reple-num">
+		(6)
+		</span>		</li><li>
+		<a href="/talk/374677680" title="비주얼 멤이라고 말 나오는 하이브 신인 남돌 " onclick="clickEnterTalk();" class="">비주얼 멤이라고 말 나오는 하이..</a>
+		<span class="reple-num">
+		(38)
+		</span>		</li><li>
+		<a href="/talk/374677375" title="기껏 활동하고도 욕만 먹어 속상했던 보아 " onclick="clickEnterTalk();" class="">기껏 활동하고도 욕만 먹어 속상..</a>
+		<span class="reple-num">
+		(14)
+		</span>		</li><li>
+		<a href="/talk/374677112" title="압구정 거리에서 추팔하는 연예인들 " onclick="clickEnterTalk();" class="">압구정 거리에서 추팔하는 연예..</a>
+				</li><li>
+		<a href="/talk/374673887" title="얼굴이 대서사이자 예술 작품인 남돌 커버 " onclick="clickEnterTalk();" class="point">얼굴이 대서사이자 예술 작품인 ..</a>
+		<span class="reple-num">
+		(20)
+		</span>		</li><li>
+		<a href="/talk/374674146" title="빠니가 생각하는 음식이 맛있는 나라의 기준 " onclick="clickEnterTalk();" class="">빠니가 생각하는 음식이 맛있는 ..</a>
+		<span class="reple-num">
+		(13)
+		</span>		</li><li>
+		<a href="/talk/374673692" title="일본에서 활동할 때마다 반응 난리인 여돌 " onclick="clickEnterTalk();" class="">일본에서 활동할 때마다 반응 난..</a>
+		<span class="reple-num">
+		(15)
+		</span>		</li><li>
+		<a href="/talk/374674049" title="비대면 연습생 4년 하고 데뷔했다는 아이돌 " onclick="clickEnterTalk();" class="">비대면 연습생 4년 하고 데뷔했..</a>
+		<span class="reple-num">
+		(25)
+		</span>		</li><li>
+		<a href="/talk/374673440" title="나이 10살 속이고 오디션 본 배우의 최후 " onclick="clickEnterTalk();" class="">나이 10살 속이고 오디션 본 배..</a>
+		<span class="reple-num">
+		(6)
+		</span>		</li>	</ul>
+	
+	<ul class="side-list" id="enter_talk1" style="display:none;">
+		<li>
+		<a href="/talk/374661439" title="서로의 틀니를 보살펴줄 수 있는 찐 우정" onclick="clickEnterTalk();" class="point">서로의 틀니를 보살펴줄 수 있는..</a>
+		<span class="reple-num">
+		(7)
+		</span>		</li><li>
+		<a href="/talk/374662087" title="알콜에 민감한 배우, 이게 진짜 반전매력이지" onclick="clickEnterTalk();" class="">알콜에 민감한 배우, 이게 진짜 ..</a>
+		<span class="reple-num">
+		(18)
+		</span>		</li><li>
+		<a href="/talk/374661393" title="28년 뒤, 헤어진 후 우정을 찾았다는 연예인" onclick="clickEnterTalk();" class="">28년 뒤, 헤어진 후 우정을 찾았..</a>
+		<span class="reple-num">
+		(3)
+		</span>		</li><li>
+		<a href="/talk/374662146" title="머리 기르기 시작 후 피해자 생성 중인 개그맨" onclick="clickEnterTalk();" class="">머리 기르기 시작 후 피해자 생..</a>
+		<span class="reple-num">
+		(12)
+		</span>		</li><li>
+		<a href="/talk/374661533" title="딸기처럼 상큼한 르세라핌 채원이의 Hi 25살!" onclick="clickEnterTalk();" class="">딸기처럼 상큼한 르세라핌 채원..</a>
+		<span class="reple-num">
+		(5)
+		</span>		</li><li>
+		<a href="/talk/374658251" title="커플이 너무 달아서 이 다 썩음, 치과 가야 됨" onclick="clickEnterTalk();" class="point">커플이 너무 달아서 이 다 썩음,..</a>
+		<span class="reple-num">
+		(23)
+		</span>		</li><li>
+		<a href="/talk/374658155" title="데식 내 '뀨' 유행이 끝나지 않았으면 해요" onclick="clickEnterTalk();" class="">데식 내 '뀨' 유행이 끝나지 않..</a>
+		<span class="reple-num">
+		(11)
+		</span>		</li><li>
+		<a href="/talk/374658221" title="얼굴의 축복이 끝이 없다, 얘들아 이게 유나야" onclick="clickEnterTalk();" class="">얼굴의 축복이 끝이 없다, 얘들..</a>
+		<span class="reple-num">
+		(8)
+		</span>		</li><li>
+		<a href="/talk/374658198" title="여름을 의인화 한다면 바로 이 사람이 아닐까" onclick="clickEnterTalk();" class="">여름을 의인화 한다면 바로 이 ..</a>
+		<span class="reple-num">
+		(29)
+		</span>		</li><li>
+		<a href="/talk/374658235" title="너무 핫한 모습에 잠이 다 깨버렸으니 책임져" onclick="clickEnterTalk();" class="">너무 핫한 모습에 잠이 다 깨버..</a>
+		<span class="reple-num">
+		(2)
+		</span>		</li>	</ul>
+
+	<div class="navi-paging">
+			<a href="#" title="이전 내용" class="prev" onclick="prevEnterTalk(); return false;">이전 내용</a>
+		<strong><b id="enterTalkPage">1</b><span>/ </span><span class="total">2</span></strong>
+		<a href="#" title="다음 내용" class="next" onclick="nextEnterTalk(); return false;">다음 내용</a>
+		</div>
+	
+</div>
+					<!-- 추천 많은 톡/ 댓글 많은 톡 / 베스트 톡톡-->
+					<div class="sidebar best-talk" id="best-content-tok">
+	<h3>베스트 톡톡</h3>
+	<!-- subTab -->
+	<ul class="subTab subtab01"><!-- subtab01~04 -->
+		<li class="recommend"><a href="javascript:;" onclick="BestContentTokApp.recmd();" class="on">추천 많은 톡</a></li>
+		<li class="reply"><a href="javascript:;" onclick="BestContentTokApp.reply();" class="">댓글 많은 톡</a></li>
+	</ul><!-- //subTab -->
+	<ul class="side-list">
+		<li>
+			<a href="/talk/374678793" onclick="BestContentTokItem.recmd();" class="point">
+				6년 연애, 결혼식 3주 남기...			</a>
+			<span class="reple-num">(172)</span>
+		</li><li>
+			<a href="/talk/374675537" onclick="BestContentTokItem.recmd();">
+				나 21살인데 나만 이렇게 사냐			</a>
+			<span class="reple-num">(277)</span>
+		</li><li>
+			<a href="/talk/374678107" onclick="BestContentTokItem.recmd();">
+				카리나 성형한거 맞지않나			</a>
+			<span class="reple-num">(194)</span>
+		</li><li>
+			<a href="/talk/374678113" onclick="BestContentTokItem.recmd();">
+				요즘 여자들 겁없다는 남자			</a>
+			<span class="reple-num">(140)</span>
+		</li><li>
+			<a href="/talk/374675470" onclick="BestContentTokItem.recmd();">
+				이거 진짜 개잘팬다			</a>
+			<span class="reple-num">(103)</span>
+		</li><li>
+			<a href="/talk/374677462" onclick="BestContentTokItem.recmd();" class="point">
+				지수에 대한 한 영화유튜버...			</a>
+			<span class="reple-num">(138)</span>
+		</li><li>
+			<a href="/talk/374675872" onclick="BestContentTokItem.recmd();">
+				힙한 현대카드 광고 촬영 중...			</a>
+			<span class="reple-num">(32)</span>
+		</li><li>
+			<a href="/talk/374680358" onclick="BestContentTokItem.recmd();">
+				찰스 마크 영상 기독교대화 ...			</a>
+			<span class="reple-num">(219)</span>
+		</li><li>
+			<a href="/talk/374677600" onclick="BestContentTokItem.recmd();">
+				막내 직원이 회사를 그만뒀...			</a>
+			<span class="reple-num">(143)</span>
+		</li><li>
+			<a href="/talk/374678784" onclick="BestContentTokItem.recmd();">
+				당근거지 때문에 신랑이랑 ...			</a>
+			<span class="reple-num">(321)</span>
+		</li>	</ul>
+	<ul class="side-list" style="display:none;">
+		<li>
+			<a href="/talk/374678094" onclick="BestContentTokItem.reply()" class="point">
+				커뮤에서 불타고 있는 주제...			</a>
+			<span class="reple-num">(446)</span>
+		</li><li>
+			<a href="/talk/374678784" onclick="BestContentTokItem.reply()">
+				당근거지 때문에 신랑이랑 ...			</a>
+			<span class="reple-num">(321)</span>
+		</li><li>
+			<a href="/talk/374675537" onclick="BestContentTokItem.reply()">
+				나 21살인데 나만 이렇게 사냐			</a>
+			<span class="reple-num">(277)</span>
+		</li><li>
+			<a href="/talk/374675205" onclick="BestContentTokItem.reply()">
+				여초회사 다 이러나요?			</a>
+			<span class="reple-num">(216)</span>
+		</li><li>
+			<a href="/talk/374680358" onclick="BestContentTokItem.reply()">
+				찰스 마크 영상 기독교대화 ...			</a>
+			<span class="reple-num">(213)</span>
+		</li><li>
+			<a href="/talk/374679737" onclick="BestContentTokItem.reply()" class="point">
+				고등학생 딸 방학때 아침 챙...			</a>
+			<span class="reple-num">(202)</span>
+		</li><li>
+			<a href="/talk/374678142" onclick="BestContentTokItem.reply()">
+				여잔데 모은돈 적다고 차였네요			</a>
+			<span class="reple-num">(199)</span>
+		</li><li>
+			<a href="/talk/374678107" onclick="BestContentTokItem.reply()">
+				카리나 성형한거 맞지않나			</a>
+			<span class="reple-num">(194)</span>
+		</li><li>
+			<a href="/talk/374678793" onclick="BestContentTokItem.reply()">
+				6년 연애, 결혼식 3주 남기...			</a>
+			<span class="reple-num">(172)</span>
+		</li><li>
+			<a href="/talk/374678473" onclick="BestContentTokItem.reply()">
+				화장하면 다 끼는데 어떡해...			</a>
+			<span class="reple-num">(170)</span>
+		</li>	</ul>
+</div>
+<script type="text/javascript" charset="utf-8"> 
+//<![CDATA[
+var BestContentTokItem = {
+		recmd: function() {
+			vndr('TCD42');
+		},
+		reply: function() {
+			vndr('TCD44');
+		}
+	};
+
+var BestContentTokApp = {
+	recmd: function() {
+		vndr('TCD41');
+		j$('#best-content-tok > .subTab > .reply > a').removeClass('on');
+		j$('#best-content-tok > .subTab > .recommend > a').addClass('on');
+		j$('#best-content-tok > .side-list:eq(1)').hide();
+		j$('#best-content-tok > .side-list:eq(0)').show();
+	},
+	reply: function() {
+		vndr('TCD43');
+		j$('#best-content-tok > .subTab > .recommend > a').removeClass('on');
+		j$('#best-content-tok > .subTab > .reply > a').addClass('on');
+		j$('#best-content-tok > .side-list:eq(0)').hide();
+		j$('#best-content-tok > .side-list:eq(1)').show();
+	}
+};
+//]]>
+</script>
+					<!-- 새로운 베플 등장 -->
+														<div class="sidebar bestreple">
+						<h3>새로운 베플 등장</h3>
+												<ul id="newBestReplyPann1" style="display: ">						
+												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374679925/reply/647053383" onclick="vndr('TCD09'); return true;">은근이 아니지..</a></div>
+								<div class="reple"><a href="/talk/374679925" onclick="vndr('TCD09'); return true;">성해은도 은근 몸매 좋네</a><span class="reple-num">(11)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681790/reply/647051187" onclick="vndr('TCD09'); return true;">ㄹㅇ 시청자들한테 강요를 한 것..</a></div>
+								<div class="reple"><a href="/talk/374681790" onclick="vndr('TCD09'); return true;">아니 찰스 마크 저 영상으로 욕먹..</a><span class="reple-num">(3)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681830/reply/647052250" onclick="vndr('TCD09'); return true;">fts는 근거를 기반으로 자료도 ..</a></div>
+								<div class="reple"><a href="/talk/374681830" onclick="vndr('TCD09'); return true;">그니까 잠재적 범죄자로 보라는 거..</a><span class="reple-num">(13)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681830/reply/647052373" onclick="vndr('TCD09'); return true;">얼마전에 웬만하면 여자 산부인..</a></div>
+								<div class="reple"><a href="/talk/374681830" onclick="vndr('TCD09'); return true;">그니까 잠재적 범죄자로 보라는 거..</a><span class="reple-num">(13)</span></div>
+							</li>												
+							<li class="last"> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374675757/reply/647025476" onclick="vndr('TCD09'); return true;">앞머리 있으나 없으나 존못</a></div>
+								<div class="reple"><a href="/talk/374675757" onclick="vndr('TCD09'); return true;">제니 앞머리 왜 이제 냈지</a><span class="reple-num">(126)</span></div>
+							</li>												</ul>	
+												<ul id="newBestReplyPann2" style="display:none ">						
+												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374674252/reply/647049048" onclick="vndr('TCD09'); return true;">네 동생말고 너한테 조언할게. ..</a></div>
+								<div class="reple"><a href="/talk/374674252" onclick="vndr('TCD09'); return true;">16세남동생 어떻게 해야함..??</a><span class="reple-num">(20)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374679961/reply/647044426" onclick="vndr('TCD09'); return true;">저 말이 칭찬이다/너처럼 생각한..</a></div>
+								<div class="reple"><a href="/talk/374679961" onclick="vndr('TCD09'); return true;">아오 이리오 왤케 싫지</a><span class="reple-num">(15)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374679639/reply/647052024" onclick="vndr('TCD09'); return true;">슴여돌들은 뭔가 연차찰수록 자..</a></div>
+								<div class="reple"><a href="/talk/374679639" onclick="vndr('TCD09'); return true;">와 순간 지젤인줄앎</a><span class="reple-num">(28)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374679021/reply/647054613" onclick="vndr('TCD09'); return true;">게으르고 크게 이루고 싶은 것도..</a></div>
+								<div class="reple"><a href="/talk/374679021" onclick="vndr('TCD09'); return true;">infp isfp들아 너네 진짜 이런 생..</a><span class="reple-num">(15)</span></div>
+							</li>												
+							<li class="last"> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374678925/reply/647050184" onclick="vndr('TCD09'); return true;">자연미인 클라쓰</a></div>
+								<div class="reple"><a href="/talk/374678925" onclick="vndr('TCD09'); return true;">오늘자 하츠투하츠 위버스 이안</a><span class="reple-num">(23)</span></div>
+							</li>												</ul>	
+												<ul id="newBestReplyPann3" style="display:none ">						
+												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374680041/reply/647052792" onclick="vndr('TCD09'); return true;">대한민국의 마돈나라 불림</a></div>
+								<div class="reple"><a href="/talk/374680041" onclick="vndr('TCD09'); return true;">엄정화 라는 분 옛날에 많이 유명..</a><span class="reple-num">(23)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374679925/reply/647054824" onclick="vndr('TCD09'); return true;">환연때도 옷 두꺼운거 입었지만 ..</a></div>
+								<div class="reple"><a href="/talk/374679925" onclick="vndr('TCD09'); return true;">성해은도 은근 몸매 좋네</a><span class="reple-num">(11)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/349274441/reply/532910686" onclick="vndr('TCD09'); return true;">내 주위에도 저런애 하나 있음 ..</a></div>
+								<div class="reple"><a href="/talk/349274441" onclick="vndr('TCD09'); return true;">작심삼일로 포기하면서 제 직업 깎..</a><span class="reple-num">(41)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374677113/reply/647042550" onclick="vndr('TCD09'); return true;">응 한남아 여자들도 맞벌이인주..</a></div>
+								<div class="reple"><a href="/talk/374677113" onclick="vndr('TCD09'); return true;">남자들이 결혼 안하는 이유</a><span class="reple-num">(37)</span></div>
+							</li>												
+							<li class="last"> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374680879/reply/647055481" onclick="vndr('TCD09'); return true;">드론 1000대면 거의 올림픽수준..</a></div>
+								<div class="reple"><a href="/talk/374680879" onclick="vndr('TCD09'); return true;">대박인 임영웅&nbsp;정규 2집 발매 기념..</a><span class="reple-num">(5)</span></div>
+							</li>												</ul>	
+												<ul id="newBestReplyPann4" style="display:none ">						
+												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681850/reply/647055935" onclick="vndr('TCD09'); return true;">하트 누르니까 진짜 나오는거 뭐..</a></div>
+								<div class="reple"><a href="/talk/374681850" onclick="vndr('TCD09'); return true;">이번에 먹을거 역대급으로 싸게팜</a><span class="reple-num">(3)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681850/reply/647055938" onclick="vndr('TCD09'); return true;">그런데 가격 왜저렇게 쌈???</a></div>
+								<div class="reple"><a href="/talk/374681850" onclick="vndr('TCD09'); return true;">이번에 먹을거 역대급으로 싸게팜</a><span class="reple-num">(3)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681850/reply/647055941" onclick="vndr('TCD09'); return true;">와 ㅈㄴ싸네 바로 하나 주문함</a></div>
+								<div class="reple"><a href="/talk/374681850" onclick="vndr('TCD09'); return true;">이번에 먹을거 역대급으로 싸게팜</a><span class="reple-num">(3)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374681830/reply/647052066" onclick="vndr('TCD09'); return true;">실컷 ‘여자한테도 잘못이 있다‘..</a></div>
+								<div class="reple"><a href="/talk/374681830" onclick="vndr('TCD09'); return true;">그니까 잠재적 범죄자로 보라는 거..</a><span class="reple-num">(13)</span></div>
+							</li>												
+							<li class="last"> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374680879/reply/647054197" onclick="vndr('TCD09'); return true;">스케일 대박이네</a></div>
+								<div class="reple"><a href="/talk/374680879" onclick="vndr('TCD09'); return true;">대박인 임영웅&nbsp;정규 2집 발매 기념..</a><span class="reple-num">(5)</span></div>
+							</li>												</ul>	
+												<ul id="newBestReplyPann5" style="display:none ">						
+												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374673481/reply/647028481" onclick="vndr('TCD09'); return true;">아니 얘네 인기가 있음??? 대중..</a></div>
+								<div class="reple"><a href="/talk/374673481" onclick="vndr('TCD09'); return true;">하츠투하츠 KB국민은행 모델</a><span class="reple-num">(22)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374682120/reply/647054151" onclick="vndr('TCD09'); return true;">지들이 케이팝알리는데 한게뭐있..</a></div>
+								<div class="reple"><a href="/talk/374682120" onclick="vndr('TCD09'); return true;">이제는 K-pop 단어 쓰지말자고함</a><span class="reple-num">(29)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374678875/reply/647043407" onclick="vndr('TCD09'); return true;">친한척 다가와서 옥장판 팔려는 ..</a></div>
+								<div class="reple"><a href="/talk/374678875" onclick="vndr('TCD09'); return true;">썸남 말 한마디에 정떨어져요</a><span class="reple-num">(13)</span></div>
+							</li>												
+							<li> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374678977/reply/647054324" onclick="vndr('TCD09'); return true;">재활용도 안돼는 인간을 만나셨..</a></div>
+								<div class="reple"><a href="/talk/374678977" onclick="vndr('TCD09'); return true;">아무래도 결혼 잘못 한걸까..</a><span class="reple-num">(49)</span></div>
+							</li>												
+							<li class="last"> 
+								<div class="tit"><span class="best">베플</span><a href="/talk/374678977/reply/647053781" onclick="vndr('TCD09'); return true;">잘못했음.. 차라리 육휴 쓰지 말..</a></div>
+								<div class="reple"><a href="/talk/374678977" onclick="vndr('TCD09'); return true;">아무래도 결혼 잘못 한걸까..</a><span class="reple-num">(49)</span></div>
+							</li>												</ul>	
+												<div class="navi-paging">
+							<a href="#" class="prev">이전 내용</a>
+							<strong id="newBeplePage">1<span>/</span> <span class="total">5</span></strong>
+							<a href="#" class="next">다음 내용</a>
+						</div>
+						<a href="/talk/bestReply" class="more" title="새로운 베플 더보기" onclick="vndr('TCD50'); return true;">+ 더보기</a>
+					</div>					
+										
+				<script type="text/javascript">
+				//<![CDATA[
+				(function($) {
+					$(function(){
+						var curPage = 1;
+						function navigateNewBestReply(e) {
+							try {
+								var inc = e.data.inc;
+								var total = 5;
+								if (curPage + inc < 1) {
+									curPage = total + 1;
+								}
+								if (curPage + inc > total) {
+									curPage = 0;
+								}
+
+								for(var i=0; i<total; i++) {
+									$(".bestreple ul#newBestReplyPann"+(i+1)).hide();
+								}
+
+								curPage += inc;
+								$(".bestreple ul#newBestReplyPann"+(curPage)).show();
+								$(".bestreple div.navi-paging strong#newBeplePage").html(curPage + "<span>/</span> <span class=\"total\">" + total + "</span>");
+								return false;
+
+							} catch (e) {}
+						}
+
+						$(".bestreple div.navi-paging a.prev").bind('click', {inc: -1}, navigateNewBestReply);
+						$(".bestreple div.navi-paging a.next").bind('click', {inc: 1}, navigateNewBestReply);
+					});
+				})(jQuery);
+				//]]>	
+				</script>                    
+                    <!-- 네이트 쇼핑추천 -->
+                    	
+<div class="sideiframe" style="text-align:center; padding-top:15px;">
+<iframe src="//shop.nate.com/shopbox/shopbox.htm?n=9&amp;c=1&amp;svcpage=pann&amp;w=250" width="100%" height="330" frameborder="0" allowtransparency="true" scrolling="no" title="네이트 쇼핑추천"></iframe>
+</div>	
+
+							</div><!-- sidearea -->
+		</div>
+	</div>
+
+
+				<!-- footer -->
+		<div id="footer">
+			<dl class="footer_list">
+				<dt>네이트 푸터 영역</dt>
+				<dd>
+					<a href="/notice/view?pann_id=373990373">게시물 게재규칙</a><span>|</span>
+					<a href="/notice/view?pann_id=373990365">판 이용약관</a><span>|</span>
+					<a href="https://www.nate.com/footer/privacy/index.html" target="_blank" title="새창"><strong>개인정보처리방침</strong></a><span>|</span>
+					<a href="https://www.nate.com/policy/youthpolicy.html" target="_blank" title="새창">청소년보호정책</a><span>|</span>
+					<a href="https://adguide.nate.com" target="_blank" title="새창">광고문의</a><span>|</span>
+					<a href="https://helpdesk.nate.com" target="_blank" title="새창">고객센터</a>
+				</dd>
+			</dl>
+			<p class="alert_right">
+				정보통신망을 통하여 불법촬영물등, 음란, 저작권 침해 명예훼손, 청소년 유해물, 기타 위법 자료 등을 게시 또는 배포하면 <br>
+				해당 게시물은 경고 없이 삭제되며,<br>
+				게시자는 법률에 따라 징역형 또는 벌금형에 처해질 수 있습니다.	
+				<br>
+			</p>
+			<div class="copyright">© <a href="http://www.natecorp.com/" target="_blank" title="새창">NATE Communications</a> </div>
+		</div>
+		<div class="clear">
+		<script type="text/javascript">
+		//<![CDATA[
+		function statCode() {
+			var dummy = new Date().getTime();
+			document.write('<img src="https://stat.nate.com/stat/stat.tiff?cp_url=[npann_ndr.nate.com/today/dtalker_total??ndrparam1=n12&ndrparam2=&ndrparam3=&ndrparam4=&ndru3=&ndrl3=]t=' + dummy + '" width="0" height="0" border="0" alt="" style="display:none" >');
+		}
+		function etcStatCode() {
+			var dummy = new Date().getTime();
+			document.write('<img src="https://statetc.nate.com/stat/stat.tiff?cp_url=[??ndrparam1=n12&ndrparam2=&ndrparam3=&ndrparam4=&ndru3=&ndrl3=]t=' + dummy + '" width="0" height="0" border="0" alt="" style="display:none">');
+		}
+		//]]>
+		</script>	
+		
+<script type="text/javascript">statCode();</script><img src="https://stat.nate.com/stat/stat.tiff?cp_url=[npann_ndr.nate.com/today/dtalker_total??ndrparam1=n12&amp;ndrparam2=&amp;ndrparam3=&amp;ndrparam4=&amp;ndru3=&amp;ndrl3=]t=1755088146751" width="0" height="0" border="0" alt="" style="display:none">		
+		
+		</div>
+<!-- 모바일 웹 보기 -->
+	</div>
+	
+	<iframe src="https://gum.criteo.com/syncframe?origin=publishertag&amp;topUrl=pann.nate.com#{&quot;bundle&quot;:{&quot;origin&quot;:0},&quot;optout&quot;:{&quot;value&quot;:false,&quot;origin&quot;:0},&quot;tld&quot;:&quot;nate.com&quot;,&quot;topUrl&quot;:&quot;pann.nate.com&quot;,&quot;version&quot;:162,&quot;origin&quot;:&quot;publishertag&quot;,&quot;requestId&quot;:&quot;0.9449217515474333&quot;}" width="0" height="0" frameborder="0" sandbox="allow-scripts allow-same-origin" aria-hidden="true" title="Criteo GUM iframe" style="border-width: 0px; margin: 0px; display: none;"></iframe></body></html>

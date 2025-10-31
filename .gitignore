@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# Logs
+*.log
+logs/
+firebase-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Node modules (모든 하위 폴더)
+**/node_modules/
+**/package-lock.json
+
+# Firebase
+.firebase/
+firebase.json
+firebase-debug.log
+
+# Next.js
+.next/
+out/
+dist/
+
+# Python packages
+**/requirements_minimal.txt
+**/requirements_utf8.txt
+
