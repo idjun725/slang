@@ -1,6 +1,7 @@
 [build]
   publish = "frontend"
-  command = "echo 'No build step needed'"
+  # 빌드 명령 없음 (정적 파일만 배포)
+  command = ""
 
 # SPA 라우팅을 위한 리다이렉트는 frontend/_redirects 파일에서 처리
 
