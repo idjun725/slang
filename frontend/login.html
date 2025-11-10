@@ -174,8 +174,11 @@
         </div>
     </div>
     
+    <!-- API URL 설정 -->
+    <script src="config.js"></script>
     <script>
-        const API_BASE_URL = 'http://localhost:8000';
+        // config.js에서 설정된 API_BASE_URL 사용
+        const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000';
         
         // 로컬 스토리지에서 세션 ID 확인
         const sessionId = localStorage.getItem('session_id');

@@ -1,4 +1,8 @@
-const API_BASE_URL = 'http://localhost:8000';
+// API URL 설정 (환경변수 또는 기본값)
+const API_BASE_URL = window.API_BASE_URL || 
+                     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                      ? 'http://localhost:8000' 
+                      : 'https://your-backend-url.herokuapp.com'); // 백엔드 URL로 변경 필요
 
 // 세션 ID 가져오기
 function getSessionId() {

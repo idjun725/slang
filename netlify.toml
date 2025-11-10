@@ -1,0 +1,10 @@
+[build]
+  publish = "frontend"
+  command = "echo 'No build step needed'"
+
+# SPA 라우팅을 위한 리다이렉트는 frontend/_redirects 파일에서 처리
+
+[build.environment]
+  NODE_VERSION = "18"
+  # API_BASE_URL은 Netlify 대시보드에서 환경변수로 설정하세요
+
