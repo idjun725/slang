@@ -10,10 +10,6 @@
   },
   "source": {
     "rootDirectory": "backend"
-  },
-  "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "cd backend && pip install -r requirements.txt"
   }
 }
 
