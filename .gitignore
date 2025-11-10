@@ -1,85 +1,83 @@
 # Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+__pycache__/\r
+*.py[cod]\r
+*.class\r
+*.so\r
+.Python\r
+build/\r
+develop-eggs/\r
+dist/\r
+downloads/\r
+eggs/\r
+.eggs/\r
+lib/\r
+lib64/\r
+parts/\r
+sdist/\r
+var/\r
+wheels/\r
+*.egg-info/\r
+.installed.cfg\r
+*.egg\r
 
 # Virtual Environment
-venv/
-env/
-ENV/
-.venv
+venv/\r
+env/\r
+ENV/\r
+.venv\r
 
 # IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+.vscode/\r
+.idea/\r
+*.swp\r
+*.swo\r
+*~\r
 
 # Environment variables
-.env
-.env.local
+.env\r
+.env.local\r
 
 # Database
-*.db
-*.sqlite
-*.sqlite3
-data/
+*.db\r
+*.sqlite\r
+*.sqlite3\r
+data/\r
 
 # Logs
-*.log
-logs/
-firebase-debug.log
+*.log\r
+logs/\r
+firebase-debug.log\r
 
 # OS
-.DS_Store
-Thumbs.db
-desktop.ini
+.DS_Store\r
+Thumbs.db\r
+desktop.ini\r
 
 # Test
-.pytest_cache/
-.coverage
-htmlcov/
+test_crawler.py\r
+.pytest_cache/\r
+.coverage\r
+htmlcov/\r
 
 # Temporary files
-*.tmp
-*.bak
-*.cache
+*.tmp\r
+*.bak\r
+*.cache\r
 
-# Node modules (모든 하위 폴더)
-**/node_modules/
-**/package-lock.json
+# Node modules
+**/node_modules/\r
+**/package-lock.json\r
 
 # Firebase
-.firebase/
-firebase.json
-firebase-debug.log
+.firebase/\r
+firebase.json\r
 
 # Next.js
-.next/
-out/
-dist/
+.next/\r
+out/\r
+dist/\r
 
 # Python packages
-**/requirements_minimal.txt
-**/requirements_utf8.txt
-
-
+**/requirements_minimal.txt\r
+**/requirements_utf8.txt\r
 

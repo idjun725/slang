@@ -1,0 +1,840 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+from collections import Counter
+from typing import List, Dict, Set, Optional
+import time
+import os
+import math
+import json
+from dotenv import load_dotenv
+
+# 환경변수 로드 (backend 디렉토리의 .env 파일 명시적으로 로드)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(current_dir, '.env')
+load_dotenv(env_path)
+
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
+    print("[WARNING] OpenAI library not installed. GPT filtering will be disabled.")
+
+class Crawler:
+    def __init__(self):
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+        }
+        
+        # 한국어 조사 목록 (제거 대상) - 긴 조사부터 정렬
+        self.korean_particles = sorted([
+            '을', '를',  # 목적격 조사
+            '의',        # 소유격 조사
+            '에', '에게', '께', '한테',  # 처소격 조사
+            '와', '과',  # 접속 조사
+            '이', '가',  # 주격 조사
+            '은', '는',  # 보조사
+            '도',        # 보조사
+            '만',        # 보조사
+            '조차', '마저', '까지', '부터',  # 보조사
+            '에서', '로', '으로',  # 처소격 조사
+        ], key=len, reverse=True)  # 긴 조사부터 정렬
+        
+        # 일반적인 단어들 (필터링용) - 확장
+        self.common_words = {
+            # 기본 일반 단어
+            '사람', '시간', '문제', '경우', '생각', '이야기', '이유', '방법', '결과',
+            '상황', '기회', '가능', '중요', '필요', '이상', '이하', '이전', '이후',
+            '위치', '상태', '조건', '내용', '형태', '성격', '특징', '목적', '의미',
+            # 추가 일반 단어
+            '생활', '일반', '주변', '관련', '대한', '때문', '이후', '이전', '이상',
+            '이하', '이번', '다음', '이전', '이후', '이상', '이하', '이번', '다음',
+            '관계', '의견', '확인', '이해', '학습', '교육', '경험', '생각', '관점',
+            '기본', '원칙', '규칙', '원인', '결과', '영향', '효과', '이유', '목적',
+            '일반', '특별', '특정', '일부', '전체', '부분', '조건', '상황', '환경',
+            # 동작/상태 단어
+            '사용', '이용', '활용', '적용', '처리', '작업', '실행', '진행', '수행',
+            '시작', '종료', '완료', '중단', '계속', '지속', '유지', '보존', '보호',
+            # 부정 단어들
+            '아니', '아닌', '없는', '없이', '없을', '없는', '없이', '없을'
+        }
+        
+        # 신조어가 아닌 확실한 일반 단어 패턴 (정규표현식)
+        self.non_slang_patterns = [
+            r'^[가-힣]{1,2}$',  # 1-2자 단일 단어 (대부분 일반 단어)
+            r'하다$',  # ~하다 패턴 (일반 동사)
+            r'되다$',  # ~되다 패턴
+            r'이다$',  # ~이다 패턴
+            r'같다$',  # ~같다 패턴
+            r'만큼', r'처럼', r'뿐만',  # 조사 성격의 단어
+            r'이[가-힣]{1,2}$',  # 이~ 패턴 (이것, 이런 등)
+            r'그[가-힣]{1,2}$',  # 그~ 패턴
+            r'저[가-힣]{1,2}$',  # 저~ 패턴
+            r'어떤$', r'어떠한$', r'어떻게$',  # 의문사
+            r'모든$', r'전체$', r'일부$', r'많은$', r'적은$',  # 수량 표현
+        ]
+        
+        # API 설정
+        self.naver_client_id = os.getenv('NAVER_CLIENT_ID', '')
+        self.naver_client_secret = os.getenv('NAVER_CLIENT_SECRET', '')
+        self.openai_api_key = os.getenv('OPENAI_API_KEY', '')
+        
+        # OpenAI 클라이언트 초기화
+        use_gpt_str = os.getenv('GPT_USE_ENABLED', '').strip().lower()
+        use_gpt = use_gpt_str == 'true' or use_gpt_str == '1'
+        
+        print(f"[DEBUG] GPT 설정 확인: GPT_USE_ENABLED='{use_gpt_str}' (변환: {use_gpt})")
+        print(f"[DEBUG] OPENAI_API_KEY 존재: {bool(self.openai_api_key)}")
+        print(f"[DEBUG] OPENAI_AVAILABLE: {OPENAI_AVAILABLE}")
+        
+        if OPENAI_AVAILABLE and self.openai_api_key and use_gpt:
+            self.openai_client = OpenAI(api_key=self.openai_api_key)
+            print("[GPT] API 활성화됨")
+        else:
+            self.openai_client = None
+            if not use_gpt:
+                print("[GPT] API 비활성화됨 (GPT_USE_ENABLED=true로 설정하면 활성화)")
+            elif not self.openai_api_key:
+                print("[GPT] API 비활성화됨 (OPENAI_API_KEY가 설정되지 않았습니다)")
+            elif not OPENAI_AVAILABLE:
+                print("[GPT] API 비활성화됨 (OpenAI 라이브러리가 설치되지 않았습니다)")
+
+        # 수동 의미 사전 로드
+        self.manual_meanings = {}
+        try:
+            data_dir = os.path.join(current_dir, 'data')
+            os.makedirs(data_dir, exist_ok=True)
+            manual_path = os.path.join(data_dir, 'manual_meanings.json')
+            if os.path.exists(manual_path):
+                # UTF-8 BOM 문제 해결: utf-8-sig 사용
+                with open(manual_path, 'r', encoding='utf-8-sig') as f:
+                    import json
+                    content = f.read().strip()
+                    if content:
+                        data = json.loads(content)
+                        if isinstance(data, dict):
+                            # 새 형식: {"단어": {"meaning": "...", "examples": [...]}}
+                            # 구 형식 호환: {"단어": "의미"}
+                            self.manual_meanings = {}
+                            for k, v in data.items():
+                                if isinstance(v, dict):
+                                    # 새 형식
+                                    self.manual_meanings[str(k)] = v
+                                elif isinstance(v, str):
+                                    # 구 형식 호환: 문자열을 객체로 변환
+                                    self.manual_meanings[str(k)] = {"meaning": v, "examples": []}
+                            print(f"[의미사전] 수동 의미 {len(self.manual_meanings)}개 로드 (예문 포함)")
+            else:
+                # 파일이 없으면 빈 파일 생성 (BOM 없이)
+                with open(manual_path, 'w', encoding='utf-8') as f:
+                    f.write("{}")
+        except Exception as e:
+            print(f"[의미사전] 수동 의미 로드 실패: {e}")
+            # 실패해도 빈 딕셔너리로 계속 진행
+            self.manual_meanings = {}
+
+        # 단어 노출 규칙(허용/차단) 로드
+        self.word_rules = {"allow": [], "block": []}
+        try:
+            rules_path = os.path.join(current_dir, 'data', 'word_rules.json')
+            if os.path.exists(rules_path):
+                import json
+                with open(rules_path, 'r', encoding='utf-8-sig') as f:
+                    content = f.read().strip()
+                    if content:
+                        data = json.loads(content)
+                        if isinstance(data, dict):
+                            allow = data.get('allow') or []
+                            block = data.get('block') or []
+                            self.word_rules = {
+                                'allow': [str(w) for w in allow if w],
+                                'block': [str(w) for w in block if w],
+                            }
+            else:
+                # 기본 파일 생성
+                os.makedirs(os.path.dirname(rules_path), exist_ok=True)
+                with open(rules_path, 'w', encoding='utf-8') as f:
+                    f.write('{"allow": [], "block": []}')
+            print(f"[단어규칙] allow={len(self.word_rules['allow'])}, block={len(self.word_rules['block'])}")
+        except Exception as e:
+            print(f"[단어규칙] 로드 실패: {e}")
+            self.word_rules = {"allow": [], "block": []}
+
+        # 의미 캐시 파일 경로 및 초기화
+        self.meaning_cache_file = os.path.join(current_dir, 'meaning_cache.json')
+        self.meaning_cache = self._load_meaning_cache()
+
+    def _is_word_allowed(self, word: str) -> bool:
+        """허용/차단 규칙 적용"""
+        if not word:
+            return False
+        if word in self.word_rules.get('block', []):
+            return False
+        allow_list = self.word_rules.get('allow') or []
+        if len(allow_list) > 0 and word not in allow_list:
+            return False
+        return True
+    
+    def _load_meaning_cache(self) -> Dict[str, tuple[str, bool]]:
+        """저장된 의미 캐시 로드"""
+        if not os.path.exists(self.meaning_cache_file):
+            return {}
+        
+        try:
+            with open(self.meaning_cache_file, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+            # JSON 형태를 tuple로 변환
+            result = {}
+            for word, (meaning, success) in cache_data.items():
+                result[word] = (meaning, success)
+            return result
+        except Exception as e:
+            print(f"[캐시] 로드 실패: {e}")
+            return {}
+    
+    def _save_meaning_cache(self, new_meanings: Dict[str, tuple[str, bool]]):
+        """새로운 의미를 캐시에 저장"""
+        # 기존 캐시와 병합
+        self.meaning_cache.update(new_meanings)
+        
+        try:
+            # tuple을 JSON 직렬화 가능한 형태로 변환
+            cache_data = {word: [meaning, success] for word, (meaning, success) in self.meaning_cache.items()}
+            with open(self.meaning_cache_file, 'w', encoding='utf-8') as f:
+                json.dump(cache_data, f, ensure_ascii=False, indent=2)
+            print(f"[캐시] {len(new_meanings)}개 의미 저장됨 (총 {len(self.meaning_cache)}개)")
+        except Exception as e:
+            print(f"[캐시] 저장 실패: {e}")
+    
+    def remove_particles(self, word: str) -> str:
+        """한국어 조사 제거"""
+        cleaned = word
+        for particle in self.korean_particles:
+            if cleaned.endswith(particle):
+                cleaned = cleaned[:-len(particle)]
+                break
+        return cleaned
+    
+    def crawl_dcinside(self) -> List[Dict]:
+        """디시인사이드 크롤링"""
+        galleries = ['dcbest', 'baseball_new11', 'hit', 'ani1_new2', 
+                     'entertain', 'leagueoflegends6', 'overwatch2']
+        base_url = 'https://gall.dcinside.com'
+        all_posts = []
+        
+        for gallery in galleries:
+            try:
+                url = f"{base_url}/board/lists/?id={gallery}"
+                response = requests.get(url, headers=self.headers)
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                gallery_titles_count = 0
+                
+                # 제목 추출 - 다양한 셀렉터 시도
+                title_elements = soup.find_all('td', class_='gall_tit')
+                if not title_elements:
+                    # 대체 셀렉터 시도
+                    title_elements = soup.find_all('a', class_='icon_txt')
+                if not title_elements:
+                    # 추가 대체 셀렉터
+                    title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                
+                # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
+                if not title_elements and gallery == galleries[0]:  # 첫 번째 갤러리에서만
+                    print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
+                    # 모든 링크 찾기 시도
+                    all_links = soup.find_all('a', href=True)
+                    print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
+                    if all_links:
+                        # 게시물 링크 패턴 확인
+                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
+                        print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
+                        if board_links:
+                            # 링크에서 제목 추출 시도
+                            title_elements = board_links
+                
+                for title_elem in title_elements:
+                    if title_elem.name == 'a':
+                        link = title_elem
+                    else:
+                        link = title_elem.find('a')
+                    
+                    if link:
+                        title_text = link.text.strip() if hasattr(link, 'text') else link.get_text(strip=True)
+                        if title_text and len(title_text) > 0:
+                            # href 추출
+                            href = link.get('href', '')
+                            if href and not href.startswith('http'):
+                                if href.startswith('/'):
+                                    full_link = base_url + href
+                                else:
+                                    full_link = base_url + '/' + href
+                            else:
+                                full_link = href if href else ''
+                            
+                            all_posts.append({
+                                'title': title_text,
+                                'source': f"DCInside {gallery}",
+                                'link': full_link
+                            })
+                            gallery_titles_count += 1
+                
+                print(f"[OK] {gallery} 갤러리에서 {gallery_titles_count}개 제목 수집")
+                time.sleep(1)
+                
+            except Exception as e:
+                print(f"[ERROR] {gallery} 갤러리 크롤링 실패: {e}")
+        
+        return all_posts
+    
+    def extract_all_keywords(self, texts: List[str]) -> Counter:
+        """모든 한글 키워드 추출 (조사 제거 포함)"""
+        keyword_counts = Counter()
+        
+        for text in texts:
+            # 한글 2-8자 단어 추출
+            words = re.findall(r'[가-힣]{2,8}', text)
+            for word in words:
+                # 조사 제거
+                cleaned = self.remove_particles(word)
+                if len(cleaned) >= 2:
+                    keyword_counts[cleaned] += 1
+        
+        return keyword_counts
+    
+    def filter_slang_candidates(self, keyword_counts: Counter) -> Dict[str, int]:
+        """기본 필터링 (일반 단어 제외)"""
+        filtered = {}
+        for word, count in keyword_counts.items():
+            # 길이 체크
+            if not (2 <= len(word) <= 8):
+                continue
+            # 일반 단어 제외
+            if word in self.common_words:
+                continue
+            # 일반 단어 패턴 체크
+            is_common = False
+            for pattern in self.non_slang_patterns:
+                if re.match(pattern, word):
+                    is_common = True
+                    break
+            if is_common:
+                continue
+            filtered[word] = count
+        return filtered
+    
+    def check_naver_dictionary(self, word: str) -> bool:
+        """네이버 사전에서 표준어인지 확인 (True면 표준어)"""
+        if not self.naver_client_id or not self.naver_client_secret:
+            # API 키가 없으면 웹 스크래핑 방식 사용
+            try:
+                url = f"https://ko.dict.naver.com/api3/koko/search?query={word}"
+                response = requests.get(url, headers=self.headers, timeout=5)
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get('items') and len(data.get('items', [])) > 0:
+                        return True
+                return False
+            except:
+                return False
+        
+        # 네이버 사전 API 사용 (API 키가 있는 경우)
+        try:
+            url = "https://openapi.naver.com/v1/search/encyc"
+            headers = {
+                'X-Naver-Client-Id': self.naver_client_id,
+                'X-Naver-Client-Secret': self.naver_client_secret
+            }
+            params = {'query': word}
+            response = requests.get(url, headers=headers, params=params, timeout=5)
+            if response.status_code == 200:
+                data = response.json()
+                # 검색 결과가 있으면 표준어
+                if data.get('items') and len(data.get('items', [])) > 0:
+                    return True
+            return False
+        except Exception as e:
+            print(f"[WARNING] 네이버 사전 확인 실패 ({word}): {e}")
+            return False
+    
+    def check_with_gpt(self, word: str, contexts: List[str], count: int, retry_count: int = 0) -> Optional[bool]:
+        """GPT API를 사용하여 신조어 여부 판별 (True/False) - 간단하고 빠른 방식"""
+        if not self.openai_client:
+            return None
+        
+        try:
+            # 맥락 정보 구성
+            context_text = ' '.join(contexts[:5]) if contexts else ''
+            
+            # 간단한 True/False 질문
+            prompt = f"""다음 단어가 한국어 신조어(최근 인터넷에서 새로 생긴 단어)인지 판단하세요.
+
+단어: {word}
+등장: {count}회
+예시: {context_text[:100] if context_text else '없음'}
+
+신조어: 최근 만들어진, 표준 사전에 없는, 특정 커뮤니티 유행어
+일반 단어: 표준 사전에 있는, 흔히 쓰는 일반 명사/동사/형용사
+
+답변: 신조어면 True, 일반 단어면 False만 출력하세요."""
+
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a Korean language expert. Answer ONLY with True or False, nothing else."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.1,
+                max_tokens=10  # True/False만 필요하므로 더 짧게
+            )
+            
+            result = response.choices[0].message.content.strip().upper()
+            
+            # True/False 파싱
+            if 'TRUE' in result or result.startswith('T'):
+                return True
+            elif 'FALSE' in result or result.startswith('F'):
+                return False
+            else:
+                # 숫자로 온 경우 (레거시 지원)
+                match = re.search(r'0?\.\d+|0\.\d+|1\.0|0\.0', result)
+                if match:
+                    prob = float(match.group())
+                    return prob >= 0.6  # 0.6 이상이면 True
+                return None
+            
+        except Exception as e:
+            error_str = str(e)
+            
+            # Rate Limit 에러 (429) 처리 (점진적 백오프)
+            if '429' in error_str or 'rate_limit' in error_str.lower() or 'Rate limit' in error_str or 'insufficient_quota' in error_str.lower():
+                if retry_count < 2:  # 최대 2번 재시도
+                    # 점진적 백오프: 첫 번째 재시도는 40초, 두 번째는 80초
+                    wait_time = 40 * (2 ** retry_count)  # 40초, 80초
+                    print(f"[WARNING] GPT API Rate Limit 발생 ({word}), {wait_time}초 대기 후 재시도... (시도 {retry_count + 1}/2)")
+                    time.sleep(wait_time)
+                    return self.check_with_gpt(word, contexts, count, retry_count + 1)
+                else:
+                    print(f"[ERROR] GPT API Rate Limit 지속 ({word}), 건너뜀")
+                    return None
+            else:
+                print(f"[WARNING] GPT API 호출 실패 ({word}): {e}")
+                return None
+    
+    def calculate_slang_score(self, word: str, count: int, contexts: List[str]) -> float:
+        """신조어 점수 계산 (기본 점수)"""
+        score = 0.0
+        
+        # 길이 점수 (3-5자가 최적)
+        word_len = len(word)
+        if 3 <= word_len <= 5:
+            score += 2.0
+        elif word_len == 2 or word_len == 6:
+            score += 1.0
+        
+        # 빈도 점수 (log1p 사용)
+        if count > 0:
+            score += min(math.log1p(count) * 0.5, 2.0)
+        
+        # 맥락 다양성 점수
+        unique_contexts = len(set(contexts))
+        score += min(unique_contexts * 0.3, 2.0)
+        
+        return score
+    
+    def enhanced_filter_slang_candidates(
+        self, 
+        word_counts: Counter, 
+        all_texts: List[str],
+        use_naver: bool = True,
+        use_gpt: bool = False,  # 기본값을 False로 변경 (필터링에서 GPT 비활성화)
+        min_count: int = 2,
+        target_count: int = 20,
+        batch_size: int = 30
+    ) -> List[Dict]:
+        """고급 필터링: 네이버 사전만 사용 (GPT는 의미 생성 시에만 사용)"""
+        candidates = []
+        total_words = len(word_counts)
+        print(f"[필터링] 총 {total_words}개 단어 후보 분석 시작...")
+        
+        # 기본 필터링
+        filtered = self.filter_slang_candidates(word_counts)
+        print(f"[필터링] 기본 필터링 후: {len(filtered)}개")
+        
+        # 맥락 수집
+        word_contexts = {}
+        for text in all_texts:
+            words_in_text = re.findall(r'[가-힣]{2,8}', text)
+            for word in words_in_text:
+                cleaned = self.remove_particles(word)
+                if cleaned in filtered:
+                    if cleaned not in word_contexts:
+                        word_contexts[cleaned] = []
+                    word_contexts[cleaned].append(text[:200])
+        
+        # 상위 후보만 분석
+        top_candidates = sorted(filtered.items(), key=lambda x: x[1], reverse=True)[:target_count * 2]
+        
+        for idx, (word, count) in enumerate(top_candidates):
+            if len(candidates) >= target_count:
+                break
+            
+            contexts = word_contexts.get(word, [])
+            
+            # 허용/차단 규칙 적용 (allow 리스트 체크 먼저)
+            if not self._is_word_allowed(word):
+                continue
+            
+            # allow 리스트에 있는 단어는 즉시 채택(이후 과정 생략)
+            # (사용자가 직접 지정한 단어는 신조어로 간주)
+            allow_list = self.word_rules.get('allow') or []
+            is_allowed_word = len(allow_list) > 0 and word in allow_list
+            if is_allowed_word:
+                score = self.calculate_slang_score(word, max(count, 1), contexts)
+                candidates.append({
+                    'word': word,
+                    'count': max(count, 1),
+                    'score': score,
+                    'contexts': contexts[:5],
+                    'gpt_probability': None
+                })
+                # 다음 후보로 넘어감 (네이버 사전 체크 등 이후 과정 생략)
+                continue
+            
+            # 네이버 사전 확인 (allow 리스트 단어 제외)
+            if use_naver and not is_allowed_word and self.check_naver_dictionary(word):
+                continue
+
+            # GPT 필터링 비활성화 (Rate Limit 방지)
+            # 의미 생성 시에만 GPT 사용
+            # gpt_result = None
+            # if use_gpt:
+            #     gpt_result = self.check_with_gpt(word, contexts, count)
+            #     if gpt_result is False:
+            #         continue
+            #     # Rate limit 방지: 기본 대기 시간 증가 (30초)
+            #     time.sleep(30)
+            
+            # 점수 계산 (GPT 없이)
+            base_score = self.calculate_slang_score(word, count, contexts)
+            # gpt_prob = 0.7 if gpt_result else 0.5
+            # final_score = base_score + (gpt_prob * 5)
+            final_score = base_score  # GPT 점수 없이 기본 점수만 사용
+            
+            candidates.append({
+                'word': word,
+                'count': count,
+                'score': final_score,
+                'contexts': contexts[:5],
+                'gpt_probability': None  # GPT 필터링 비활성화로 None
+            })
+            
+            if (idx + 1) % 10 == 0:
+                print(f"  [{idx + 1}/{len(top_candidates)}] 처리 중...")
+        
+        # allow 리스트의 단어들을 확인하고, 크롤링 데이터에 없으면 최소값으로 추가
+        allow_list = self.word_rules.get('allow') or []
+        if len(allow_list) > 0:
+            found_words = {c['word'] for c in candidates}
+            for allowed_word in allow_list:
+                if allowed_word not in found_words:
+                    # allow 리스트 단어는 크롤링 데이터에 없어도 포함 (최소값으로)
+                    # 단어가 크롤링 데이터에 있는지 확인
+                    word_count = word_counts.get(allowed_word, 0)
+                    if word_count == 0:
+                        # 크롤링 데이터에 없으면 최소값(1)으로 설정
+                        word_count = 1
+                        # 맥락 찾기 시도
+                        contexts_for_allowed = []
+                        for text in all_texts:
+                            if allowed_word in text:
+                                contexts_for_allowed.append(text[:200])
+                        if not contexts_for_allowed:
+                            # 맥락도 없으면 기본 맥락 추가
+                            contexts_for_allowed = [f"{allowed_word} 관련 게시물"]
+                    else:
+                        # 크롤링 데이터에 있으면 기존 맥락 사용
+                        contexts_for_allowed = word_contexts.get(allowed_word, [])
+                    
+                    score = self.calculate_slang_score(allowed_word, word_count, contexts_for_allowed)
+                    candidates.append({
+                        'word': allowed_word,
+                        'count': word_count,
+                        'score': score,
+                        'contexts': contexts_for_allowed[:5] if contexts_for_allowed else [f"{allowed_word} 관련"],
+                        'gpt_probability': None
+                    })
+                    print(f"[필터링] allow 리스트 단어 추가: {allowed_word} (count={word_count})")
+        
+        print(f"[필터링] {len(candidates)}개 신조어 후보 발견")
+        return candidates
+    
+    def analyze_rer_meaning_with_gpt(self, word: str, contexts: List[str], retry_count: int = 0) -> tuple[str, bool]:
+        """-러로 끝나는 단어의 의미를 GPT로 분석"""
+        if not self.openai_client or not word.endswith('러'):
+            return (f'{word[:-1]}를 좋아하는 사람', False)
+        
+        try:
+            context_text = ' '.join(contexts[:5]) if contexts else ''
+            base_word = word[:-1]
+            
+            prompt = f"""다음 단어는 "-러"로 끝나는 신조어입니다. 의미를 분석해주세요.
+
+단어: {word} (기본: {base_word})
+맥락: {context_text[:300]}
+
+다음 두 가지 의미 중 더 자연스러운 것을 선택하거나, 더 정확한 의미를 제시하세요:
+1. "{base_word}를 좋아하는 사람"
+2. "{base_word}를 하는 사람"
+
+답변 형식: "의미: [선택한 의미 또는 더 정확한 의미]"만 출력하세요."""
+
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a Korean language expert. Answer concisely."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.1,
+                max_tokens=50
+            )
+            
+            result = response.choices[0].message.content.strip()
+            if '의미:' in result:
+                meaning = result.split('의미:')[1].strip()
+                return (meaning, True)
+            return (f'{base_word}를 좋아하는 사람', False)
+        except Exception as e:
+            error_str = str(e)
+            if '429' in error_str or 'rate_limit' in error_str.lower():
+                if retry_count < 1:
+                    time.sleep(25)
+                    return self.analyze_rer_meaning_with_gpt(word, contexts, retry_count + 1)
+            return (f'{word[:-1]}를 좋아하는 사람', False)
+    
+    def analyze_rer_meaning_batch(self, words_with_contexts: List[tuple[str, List[str]]]) -> Dict[str, tuple[str, bool]]:
+        """-러로 끝나는 단어들의 의미를 배치로 분석"""
+        cached_results = {}
+        words_to_analyze = []
+        
+        for word, contexts in words_with_contexts:
+            if word in self.meaning_cache:
+                cached_results[word] = self.meaning_cache[word]
+            else:
+                words_to_analyze.append((word, contexts))
+        
+        if not words_to_analyze:
+            return cached_results
+        
+        # 배치 분석 (간소화)
+        final_results = cached_results.copy()
+        for word, contexts in words_to_analyze[:10]:  # 최대 10개만
+            meaning, success = self.analyze_rer_meaning_with_gpt(word, contexts)
+            final_results[word] = (meaning, success)
+            time.sleep(30)  # Rate limit 방지: 대기 시간 증가
+        
+        self._save_meaning_cache(final_results)
+        return final_results
+    
+    def analyze_word_meaning_batch(self, words_with_contexts: List[tuple[str, List[str]]]) -> Dict[str, tuple[str, bool]]:
+        """일반 단어들의 의미를 배치로 분석"""
+        cached_results = {}
+        words_to_analyze = []
+        
+        for word, contexts in words_with_contexts:
+            if word in self.meaning_cache:
+                cached_results[word] = self.meaning_cache[word]
+            else:
+                words_to_analyze.append((word, contexts))
+        
+        # 배치 분석 (간소화)
+        final_results = cached_results.copy()
+        for word, contexts in words_to_analyze[:10]:  # 최대 10개만
+            final_results[word] = (f'{word}의 의미 (분석 중)', False)
+        
+        return final_results
+    
+    def _llm_batch_filter(self, candidates: List[Dict], top_k: int = 120) -> List[Dict]:
+        """LLM을 사용한 배치 필터링 (간소화 버전)"""
+        if not self.openai_client:
+            return candidates[:top_k]
+        return candidates[:top_k]
+    
+    def crawl_and_analyze(self, use_enhanced_filter: bool = True) -> List[Dict]:
+        """고급 크롤링 및 분석 실행 (디시인사이드 전용)"""
+        print("고급 크롤링 시작...")
+        
+        try:
+            # 디시인사이드 크롤링만 실행
+            print("디시인사이드 크롤링 중...")
+            dc_posts = self.crawl_dcinside()
+            print(f"디시인사이드에서 {len(dc_posts)}개 게시물 수집")
+            
+            if not dc_posts:
+                print("[WARNING] 수집된 게시물이 없습니다. 기본 크롤링을 사용하세요.")
+                return []
+            
+            # 모든 텍스트 수집
+            all_texts = [post['title'] for post in dc_posts]
+            scored_slangs = []
+            
+            # 고급 필터링만 사용
+            if use_enhanced_filter:
+                print("\n고급 필터링 (네이버 사전) 시작... (GPT는 의미 생성에만 사용)")
+                all_keyword_counts = self.extract_all_keywords(all_texts)
+                
+                filtered_counts = Counter(all_keyword_counts)
+                
+                # 고급 필터링 실행 (GPT 필터링 비활성화 - 의미 생성에만 GPT 사용)
+                enhanced_candidates = self.enhanced_filter_slang_candidates(
+                    filtered_counts,
+                    all_texts,
+                    use_naver=True,
+                    use_gpt=False,  # 필터링에서는 GPT 사용 안 함 (Rate Limit 방지)
+                    min_count=2,
+                    target_count=20,
+                    batch_size=30
+                )
+                
+                # 의미 생성 배치 처리 준비
+                from meaning_extractor import MeaningExtractor
+                extractor = MeaningExtractor(openai_client=self.openai_client)
+                
+                # 배치 입력 구성 (컨텍스트 최소화)
+                batch_items = []
+                for candidate in enhanced_candidates:
+                    word = candidate['word']
+                    contexts = candidate.get('contexts', [])
+                    # 캐시에 없을 때만 배치에 포함
+                    # 수동 의미 사전에 있으면 배치 제외
+                    if self.manual_meanings.get(word):
+                        continue
+                    if not self.meaning_cache.get(word):
+                        # 컨텍스트 최소화: 첫 번째 컨텍스트만 사용 (토큰 절약)
+                        batch_items.append({
+                            'word': word,
+                            'contexts': [contexts[0]] if contexts else []
+                        })
+                
+                batch_results = {}
+                if self.openai_client and batch_items:
+                    # 배치 호출 (RPM=3 준수를 위해 5개 단위로 분할, 각 배치 사이 30초 대기)
+                    batch_results = {}
+                    chunk_size = 5  # RPM 제한 준수를 위해 5개로 줄임
+                    import math
+                    for i in range(0, len(batch_items), chunk_size):
+                        chunk = batch_items[i:i+chunk_size]
+                        print(f"[의미추출] 배치 처리 중 ({i//chunk_size + 1}/{(len(batch_items)-1)//chunk_size + 1}): {len(chunk)}개 단어")
+                        res = extractor.extract_meanings_batch(chunk)
+                        if res:
+                            batch_results.update(res)
+                            print(f"[의미추출] 배치 성공: {len(res)}개 의미 추출")
+                        else:
+                            print(f"[의미추출] 배치 실패 또는 Rate Limit - 다음 배치까지 대기")
+                            # Rate Limit 발생 시 즉시 중단 (재시도 없음)
+                            if i + chunk_size < len(batch_items):
+                                break
+                        
+                        # RPM=3 준수: 각 배치 사이 최소 30초 대기
+                        if i + chunk_size < len(batch_items):
+                            wait_time = 30
+                            print(f"[의미추출] RPM 제한 준수를 위해 {wait_time}초 대기...")
+                            time.sleep(wait_time)
+                    # 결과를 파일로 저장
+                    try:
+                        import json, datetime
+                        data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+                        data_dir = os.path.abspath(data_dir)
+                        os.makedirs(data_dir, exist_ok=True)
+                        ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+                        out_path = os.path.join(data_dir, f'meanings_{ts}.json')
+                        with open(out_path, 'w', encoding='utf-8') as f:
+                            json.dump(batch_results, f, ensure_ascii=False, indent=2)
+                        print(f"[의미추출] 배치 결과 저장: {out_path}")
+                    except Exception as e:
+                        print(f"[의미추출] 배치 결과 파일 저장 실패: {e}")
+                
+                # 고급 필터링 결과 추가 (수동 사전/배치 결과 적용)
+                for candidate in enhanced_candidates:
+                    word = candidate['word']
+                    contexts = candidate.get('contexts', [])
+                    meaning = f'{word}의 의미 (분석 중)'
+                    gpt_meaning_success = None
+                    
+                    cached = self.meaning_cache.get(word)
+                    if cached:
+                        if isinstance(cached, tuple):
+                            meaning, gpt_meaning_success = cached
+                        else:
+                            meaning = cached
+                    else:
+                        # 수동 의미 우선 적용
+                        manual_data = self.manual_meanings.get(word)
+                        if manual_data:
+                            if isinstance(manual_data, dict):
+                                meaning = manual_data.get('meaning', f'{word}의 의미 (분석 중)')
+                            else:
+                                # 구 형식 호환
+                                meaning = str(manual_data)
+                            gpt_meaning_success = None  # 수동 입력
+                            self.meaning_cache[word] = (meaning, gpt_meaning_success)
+                        elif word in batch_results:
+                            meaning = batch_results[word]
+                            gpt_meaning_success = True if meaning and meaning != f'{word}의 의미 (분석 중)' else False
+                            self.meaning_cache[word] = (meaning, gpt_meaning_success)
+                        else:
+                            # GPT 비활성화 또는 배치 실패 시 기본값 유지
+                            pass
+                    
+                    # 예문 설정 (수동 예문 우선)
+                    final_examples = contexts[:3]
+                    manual_data = self.manual_meanings.get(word)
+                    if manual_data and isinstance(manual_data, dict):
+                        manual_examples = manual_data.get('examples', [])
+                        if manual_examples and isinstance(manual_examples, list) and len(manual_examples) > 0:
+                            final_examples = manual_examples
+                    
+                    scored_slangs.append({
+                        'word': word,
+                        'count': candidate['count'],
+                        'score': candidate['score'],
+                        'contexts': contexts,
+                        'meaning': meaning,
+                        'examples': final_examples,
+                        'method': 'enhanced',
+                        'is_standard_word': False,
+                        'gpt_probability': candidate.get('gpt_probability'),
+                        'gpt_meaning_success': gpt_meaning_success
+                    })
+            
+            # 중복 제거 및 정렬
+            unique_slangs = {}
+            for slang in scored_slangs:
+                word = slang['word']
+                if word not in unique_slangs or slang['score'] > unique_slangs[word]['score']:
+                    unique_slangs[word] = slang
+            
+            result = list(unique_slangs.values())
+            # 사용 횟수와 점수로 정렬
+            result.sort(key=lambda x: (x.get('count', 0), x.get('score', 0)), reverse=True)
+            
+            enhanced_count = sum(1 for s in result if s.get('method') == 'enhanced')
+            
+            print(f"\n[결과] 총 {len(result)}개 신조어 후보 발견 (중복 제거 후)")
+            if enhanced_count > 0:
+                print(f"  - 고급 필터링: {enhanced_count}개")
+            
+            return result[:30]  # 상위 30개 반환
+            
+        except Exception as e:
+            print(f"[ERROR] 고급 크롤링 실패: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
