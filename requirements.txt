@@ -1,0 +1,5 @@
+# This file is at root to help Railway detect Python project
+# Actual requirements are in backend/requirements.txt
+fastapi==0.104.1
+uvicorn==0.24.0
+
