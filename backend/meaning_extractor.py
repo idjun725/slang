@@ -99,9 +99,9 @@ class MeaningExtractor:
                     # 의미 관련 문장 추출
                     sentences = re.split(r'[\.\!\?]', text)
                     for sentence in sentences:
-                        if word in sentence and ('의미' in sentence or '뜻' in sentence or '뜻은' in sentence):
+                        if word in sentence and ('의미' in sentence or '설명' in sentence or '설명은' in sentence):
                             # 의미 부분만 추출
-                            meaning_match = re.search(r'(?:의미|뜻|뜻은)[는은]?\s*:?\s*([^\.]+)', sentence)
+                            meaning_match = re.search(r'(?:의미|설명|설명은)[는은]?\s*:?\s*([^\.]+)', sentence)
                             if meaning_match:
                                 meaning = meaning_match.group(1).strip()
                                 if 5 < len(meaning) < 80:
@@ -225,7 +225,7 @@ class MeaningExtractor:
                 return {}
             import json
             user_prompt = (
-                "다음 신조어들의 의미를 한국어로 매우 간결하게 생성하세요. 각 항목은 30자 이내.\n"
+                "다음 신조어들의 의미를 웹에서 검색한 결과를 바탕으로 한국어로 매우 간결하게 생성하세요. 각 항목은 30자 이내.\n"
                 "입력은 JSON 배열이며, 각 객체는 {word, ctx}를 가집니다.\n"
                 "반드시 다음 형식의 JSON으로만 답변하세요: {\\\"results\\\":[{\\\"word\\\":\\\"...\\\",\\\"meaning\\\":\\\"...\\\"}, ...]}"
             )

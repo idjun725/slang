@@ -76,6 +76,39 @@ function setupEventListeners() {
             handleSlangSearch();
         }
     });
+    
+    // 랭킹 아이템 클릭 이벤트 (문서 단위 위임, 한 번만 설정)
+    if (!document.body.hasAttribute('data-ranking-listener')) {
+        document.body.setAttribute('data-ranking-listener', 'true');
+        document.addEventListener('click', function(e) {
+            const rankingItem = e.target.closest('.ranking-item');
+            if (rankingItem) {
+                const word = rankingItem.getAttribute('data-word');
+                triggerRankingSearch(word);
+            }
+        });
+    }
+}
+
+function triggerRankingSearch(word) {
+    if (!word) return;
+    const trimmed = word.trim();
+    if (!trimmed) return;
+    
+    // 검색 입력창에 단어 입력
+    const searchInput = document.getElementById('slang-search-input');
+    if (searchInput) {
+        searchInput.value = trimmed;
+    }
+    
+    // 검색 실행
+    handleSlangSearch(trimmed);
+    
+    // 검색 섹션으로 스크롤
+    const searchSection = document.querySelector('.search-section');
+    if (searchSection) {
+        searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // 사용자 정보 표시
@@ -214,7 +247,7 @@ function displayRanking(ranking) {
         const usageCount = item.usage_count || 1;
         
         return `
-        <div class="ranking-item" data-word="${item.word}">
+        <div class="ranking-item" data-word="${item.word}" style="cursor: pointer;">
             <div class="rank">#${index + 1}</div>
             <div class="word-info">
                 <div class="word">${item.word}${methodLabel}</div>
@@ -259,9 +292,14 @@ async function loadVideosForWord(word) {
 }
 
 // 신조어 검색 처리
-async function handleSlangSearch() {
+async function handleSlangSearch(forcedWord = null) {
     const searchInput = document.getElementById('slang-search-input');
-    const word = searchInput.value.trim();
+    const wordSource = forcedWord !== null ? forcedWord : (searchInput ? searchInput.value : '');
+    const word = (wordSource || '').trim();
+    
+    if (searchInput && forcedWord !== null) {
+        searchInput.value = forcedWord;
+    }
     const searchResults = document.getElementById('search-results');
     
     if (!word) {
@@ -320,11 +358,16 @@ function displaySearchResult(data) {
     }
     
     let examplesHTML = '';
-    if (result.examples && result.examples.length > 0) {
+    const uniqueExamples = result.examples 
+        ? [...new Set(result.examples.map(example => (example || '').trim()))].filter(example => example.length > 0)
+        : [];
+    
+    if (uniqueExamples.length > 0) {
+        const examplesToShow = uniqueExamples.slice(0, 1);
         examplesHTML = `
             <div class="search-result-examples">
                 <h4>📝 사용 예문</h4>
-                ${result.examples.map(example => `<div class="example-item">${example}</div>`).join('')}
+                ${examplesToShow.map(example => `<div class="example-item">${example}</div>`).join('')}
             </div>
         `;
     } else {

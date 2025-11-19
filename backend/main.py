@@ -230,13 +230,9 @@ async def get_ranking(limit: int = 100, period: Optional[str] = None):
             print(f"[랭킹] 단어 규칙 로드 실패: {e}")
             rules = global_crawler_for_meanings.word_rules
         
-        if rules and (rules.get('allow') or rules.get('block')):
-            allow = set(rules.get('allow') or [])
+        if rules and rules.get('block'):
             block = set(rules.get('block') or [])
             original_count = len(ranking)
-            
-            # allow 리스트가 있지만 비어있지 않은 경우
-            allow_not_empty = len(allow) > 0
             
             def _allowed(item):
                 w = item.get('word')
@@ -244,9 +240,6 @@ async def get_ranking(limit: int = 100, period: Optional[str] = None):
                     return False
                 # block 리스트에 있으면 무조건 제외
                 if w in block:
-                    return False
-                # allow 리스트가 비어있지 않으면 allow 리스트에 있는 것만 허용
-                if allow_not_empty and w not in allow:
                     return False
                 return True
             
@@ -256,11 +249,7 @@ async def get_ranking(limit: int = 100, period: Optional[str] = None):
             # 디버그 정보 출력
             if filtered_count == 0 and original_count > 0:
                 print(f"[랭킹 필터링] 원본 {original_count}개 → 필터링 후 {filtered_count}개")
-                print(f"[랭킹 필터링] allow={len(allow)}개, block={len(block)}개")
-                if allow_not_empty:
-                    print(f"[랭킹 필터링] allow 리스트 예시: {list(allow)[:5]}")
-                    print(f"[랭킹 필터링] 원본 단어 예시: {[r.get('word') for r in db.get_ranking(5) if r.get('word')]}")
-                    print(f"[랭킹 필터링] ⚠️ allow 리스트 단어들이 DB에 없습니다. 크롤러를 실행하세요.")
+                print(f"[랭킹 필터링] block={len(block)}개")
         return {"success": True, "data": ranking, "period": period or "all"}
     except HTTPException:
         raise
@@ -342,8 +331,8 @@ async def get_stats():
 async def upsert_bulk_meanings(payload: BulkMeaningsRequest):
     """수동 의미와 예문을 대량 업서트. 기존 값에 병합 저장.
     본문 형식: 
-    - 구 형식: { "meanings": { "단어": "뜻", ... } }
-    - 새 형식: { "meanings": { "단어": {"meaning": "뜻", "examples": [...]}, ... } }
+    - 구 형식: { "meanings": { "단어": "설명", ... } }
+    - 새 형식: { "meanings": { "단어": {"meaning": "설명", "examples": [...]}, ... } }
     """
     try:
         data_dir = os.path.join(current_dir, 'data')
