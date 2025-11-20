@@ -101,16 +101,15 @@ async function runCrawler() {
         
         const data = await response.json();
         
-        if (response.ok) {
-            crawlStatus.innerHTML = `<div class="success">✅ ${data.message || '크롤링이 완료되었습니다!'}</div>`;
-            // 랭킹 새로고침
+        if (response.ok && data.success) {
+            crawlStatus.innerHTML = `<div class="success">✅ ${data.message || '크롤링이 시작되었습니다!'}</div>`;
+            crawlStatus.innerHTML += '<div style="margin-top: 10px; color: #666; font-size: 0.9rem;">크롤링은 백그라운드에서 실행 중입니다. 몇 분 후 랭킹을 새로고침해주세요.</div>';
+            // 상태 메시지는 유지하되, 자동 새로고침은 하지 않음 (사용자가 직접 새로고침)
             setTimeout(() => {
-                loadRanking();
-                loadStats();
                 crawlStatus.style.display = 'none';
-            }, 2000);
+            }, 10000); // 10초 후 메시지 숨김
         } else {
-            crawlStatus.innerHTML = `<div class="error">❌ 크롤링 실패: ${data.detail || data.message || '알 수 없는 오류'}</div>`;
+            crawlStatus.innerHTML = `<div class="error">❌ 크롤링 시작 실패: ${data.detail || data.message || '알 수 없는 오류'}</div>`;
         }
     } catch (error) {
         console.error('Error running crawler:', error);

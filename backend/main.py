@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -302,12 +302,14 @@ async def get_subscription_status(session_id: Optional[str] = None):
     status = db.get_newsletter_subscription_status(user['id'])
     return {"success": True, "subscribed": status}
 
-@app.post("/crawl")
-async def trigger_crawl():
-    """크롤링 실행"""
+def run_crawler_task():
+    """백그라운드에서 실행할 크롤러 작업"""
     try:
+        print("[크롤러] 백그라운드 크롤링 시작...")
         crawler = Crawler()
         result = crawler.crawl_and_analyze()
+        
+        print(f"[크롤러] 크롤링 완료: {len(result)}개 신조어 발견")
         
         # 데이터베이스에 저장
         added_count = 0
@@ -321,8 +323,26 @@ async def trigger_crawl():
             ):
                 added_count += 1
         
-        return {"message": f"크롤링 완료! {added_count}개 신조어 발견", "count": added_count}
+        print(f"[크롤러] 데이터베이스 저장 완료: {added_count}개 신조어 저장됨")
     except Exception as e:
+        print(f"[크롤러] 크롤링 실패: {e}")
+        import traceback
+        traceback.print_exc()
+
+@app.post("/crawl")
+async def trigger_crawl(background_tasks: BackgroundTasks):
+    """크롤링 실행 (백그라운드 작업)"""
+    try:
+        # 백그라운드 작업으로 크롤링 실행
+        background_tasks.add_task(run_crawler_task)
+        print("[크롤러] 크롤링 작업이 백그라운드에서 시작되었습니다.")
+        return {
+            "success": True,
+            "message": "크롤링이 시작되었습니다. 몇 분 후 랭킹을 새로고침해주세요.",
+            "status": "started"
+        }
+    except Exception as e:
+        print(f"[크롤러] 크롤링 시작 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/stats")
