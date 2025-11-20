@@ -135,7 +135,7 @@ class Crawler:
                 print("[GPT] API 비활성화됨 (OPENAI_API_KEY가 설정되지 않았습니다)")
             elif not OPENAI_AVAILABLE:
                 print("[GPT] API 비활성화됨 (OpenAI 라이브러리가 설치되지 않았습니다)")
-
+        
         # 수동 의미 사전 로드
         self.manual_meanings = {}
         try:
@@ -425,42 +425,42 @@ class Crawler:
                         break
                     
                     response = requests.get(list_url, headers=self.headers)
-                    response.raise_for_status()
-                    
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    
-                    # 제목 추출 - 다양한 셀렉터 시도
-                    title_elements = soup.find_all('td', class_='gall_tit')
-                    if not title_elements:
-                        # 대체 셀렉터 시도
-                        title_elements = soup.find_all('a', class_='icon_txt')
-                    if not title_elements:
-                        # 추가 대체 셀렉터
-                        title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
-                    
-                    # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # 제목 추출 - 다양한 셀렉터 시도
+                title_elements = soup.find_all('td', class_='gall_tit')
+                if not title_elements:
+                    # 대체 셀렉터 시도
+                    title_elements = soup.find_all('a', class_='icon_txt')
+                if not title_elements:
+                    # 추가 대체 셀렉터
+                    title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                
+                # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
                     if not title_elements and gallery == galleries[0] and list_url == list_urls[0]:
-                        print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
-                        # 모든 링크 찾기 시도
-                        all_links = soup.find_all('a', href=True)
-                        print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
-                        if all_links:
-                            # 게시물 링크 패턴 확인
-                            board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
-                            print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
-                            if board_links:
-                                # 링크에서 제목 추출 시도
-                                title_elements = board_links
-                    
-                    for title_elem in title_elements:
+                    print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
+                    # 모든 링크 찾기 시도
+                    all_links = soup.find_all('a', href=True)
+                    print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
+                    if all_links:
+                        # 게시물 링크 패턴 확인
+                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
+                        print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
+                        if board_links:
+                            # 링크에서 제목 추출 시도
+                            title_elements = board_links
+                
+                for title_elem in title_elements:
                         if len(gallery_posts) >= max_posts_per_gallery:
                             break
                         
-                        if title_elem.name == 'a':
-                            link = title_elem
-                        else:
-                            link = title_elem.find('a')
-                        
+                    if title_elem.name == 'a':
+                        link = title_elem
+                    else:
+                        link = title_elem.find('a')
+                    
                         if not link:
                             continue
                         
@@ -468,15 +468,15 @@ class Crawler:
                         if not title_text:
                             continue
                         
-                        # href 추출
+                            # href 추출
                         href = link.get('href', '')
-                        if href and not href.startswith('http'):
-                            if href.startswith('/'):
-                                full_link = base_url + href
-                            else:
-                                full_link = base_url + '/' + href
-                        else:
-                            full_link = href if href else ''
+                                if href and not href.startswith('http'):
+                                    if href.startswith('/'):
+                                        full_link = base_url + href
+                                    else:
+                                        full_link = base_url + '/' + href
+                                else:
+                                    full_link = href if href else ''
                         
                         # 잘못된 링크 필터링
                         if not full_link or full_link.startswith('javascript:') or 'javascript:;' in full_link:
@@ -492,8 +492,8 @@ class Crawler:
                         seen_links.add(full_link)
                         
                         post_data = {
-                            'title': title_text,
-                            'source': f"DCInside {gallery}",
+                                'title': title_text,
+                                'source': f"DCInside {gallery}",
                             'link': full_link,
                             'content': ''  # 기본값
                         }
@@ -505,7 +505,7 @@ class Crawler:
                             time.sleep(0.5)  # 서버 부하 방지를 위한 대기
                         
                         gallery_posts.append(post_data)
-                        gallery_titles_count += 1
+                            gallery_titles_count += 1
                 
                 all_posts.extend(gallery_posts)
                 print(f"[OK] {gallery} 갤러리에서 {gallery_titles_count}개 제목 수집" + 
@@ -660,7 +660,7 @@ class Crawler:
                 json.dump(self.naver_dict_cache, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"[네이버 사전 캐시] 저장 실패: {e}")
-
+    
     def check_naver_dictionary(self, word: str) -> bool:
         """네이버 사전에서 표준어인지 확인 (True면 표준어) - 캐싱 지원"""
         # 캐시 확인
@@ -749,8 +749,8 @@ class Crawler:
                         self._naver_cache_dirty = True
                     elif word in self.naver_dict_cache:
                         del self.naver_dict_cache[word]
-                except Exception as e:
-                    print(f"[WARNING] 네이버 사전 확인 실패 ({word}): {e}")
+        except Exception as e:
+            print(f"[WARNING] 네이버 사전 확인 실패 ({word}): {e}")
                     results[word] = False
         
         # 캐시 저장
@@ -758,189 +758,19 @@ class Crawler:
         
         return results
     
-    def check_with_gpt(self, word: str, contexts: List[str], count: int, retry_count: int = 0) -> Optional[bool]:
-        """GPT API를 사용하여 신조어 여부 판별 (True/False) - 간단하고 빠른 방식"""
-        if not self.openai_client:
-            return None
-        
-        try:
-            # 맥락 정보 구성
-            context_text = ' '.join(contexts[:5]) if contexts else ''
-            
-            # 간단한 True/False 질문
-            prompt = f"""다음 단어가 한국어 신조어(최근 인터넷에서 새로 생긴 단어)인지 판단하세요.
-
-단어: {word}
-등장: {count}회
-예시: {context_text[:100] if context_text else '없음'}
-
-신조어: 최근 만들어진, 표준 사전에 없는, 특정 커뮤니티 유행어
-일반 단어: 표준 사전에 있는, 흔히 쓰는 일반 명사/동사/형용사
-
-답변: 신조어면 True, 일반 단어면 False만 출력하세요."""
-
-            response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a Korean language expert. Answer ONLY with True or False, nothing else."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.1,
-                max_tokens=10  # True/False만 필요하므로 더 짧게
-            )
-            
-            result = response.choices[0].message.content.strip().upper()
-            
-            # True/False 파싱
-            if 'TRUE' in result or result.startswith('T'):
-                return True
-            elif 'FALSE' in result or result.startswith('F'):
-                return False
-            else:
-                # 숫자로 온 경우 (레거시 지원)
-                match = re.search(r'0?\.\d+|0\.\d+|1\.0|0\.0', result)
-                if match:
-                    prob = float(match.group())
-                    return prob >= 0.6  # 0.6 이상이면 True
-                return None
-            
-        except Exception as e:
-            error_str = str(e)
-            
-            # Rate Limit 에러 (429) 처리 (점진적 백오프)
-            if '429' in error_str or 'rate_limit' in error_str.lower() or 'Rate limit' in error_str or 'insufficient_quota' in error_str.lower():
-                if retry_count < 2:  # 최대 2번 재시도
-                    # 점진적 백오프: 첫 번째 재시도는 40초, 두 번째는 80초
-                    wait_time = 40 * (2 ** retry_count)  # 40초, 80초
-                    print(f"[WARNING] GPT API Rate Limit 발생 ({word}), {wait_time}초 대기 후 재시도... (시도 {retry_count + 1}/2)")
-                    time.sleep(wait_time)
-                    return self.check_with_gpt(word, contexts, count, retry_count + 1)
-                else:
-                    print(f"[ERROR] GPT API Rate Limit 지속 ({word}), 건너뜀")
-                    return None
-            else:
-                print(f"[WARNING] GPT API 호출 실패 ({word}): {e}")
-                return None
-    
-    def check_slang_with_gpt_comparison(self, word: str, contexts: List[str], retry_count: int = 0) -> Optional[Dict]:
-        """GPT 기본 답변 vs 웹 검색 기반 답변 비교로 신조어 판별"""
-        if not self.openai_client:
-            return None
-        
-        try:
-            context_text = ' '.join(contexts[:5]) if contexts else ''
-            
-            # 1. GPT 기본 지식으로 의미 물어보기
-            prompt_basic = f"""다음 단어의 의미를 설명해주세요. 당신이 알고 있는 일반적인 지식으로 답변하세요.
-
-단어: {word}
-
-답변 형식: "의미: [의미]"만 출력하세요."""
-            
-            # 2. 웹 검색 결과 기반으로 의미 물어보기
-            prompt_web = f"""다음 단어가 실제 웹에서 어떻게 사용되는지 보여주는 예시입니다.
-이 예시들을 바탕으로 이 단어의 실제 의미를 분석해주세요.
-
-단어: {word}
-웹에서 발견된 사용 예시:
-{context_text[:500] if context_text else '예시 없음'}
-
-답변 형식: "의미: [의미]"만 출력하세요."""
-            
-            # 기본 지식 기반 답변
-            response_basic = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a Korean language expert. Answer concisely."},
-                    {"role": "user", "content": prompt_basic}
-                ],
-                temperature=0.1,
-                max_tokens=100
-            )
-            meaning_basic = response_basic.choices[0].message.content.strip()
-            if '의미:' in meaning_basic:
-                meaning_basic = meaning_basic.split('의미:')[1].strip()
-            
-            time.sleep(1)  # Rate limit 방지
-            
-            # 웹 검색 기반 답변
-            response_web = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a Korean language expert. Answer concisely based on the provided examples."},
-                    {"role": "user", "content": prompt_web}
-                ],
-                temperature=0.1,
-                max_tokens=100
-            )
-            meaning_web = response_web.choices[0].message.content.strip()
-            if '의미:' in meaning_web:
-                meaning_web = meaning_web.split('의미:')[1].strip()
-            
-            # 두 답변의 유사도 계산 (간단한 문자열 유사도)
-            # 차이가 크면 신조어일 가능성이 높음
-            similarity = self._calculate_text_similarity(meaning_basic, meaning_web)
-            is_slang = similarity < 0.6  # 유사도가 60% 미만이면 신조어로 판단
-            
-            return {
-                'is_slang': is_slang,
-                'similarity': similarity,
-                'meaning_basic': meaning_basic,
-                'meaning_web': meaning_web,
-                'confidence': 1.0 - similarity  # 차이가 클수록 신뢰도 높음
-            }
-            
-        except Exception as e:
-            error_str = str(e)
-            if '429' in error_str or 'rate_limit' in error_str.lower():
-                if retry_count < 1:
-                    time.sleep(30)
-                    return self.check_slang_with_gpt_comparison(word, contexts, retry_count + 1)
-            print(f"[WARNING] GPT 비교 분석 실패 ({word}): {e}")
-            return None
-    
-    def _calculate_text_similarity(self, text1: str, text2: str) -> float:
-        """두 텍스트의 유사도 계산 (0~1)"""
-        if not text1 or not text2:
-            return 0.0
-        
-        # 간단한 단어 기반 유사도
-        words1 = set(text1.split())
-        words2 = set(text2.split())
-        
-        if not words1 or not words2:
-            return 0.0
-        
-        intersection = len(words1 & words2)
-        union = len(words1 | words2)
-        
-        if union == 0:
-            return 0.0
-        
-        # Jaccard 유사도
-        jaccard = intersection / union
-        
-        # 추가: 공통 문자 비율
-        common_chars = sum(1 for c in text1 if c in text2)
-        char_ratio = common_chars / max(len(text1), len(text2)) if max(len(text1), len(text2)) > 0 else 0
-        
-        # 두 유사도의 평균
-        similarity = (jaccard * 0.6 + char_ratio * 0.4)
-        return similarity
-    
     def _is_profane_word(self, word: str) -> bool:
-        """GPT를 사용해 단어가 욕설인지 판별"""
+        """GPT를 사용해 단어가 욕설인지 판별 (단일 단어용)"""
         if not word:
             return False
         cached = self.profane_cache.get(word)
         if cached is not None:
             return cached
-        
+    
         if not self.openai_client:
             return False
         
         prompt = (
-            "다음 한국어 단어가 욕설·비속어·차별적 표현에 해당하는지 판단해 주세요.\n"
+            "다음 한국어 단어가 욕설·비속어·차별적 표현에 해당하는지 웹에서 검색한 결과를 바탕으로 판단해해주세요.\n"
             f"단어: {word}\n\n"
             "욕설/비속어라면 YES, 아니면 NO만 대문자로 답변하세요."
         )
@@ -968,6 +798,79 @@ class Crawler:
             print(f"[욕설필터] GPT 판별 실패 ({word}): {e}")
             return False
     
+    def _is_profane_words_batch(self, words: List[str]) -> Dict[str, bool]:
+        """GPT를 사용해 여러 단어가 욕설인지 배치로 판별"""
+        if not words:
+            return {}
+        if not self.openai_client:
+            return {word: False for word in words}
+        
+        # 캐시 확인
+        results = {}
+        words_to_check = []
+        for word in words:
+            cached = self.profane_cache.get(word)
+            if cached is not None:
+                results[word] = cached
+            else:
+                words_to_check.append(word)
+        
+        if not words_to_check:
+            return results
+        
+        # 배치 요청 (최대 20개)
+        words_batch = words_to_check[:20]
+        words_list = "\n".join([f"- {word}" for word in words_batch])
+        
+        prompt = (
+            "다음 한국어 단어들이 욕설·비속어·차별적 표현에 해당하는지 판단해 주세요.\n\n"
+            f"단어 목록:\n{words_list}\n\n"
+            "각 단어에 대해 욕설/비속어라면 YES, 아니면 NO를 대문자로 답변하세요.\n"
+            "답변 형식: 각 줄에 '단어: YES' 또는 '단어: NO' 형식으로 답변하세요."
+        )
+        
+        try:
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a Korean content moderator. Answer with YES or NO for each word."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.0,
+                max_tokens=200
+            )
+            answer = response.choices[0].message.content.strip()
+            
+            # 결과 파싱
+            for word in words_batch:
+                is_profane = False
+                # 단어: YES 또는 단어: NO 형식 찾기
+                word_line = None
+                for line in answer.split('\n'):
+                    if word in line and (': YES' in line.upper() or ': NO' in line.upper()):
+                        word_line = line.upper()
+                        break
+                
+                if word_line and ': YES' in word_line:
+                    is_profane = True
+                
+                results[word] = is_profane
+                self.profane_cache[word] = is_profane
+                self._profane_cache_dirty = True
+                
+                if is_profane:
+                    print(f"[욕설필터] '{word}' → GPT 판별: 욕설/비속어 (제외)")
+            else:
+                    print(f"[욕설필터] '{word}' → GPT 판별: 안전")
+            
+            return results
+        except Exception as e:
+            print(f"[욕설필터] GPT 배치 판별 실패: {e}")
+            # 실패 시 모두 안전으로 처리
+            for word in words_batch:
+                results[word] = False
+            return results
+    
     def _filter_profane_candidates(self, sorted_candidates: List[Dict], target_count: int) -> List[Dict]:
         """GPT 욕설 판별을 통과한 상위 후보 선택"""
         if target_count <= 0:
@@ -979,18 +882,83 @@ class Crawler:
             print("[욕설필터] GPT 비활성화 상태이므로 욕설 필터를 건너뜁니다.")
             return sorted_candidates[:target_count]
         
+        print(f"[욕설필터] {len(sorted_candidates)}개 후보 중 욕설 필터링 시작...")
+        
         safe_candidates = []
         idx = 0
+        
+        # 처음 20개는 배치로 처리
+        batch_size = 20
+        batch_words = []
+        batch_indices = []
+        
         while len(safe_candidates) < target_count and idx < len(sorted_candidates):
             candidate = sorted_candidates[idx]
-            idx += 1
             word = candidate['word']
-            if self._is_profane_word(word):
+            
+            # 처음 20개는 배치로 수집
+            if len(batch_words) < batch_size and idx < batch_size:
+                batch_words.append(word)
+                batch_indices.append(idx)
+                idx += 1
                 continue
+            
+            # 배치가 채워졌거나 20개를 넘었으면 배치 처리
+            if batch_words:
+                print(f"[욕설필터] 배치 처리 중: {len(batch_words)}개 단어")
+                batch_results = self._is_profane_words_batch(batch_words)
+                
+                # 배치 결과 적용
+                for i, word in enumerate(batch_words):
+                    candidate_idx = batch_indices[i]
+                    candidate = sorted_candidates[candidate_idx]
+                    if not batch_results.get(word, False):
+                        safe_candidates.append(candidate)
+                        if len(safe_candidates) >= target_count:
+                            break
+                
+                batch_words = []
+                batch_indices = []
+                
+                # 배치 처리 후 대기 (RPM 제한 준수)
+                if len(safe_candidates) < target_count:
+                    wait_time = 10
+                    print(f"[욕설필터] RPM 제한 준수를 위해 {wait_time}초 대기...")
+                    time.sleep(wait_time)
+                
+                if len(safe_candidates) >= target_count:
+                    break
+            
+            # 나머지는 개별 처리
+            if self._is_profane_word(word):
+                idx += 1
+                continue
+            
             safe_candidates.append(candidate)
+            idx += 1
+            
+            # 개별 요청 후 대기 (RPM 제한 준수)
+            if len(safe_candidates) < target_count and idx < len(sorted_candidates):
+                wait_time = 2
+                time.sleep(wait_time)
+        
+        # 남은 배치 처리
+        if batch_words and len(safe_candidates) < target_count:
+            print(f"[욕설필터] 남은 배치 처리 중: {len(batch_words)}개 단어")
+            batch_results = self._is_profane_words_batch(batch_words)
+            
+            for i, word in enumerate(batch_words):
+                candidate_idx = batch_indices[i]
+                candidate = sorted_candidates[candidate_idx]
+                if not batch_results.get(word, False):
+                    safe_candidates.append(candidate)
+                    if len(safe_candidates) >= target_count:
+                        break
         
         if len(safe_candidates) < target_count:
             print(f"[욕설필터] 충분한 안전 후보가 없어 {len(safe_candidates)}개만 선택되었습니다.")
+                else:
+            print(f"[욕설필터] {len(safe_candidates)}개 안전한 후보 선택 완료")
         
         if self._profane_cache_dirty:
             self._save_profane_cache()
@@ -1025,7 +993,6 @@ class Crawler:
         all_texts: List[str],
         use_naver: bool = True,
         use_gpt: bool = False,  # 기본값을 False로 변경 (필터링에서 GPT 비활성화)
-        use_gpt_comparison: bool = False,  # GPT 비교 필터링 사용 여부 (현재 비활성화)
         min_count: int = 2,
         target_count: int = 30,  # 상위 30개 반환
         nlp_analysis_count: int = 2000,  # NLP로 분석할 단어 개수
@@ -1154,7 +1121,7 @@ class Crawler:
             
             # 확률이 임계값 미만이면 제외
             if nlp_probability < nlp_threshold:
-                continue
+                    continue
             
             filtered_by_nlp.append({
                 'word': word,
@@ -1193,7 +1160,7 @@ class Crawler:
                 'nlp_probability': nlp_probability,  # NLP 확률
                 'gpt_comparison': None  # GPT 비교 결과 (현재 비활성화)
             })
-        
+            
         print(f"[필터링] 최종 결과: {len(candidates)}개 신조어 후보 (확률 기준 상위 {target_count}개)")
         if candidates:
             print("[필터링] 최종 후보 목록 (NLP 확률 포함):")
@@ -1206,97 +1173,6 @@ class Crawler:
             self._naver_cache_dirty = False
         
         return candidates
-    
-    def analyze_rer_meaning_with_gpt(self, word: str, contexts: List[str], retry_count: int = 0) -> tuple[str, bool]:
-        """-러로 끝나는 단어의 의미를 GPT로 분석"""
-        if not self.openai_client or not word.endswith('러'):
-            return (f'{word[:-1]}를 좋아하는 사람', False)
-        
-        try:
-            context_text = ' '.join(contexts[:5]) if contexts else ''
-            base_word = word[:-1]
-            
-            prompt = f"""다음 단어는 "-러"로 끝나는 신조어입니다. 의미를 분석해주세요.
-
-단어: {word} (기본: {base_word})
-맥락: {context_text[:300]}
-
-다음 두 가지 의미 중 더 자연스러운 것을 선택하거나, 더 정확한 의미를 제시하세요:
-1. "{base_word}를 좋아하는 사람"
-2. "{base_word}를 하는 사람"
-
-답변 형식: "의미: [선택한 의미 또는 더 정확한 의미]"만 출력하세요."""
-
-            response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a Korean language expert. Answer concisely."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.1,
-                max_tokens=50
-            )
-            
-            result = response.choices[0].message.content.strip()
-            if '의미:' in result:
-                meaning = result.split('의미:')[1].strip()
-                return (meaning, True)
-            return (f'{base_word}를 좋아하는 사람', False)
-        except Exception as e:
-            error_str = str(e)
-            if '429' in error_str or 'rate_limit' in error_str.lower():
-                if retry_count < 1:
-                    time.sleep(25)
-                    return self.analyze_rer_meaning_with_gpt(word, contexts, retry_count + 1)
-            return (f'{word[:-1]}를 좋아하는 사람', False)
-    
-    def analyze_rer_meaning_batch(self, words_with_contexts: List[tuple[str, List[str]]]) -> Dict[str, tuple[str, bool]]:
-        """-러로 끝나는 단어들의 의미를 배치로 분석"""
-        cached_results = {}
-        words_to_analyze = []
-        
-        for word, contexts in words_with_contexts:
-            if word in self.meaning_cache:
-                cached_results[word] = self.meaning_cache[word]
-            else:
-                words_to_analyze.append((word, contexts))
-        
-        if not words_to_analyze:
-            return cached_results
-        
-        # 배치 분석 (간소화)
-        final_results = cached_results.copy()
-        for word, contexts in words_to_analyze[:10]:  # 최대 10개만
-            meaning, success = self.analyze_rer_meaning_with_gpt(word, contexts)
-            final_results[word] = (meaning, success)
-            time.sleep(30)  # Rate limit 방지: 대기 시간 증가
-        
-        self._save_meaning_cache(final_results)
-        return final_results
-    
-    def analyze_word_meaning_batch(self, words_with_contexts: List[tuple[str, List[str]]]) -> Dict[str, tuple[str, bool]]:
-        """일반 단어들의 의미를 배치로 분석"""
-        cached_results = {}
-        words_to_analyze = []
-        
-        for word, contexts in words_with_contexts:
-            if word in self.meaning_cache:
-                cached_results[word] = self.meaning_cache[word]
-            else:
-                words_to_analyze.append((word, contexts))
-        
-        # 배치 분석 (간소화)
-        final_results = cached_results.copy()
-        for word, contexts in words_to_analyze[:10]:  # 최대 10개만
-            final_results[word] = (f'{word}의 의미 (분석 중)', False)
-        
-        return final_results
-    
-    def _llm_batch_filter(self, candidates: List[Dict], top_k: int = 120) -> List[Dict]:
-        """LLM을 사용한 배치 필터링 (간소화 버전)"""
-        if not self.openai_client:
-            return candidates[:top_k]
-        return candidates[:top_k]
     
     def crawl_and_analyze(self, use_enhanced_filter: bool = True) -> List[Dict]:
         """고급 크롤링 및 분석 실행 (디시인사이드 전용)"""
@@ -1338,7 +1214,6 @@ class Crawler:
                     all_texts,
                     use_naver=True,
                     use_gpt=False,  # 필터링에서는 GPT 사용 안 함 (Rate Limit 방지)
-                    use_gpt_comparison=False,  # GPT 비교 필터링 비활성화 (나중에 추가 예정)
                     min_count=self.filter_min_count,
                     target_count=self.filter_target_count,  # 상위 N개 반환
                     nlp_analysis_count=2000,  # NLP로 분석할 단어 개수
