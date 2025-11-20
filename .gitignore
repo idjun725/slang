@@ -43,6 +43,9 @@ ENV/\r
 *.sqlite3\r
 data/\r
 
+# Training models (large files)
+backend/training/\r
+
 # Logs
 *.log\r
 logs/\r

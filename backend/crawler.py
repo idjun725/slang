@@ -212,6 +212,11 @@ class Crawler:
         self._naver_cache_dirty = False
         self._load_naver_dict_cache()
         
+        # 욕설 판별 캐시
+        self.profane_cache_file = os.path.join(current_dir, 'profane_word_cache.json')
+        self.profane_cache = self._load_profane_cache()
+        self._profane_cache_dirty = False
+        
         # NLP 분류기 초기화 (옵션)
         self.nlp_classifier = None
         use_nlp_str = os.getenv('USE_NLP_FILTER', '').strip().lower()
@@ -267,6 +272,28 @@ class Crawler:
             print(f"[캐시] {len(new_meanings)}개 의미 저장됨 (총 {len(self.meaning_cache)}개)")
         except Exception as e:
             print(f"[캐시] 저장 실패: {e}")
+    
+    def _load_profane_cache(self) -> Dict[str, bool]:
+        """욕설 판별 결과 캐시 로드"""
+        if not os.path.exists(self.profane_cache_file):
+            return {}
+        try:
+            with open(self.profane_cache_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return {str(k): bool(v) for k, v in data.items()}
+        except Exception as e:
+            print(f"[욕설필터] 캐시 로드 실패: {e}")
+        return {}
+    
+    def _save_profane_cache(self):
+        """욕설 판별 캐시 저장"""
+        try:
+            with open(self.profane_cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.profane_cache, f, ensure_ascii=False, indent=2)
+            print(f"[욕설필터] 캐시 저장: {len(self.profane_cache)}개 단어")
+        except Exception as e:
+            print(f"[욕설필터] 캐시 저장 실패: {e}")
     
     def remove_particles(self, word: str) -> str:
         """한국어 조사 제거"""
@@ -901,6 +928,76 @@ class Crawler:
         similarity = (jaccard * 0.6 + char_ratio * 0.4)
         return similarity
     
+    def _is_profane_word(self, word: str) -> bool:
+        """GPT를 사용해 단어가 욕설인지 판별"""
+        if not word:
+            return False
+        cached = self.profane_cache.get(word)
+        if cached is not None:
+            return cached
+        
+        if not self.openai_client:
+            return False
+        
+        prompt = (
+            "다음 한국어 단어가 욕설·비속어·차별적 표현에 해당하는지 판단해 주세요.\n"
+            f"단어: {word}\n\n"
+            "욕설/비속어라면 YES, 아니면 NO만 대문자로 답변하세요."
+        )
+        
+        try:
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a Korean content moderator. Answer with YES or NO only."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.0,
+                max_tokens=5
+            )
+            answer = response.choices[0].message.content.strip().upper()
+            is_profane = answer.startswith("YES")
+            self.profane_cache[word] = is_profane
+            self._profane_cache_dirty = True
+            if is_profane:
+                print(f"[욕설필터] '{word}' → GPT 판별: 욕설/비속어 (제외)")
+            else:
+                print(f"[욕설필터] '{word}' → GPT 판별: 안전")
+            return is_profane
+        except Exception as e:
+            print(f"[욕설필터] GPT 판별 실패 ({word}): {e}")
+            return False
+    
+    def _filter_profane_candidates(self, sorted_candidates: List[Dict], target_count: int) -> List[Dict]:
+        """GPT 욕설 판별을 통과한 상위 후보 선택"""
+        if target_count <= 0:
+            return []
+        if not sorted_candidates:
+            return []
+        if not self.openai_client:
+            # GPT 사용 불가 시 기존 로직 유지
+            print("[욕설필터] GPT 비활성화 상태이므로 욕설 필터를 건너뜁니다.")
+            return sorted_candidates[:target_count]
+        
+        safe_candidates = []
+        idx = 0
+        while len(safe_candidates) < target_count and idx < len(sorted_candidates):
+            candidate = sorted_candidates[idx]
+            idx += 1
+            word = candidate['word']
+            if self._is_profane_word(word):
+                continue
+            safe_candidates.append(candidate)
+        
+        if len(safe_candidates) < target_count:
+            print(f"[욕설필터] 충분한 안전 후보가 없어 {len(safe_candidates)}개만 선택되었습니다.")
+        
+        if self._profane_cache_dirty:
+            self._save_profane_cache()
+            self._profane_cache_dirty = False
+        
+        return safe_candidates
+    
     def calculate_slang_score(self, word: str, count: int, contexts: List[str]) -> float:
         """신조어 점수 계산 (기본 점수)"""
         score = 0.0
@@ -1069,9 +1166,11 @@ class Crawler:
         
         print(f"[필터링] 4단계 - NLP 확률 필터링 후: {len(filtered_by_nlp)}개 (임계값: {nlp_threshold})")
         
-        # 5단계: 확률 기준으로 정렬하여 상위 30개 선택
+        # 5단계: 확률 기준으로 정렬
         filtered_by_nlp.sort(key=lambda x: x['nlp_probability'], reverse=True)
-        final_candidates = filtered_by_nlp[:target_count]
+        
+        # 5.5단계: GPT 욕설 필터 적용 (가능한 경우)
+        final_candidates = self._filter_profane_candidates(filtered_by_nlp, target_count)
         
         # 최종 결과 구성
         candidates = []
