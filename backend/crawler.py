@@ -442,9 +442,26 @@ class Crawler:
                         # 추가 대체 셀렉터
                         title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
                     
+                    # 추천 목록 전용 셀렉터 시도 (추천 목록은 다른 구조일 수 있음)
+                    if not title_elements and "exception_mode=recommend" in list_url:
+                        print(f"[DEBUG] 추천 목록 전용 셀렉터 시도 중...")
+                        # 추천 목록의 다른 가능한 셀렉터들
+                        title_elements = soup.select('td.gall_tit a, .gall_tit a, a[href*="/board/view/"]')
+                        if not title_elements:
+                            # 테이블 행에서 찾기
+                            rows = soup.find_all('tr')
+                            for row in rows:
+                                link = row.find('a', href=lambda x: x and '/board/view/' in x)
+                                if link:
+                                    if not title_elements:
+                                        title_elements = []
+                                    title_elements.append(link)
+                        if title_elements:
+                            print(f"[DEBUG] 추천 목록 전용 셀렉터로 {len(title_elements)}개 발견")
+                    
                     # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
-                    if not title_elements and gallery == galleries[0] and list_url == list_urls[0]:
-                        print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
+                    if not title_elements:
+                        print(f"[DEBUG] {gallery} 갤러리 ({url_type}) HTML 구조 확인 중...")
                         # 모든 링크 찾기 시도
                         all_links = soup.find_all('a', href=True)
                         print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
@@ -455,6 +472,14 @@ class Crawler:
                             if board_links:
                                 # 링크에서 제목 추출 시도
                                 title_elements = board_links
+                                print(f"[DEBUG] 대체 셀렉터로 {len(title_elements)}개 게시물 링크 발견")
+                        
+                        # 여전히 없으면 HTML 일부 출력
+                        if not title_elements:
+                            print(f"[WARNING] {gallery} 갤러리 ({url_type})에서 게시물을 찾을 수 없습니다.")
+                            # HTML 구조 확인을 위한 샘플 출력
+                            sample_html = soup.prettify()[:500] if soup else "HTML 없음"
+                            print(f"[DEBUG] HTML 샘플 (처음 500자): {sample_html}")
                     
                     url_posts_before = len(gallery_posts)
                     url_found_count = 0  # 발견된 게시물 수 (중복 포함)
@@ -1000,7 +1025,7 @@ class Crawler:
         nlp_threshold: float = 0.41  # NLP 확률 임계값
     ) -> List[Dict]:
         """
-        고급 필터링: 네이버 사전 + NLP 확률 기반 필터링
+        필터링: 네이버 사전 + NLP 확률 기반 필터링
         
         프로세스:
         1. 기본 필터링 (common_words, 패턴 제외)
@@ -1176,8 +1201,8 @@ class Crawler:
         return candidates
     
     def crawl_and_analyze(self, use_enhanced_filter: bool = True) -> List[Dict]:
-        """고급 크롤링 및 분석 실행 (디시인사이드 전용)"""
-        print("고급 크롤링 시작...")
+        """ 크롤링 및 분석 실행 (디시인사이드 전용)"""
+        print(" 크롤링 시작...")
         
         try:
             # 디시인사이드 크롤링만 실행 (게시글 내용 포함)
@@ -1202,14 +1227,14 @@ class Crawler:
                     all_texts.append(combined_text)
             scored_slangs = []
             
-            # 고급 필터링만 사용
+            #  필터링만 사용
             if use_enhanced_filter:
-                print("\n고급 필터링 (네이버 사전) 시작... (GPT는 의미 생성에만 사용)")
+                print("\n 필터링 (네이버 사전) 시작... (GPT는 의미 생성에만 사용)")
                 all_keyword_counts = self.extract_all_keywords(all_texts)
                 
                 filtered_counts = Counter(all_keyword_counts)
                 
-                # 고급 필터링 실행 (NLP 확률 기반 필터링)
+                #  필터링 실행 (NLP 확률 기반 필터링)
                 enhanced_candidates = self.enhanced_filter_slang_candidates(
                     filtered_counts,
                     all_texts,
@@ -1279,7 +1304,7 @@ class Crawler:
                     except Exception as e:
                         print(f"[의미추출] 배치 결과 파일 저장 실패: {e}")
                 
-                # 고급 필터링 결과 추가 (수동 사전/배치 결과 적용)
+                #  필터링 결과 추가 (수동 사전/배치 결과 적용)
                 for candidate in enhanced_candidates:
                     word = candidate['word']
                     contexts = candidate.get('contexts', [])
@@ -1355,12 +1380,12 @@ class Crawler:
             
             print(f"\n[결과] 총 {len(result)}개 신조어 후보 발견 (중복 제거 후)")
             if enhanced_count > 0:
-                print(f"  - 고급 필터링: {enhanced_count}개")
+                print(f"  -  필터링: {enhanced_count}개")
             
             return result[:30]  # 상위 30개 반환
             
         except Exception as e:
-            print(f"[ERROR] 고급 크롤링 실패: {e}")
+            print(f"[ERROR]  크롤링 실패: {e}")
             import traceback
             traceback.print_exc()
             return []
