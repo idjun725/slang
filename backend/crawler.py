@@ -420,47 +420,54 @@ class Crawler:
                 gallery_titles_count = 0
                 seen_links = set()
                 
-                for list_url in list_urls:
+                for url_idx, list_url in enumerate(list_urls):
                     if len(gallery_posts) >= max_posts_per_gallery:
                         break
                     
+                    # URL 타입 확인 (일반 목록 vs 추천 목록)
+                    url_type = "추천 목록" if "exception_mode=recommend" in list_url else "일반 목록"
+                    print(f"[크롤링] {gallery} 갤러리 - {url_type} 크롤링 시작: {list_url}")
+                    
                     response = requests.get(list_url, headers=self.headers)
-                response.raise_for_status()
-                
-                soup = BeautifulSoup(response.text, 'html.parser')
-                
-                # 제목 추출 - 다양한 셀렉터 시도
-                title_elements = soup.find_all('td', class_='gall_tit')
-                if not title_elements:
-                    # 대체 셀렉터 시도
-                    title_elements = soup.find_all('a', class_='icon_txt')
-                if not title_elements:
-                    # 추가 대체 셀렉터
-                    title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
-                
-                # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
+                    response.raise_for_status()
+                    
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    
+                    # 제목 추출 - 다양한 셀렉터 시도
+                    title_elements = soup.find_all('td', class_='gall_tit')
+                    if not title_elements:
+                        # 대체 셀렉터 시도
+                        title_elements = soup.find_all('a', class_='icon_txt')
+                    if not title_elements:
+                        # 추가 대체 셀렉터
+                        title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                    
+                    # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
                     if not title_elements and gallery == galleries[0] and list_url == list_urls[0]:
-                    print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
-                    # 모든 링크 찾기 시도
-                    all_links = soup.find_all('a', href=True)
-                    print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
-                    if all_links:
-                        # 게시물 링크 패턴 확인
-                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
-                        print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
-                        if board_links:
-                            # 링크에서 제목 추출 시도
-                            title_elements = board_links
-                
-                for title_elem in title_elements:
+                        print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
+                        # 모든 링크 찾기 시도
+                        all_links = soup.find_all('a', href=True)
+                        print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
+                        if all_links:
+                            # 게시물 링크 패턴 확인
+                            board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
+                            print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
+                            if board_links:
+                                # 링크에서 제목 추출 시도
+                                title_elements = board_links
+                    
+                    url_posts_before = len(gallery_posts)
+                    url_found_count = 0  # 발견된 게시물 수 (중복 포함)
+                    
+                    for title_elem in title_elements:
                         if len(gallery_posts) >= max_posts_per_gallery:
                             break
                         
-                    if title_elem.name == 'a':
-                        link = title_elem
-                    else:
-                        link = title_elem.find('a')
-                    
+                        if title_elem.name == 'a':
+                            link = title_elem
+                        else:
+                            link = title_elem.find('a')
+                        
                         if not link:
                             continue
                         
@@ -468,15 +475,15 @@ class Crawler:
                         if not title_text:
                             continue
                         
-                            # href 추출
+                        # href 추출
                         href = link.get('href', '')
-                                if href and not href.startswith('http'):
-                                    if href.startswith('/'):
-                                        full_link = base_url + href
-                                    else:
-                                        full_link = base_url + '/' + href
-                                else:
-                                    full_link = href if href else ''
+                        if href and not href.startswith('http'):
+                            if href.startswith('/'):
+                                full_link = base_url + href
+                            else:
+                                full_link = base_url + '/' + href
+                        else:
+                            full_link = href if href else ''
                         
                         # 잘못된 링크 필터링
                         if not full_link or full_link.startswith('javascript:') or 'javascript:;' in full_link:
@@ -486,14 +493,16 @@ class Crawler:
                         if '/board/view/' not in full_link:
                             continue
                         
+                        url_found_count += 1
+                        
                         # 동일 게시글 중복 수집 방지
                         if full_link in seen_links:
                             continue
                         seen_links.add(full_link)
                         
                         post_data = {
-                                'title': title_text,
-                                'source': f"DCInside {gallery}",
+                            'title': title_text,
+                            'source': f"DCInside {gallery}",
                             'link': full_link,
                             'content': ''  # 기본값
                         }
@@ -505,10 +514,16 @@ class Crawler:
                             time.sleep(0.5)  # 서버 부하 방지를 위한 대기
                         
                         gallery_posts.append(post_data)
-                            gallery_titles_count += 1
+                        gallery_titles_count += 1
+                    
+                    # 각 URL에서 가져온 게시물 수 로그
+                    url_posts_after = len(gallery_posts)
+                    url_posts_added = url_posts_after - url_posts_before
+                    duplicate_count = url_found_count - url_posts_added
+                    print(f"[크롤링] {gallery} 갤러리 - {url_type}: {url_posts_added}개 게시물 수집 (발견: {url_found_count}개, 중복 제외: {duplicate_count}개)")
                 
                 all_posts.extend(gallery_posts)
-                print(f"[OK] {gallery} 갤러리에서 {gallery_titles_count}개 제목 수집" + 
+                print(f"[OK] {gallery} 갤러리에서 총 {gallery_titles_count}개 제목 수집" + 
                       (f" (내용 포함: {sum(1 for p in gallery_posts if p.get('content'))}개)" if include_content else ""))
                 time.sleep(1)
                 
@@ -749,8 +764,8 @@ class Crawler:
                         self._naver_cache_dirty = True
                     elif word in self.naver_dict_cache:
                         del self.naver_dict_cache[word]
-        except Exception as e:
-            print(f"[WARNING] 네이버 사전 확인 실패 ({word}): {e}")
+                except Exception as e:
+                    print(f"[WARNING] 네이버 사전 확인 실패 ({word}): {e}")
                     results[word] = False
         
         # 캐시 저장
@@ -860,7 +875,7 @@ class Crawler:
                 
                 if is_profane:
                     print(f"[욕설필터] '{word}' → GPT 판별: 욕설/비속어 (제외)")
-            else:
+                else:
                     print(f"[욕설필터] '{word}' → GPT 판별: 안전")
             
             return results
@@ -957,7 +972,7 @@ class Crawler:
         
         if len(safe_candidates) < target_count:
             print(f"[욕설필터] 충분한 안전 후보가 없어 {len(safe_candidates)}개만 선택되었습니다.")
-                else:
+        else:
             print(f"[욕설필터] {len(safe_candidates)}개 안전한 후보 선택 완료")
         
         if self._profane_cache_dirty:
@@ -1121,7 +1136,7 @@ class Crawler:
             
             # 확률이 임계값 미만이면 제외
             if nlp_probability < nlp_threshold:
-                    continue
+                continue
             
             filtered_by_nlp.append({
                 'word': word,
