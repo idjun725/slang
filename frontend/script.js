@@ -69,10 +69,68 @@ document.addEventListener('DOMContentLoaded', async function() {
     setupEventListeners();
 });
 
+// 크롤러 실행
+async function runCrawler() {
+    const crawlBtn = document.getElementById('crawl-btn');
+    const crawlStatus = document.getElementById('crawl-status');
+    
+    // 버튼 비활성화
+    crawlBtn.disabled = true;
+    crawlBtn.textContent = '⏳ 크롤링 중...';
+    crawlStatus.style.display = 'block';
+    crawlStatus.innerHTML = '<div class="loading">크롤러를 실행하고 있습니다. 이 작업은 몇 분이 걸릴 수 있습니다...</div>';
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/crawl`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        // 응답이 JSON인지 확인
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response:', text.substring(0, 200));
+            crawlStatus.innerHTML = '<div class="error">서버 응답 오류: JSON이 아닌 응답을 받았습니다.</div>';
+            crawlBtn.disabled = false;
+            crawlBtn.textContent = '🔄 크롤러 실행';
+            return;
+        }
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            crawlStatus.innerHTML = `<div class="success">✅ ${data.message || '크롤링이 완료되었습니다!'}</div>`;
+            // 랭킹 새로고침
+            setTimeout(() => {
+                loadRanking();
+                loadStats();
+                crawlStatus.style.display = 'none';
+            }, 2000);
+        } else {
+            crawlStatus.innerHTML = `<div class="error">❌ 크롤링 실패: ${data.detail || data.message || '알 수 없는 오류'}</div>`;
+        }
+    } catch (error) {
+        console.error('Error running crawler:', error);
+        crawlStatus.innerHTML = '<div class="error">❌ 서버 연결에 실패했습니다. 서버가 시작 중일 수 있습니다.</div>';
+    } finally {
+        crawlBtn.disabled = false;
+        crawlBtn.textContent = '🔄 크롤러 실행';
+    }
+}
+
 // 이벤트 리스너 설정
 function setupEventListeners() {
     // 로그아웃 버튼
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
+    
+    // 크롤러 실행 버튼
+    const crawlBtn = document.getElementById('crawl-btn');
+    if (crawlBtn) {
+        crawlBtn.addEventListener('click', runCrawler);
+    }
     
     // 구독 토글
     document.getElementById('subscription-toggle').addEventListener('change', handleSubscriptionToggle);

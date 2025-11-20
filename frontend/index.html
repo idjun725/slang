@@ -401,6 +401,28 @@
             background: #d1d5d9;
         }
         
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            color: #667eea;
+            text-align: center;
+            padding: 20px;
+        }
+        
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -483,7 +505,11 @@
         
         <div class="main-content">
             <div class="ranking-section">
-                <h2>🏆 신조어 랭킹</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 style="margin: 0;">🏆 신조어 랭킹</h2>
+                    <button id="crawl-btn" class="btn" style="padding: 10px 20px; font-size: 0.9rem;">🔄 크롤러 실행</button>
+                </div>
+                <div id="crawl-status" style="margin-bottom: 10px; display: none;"></div>
                 <div id="ranking-list">
                     <div class="loading">랭킹을 불러오는 중...</div>
                 </div>
