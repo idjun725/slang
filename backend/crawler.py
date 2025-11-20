@@ -402,7 +402,7 @@ class Crawler:
     def crawl_dcinside(self, include_content: bool = True, max_posts_per_gallery: int = 20) -> List[Dict]:
         """디시인사이드 크롤링"""
         galleries = ['dcbest', 'baseball_new11', 'ani1_new2', 'entertain',
-        'leagueoflegends6', 'valorant', 'battlegrounds', 'battlefield']
+        'leagueoflegends6', 'valorant', 'battlegrounds']
         base_url = 'https://gall.dcinside.com'
         all_posts = []
         
@@ -484,6 +484,12 @@ class Crawler:
                     url_posts_before = len(gallery_posts)
                     url_found_count = 0  # 발견된 게시물 수 (중복 포함)
                     
+                    # 추천 목록에서 게시물을 찾지 못한 경우 경고
+                    if not title_elements and "exception_mode=recommend" in list_url:
+                        print(f"[WARNING] {gallery} 갤러리 - 추천 목록에서 게시물을 찾을 수 없습니다. 추천 목록이 비어있거나 구조가 변경되었을 수 있습니다.")
+                        # 추천 목록을 건너뛰고 다음 갤러리로
+                        continue
+                    
                     for title_elem in title_elements:
                         if len(gallery_posts) >= max_posts_per_gallery:
                             break
@@ -545,7 +551,10 @@ class Crawler:
                     url_posts_after = len(gallery_posts)
                     url_posts_added = url_posts_after - url_posts_before
                     duplicate_count = url_found_count - url_posts_added
-                    print(f"[크롤링] {gallery} 갤러리 - {url_type}: {url_posts_added}개 게시물 수집 (발견: {url_found_count}개, 중복 제외: {duplicate_count}개)")
+                    if url_posts_added > 0:
+                        print(f"[크롤링] {gallery} 갤러리 - {url_type}: {url_posts_added}개 게시물 수집 (발견: {url_found_count}개, 중복 제외: {duplicate_count}개)")
+                    else:
+                        print(f"[크롤링] {gallery} 갤러리 - {url_type}: 게시물 없음 (발견: {url_found_count}개)")
                 
                 all_posts.extend(gallery_posts)
                 print(f"[OK] {gallery} 갤러리에서 총 {gallery_titles_count}개 제목 수집" + 
