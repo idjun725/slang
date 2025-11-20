@@ -49,8 +49,15 @@ app.add_middleware(
 
 # 데이터베이스 초기화
 db = Database()
-# 전역 크롤러 (수동 의미 사전 접근용)
-global_crawler_for_meanings = Crawler()
+# 전역 크롤러 (수동 의미 사전 접근용) - 지연 로딩
+global_crawler_for_meanings = None
+
+def get_global_crawler():
+    """전역 크롤러를 지연 로딩으로 가져오기 (서버 시작 시 메모리 부족 방지)"""
+    global global_crawler_for_meanings
+    if global_crawler_for_meanings is None:
+        global_crawler_for_meanings = Crawler()
+    return global_crawler_for_meanings
 
 # 세션 저장소 (간단한 in-memory)
 sessions = {}
@@ -225,10 +232,10 @@ async def get_ranking(limit: int = 100, period: Optional[str] = None):
                         if not isinstance(rules, dict):
                             rules = {"allow": [], "block": []}
             # 메모리 캐시도 갱신
-            global_crawler_for_meanings.word_rules = rules
+            get_global_crawler().word_rules = rules
         except Exception as e:
             print(f"[랭킹] 단어 규칙 로드 실패: {e}")
-            rules = global_crawler_for_meanings.word_rules
+            rules = get_global_crawler().word_rules
         
         if rules and rules.get('block'):
             block = set(rules.get('block') or [])
@@ -365,14 +372,14 @@ async def upsert_bulk_meanings(payload: BulkMeaningsRequest):
         with open(manual_path, 'w', encoding='utf-8') as f:
             json.dump(existing, f, ensure_ascii=False, indent=2)
         # 전역 크롤러 캐시 갱신
-        global_crawler_for_meanings.manual_meanings = existing
+        get_global_crawler().manual_meanings = existing
         return {"updated": len(payload.meanings or {}), "total": len(existing)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/words/rules")
 async def get_word_rules():
-    return global_crawler_for_meanings.word_rules
+    return get_global_crawler().word_rules
 
 @app.post("/words/rules")
 async def upsert_word_rules(payload: WordRulesRequest):
@@ -398,7 +405,7 @@ async def upsert_word_rules(payload: WordRulesRequest):
         with open(rules_path, 'w', encoding='utf-8') as f:
             json.dump(rules, f, ensure_ascii=False, indent=2)
         # 메모리 갱신
-        global_crawler_for_meanings.word_rules = rules
+        get_global_crawler().word_rules = rules
         return rules
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -577,7 +584,7 @@ async def search_slang(word: str):
             print(f"[검색] '{word}' 의미 추출 중...")
             
             # 수동 의미 우선 적용
-            manual_data = global_crawler_for_meanings.manual_meanings.get(word)
+            manual_data = get_global_crawler().manual_meanings.get(word)
             if manual_data:
                 if isinstance(manual_data, dict):
                     meaning = manual_data.get('meaning', '')
@@ -638,7 +645,7 @@ async def search_slang(word: str):
         examples = []
         
         # 수동 예문 우선 적용
-        manual_data = global_crawler_for_meanings.manual_meanings.get(word)
+        manual_data = get_global_crawler().manual_meanings.get(word)
         if manual_data and isinstance(manual_data, dict):
             manual_examples = manual_data.get('examples', [])
             if manual_examples and isinstance(manual_examples, list):
