@@ -151,7 +151,10 @@
     <script src="config.js"></script>
     <script>
         // config.js에서 설정된 API_BASE_URL 사용
-        const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000';
+        const API_BASE_URL = window.API_BASE_URL || 
+                             (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                              ? 'http://localhost:8000' 
+                              : 'https://slang-ko5f.onrender.com');
         
         document.getElementById('unsubscribe-form').addEventListener('submit', async function(event) {
             event.preventDefault();
