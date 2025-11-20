@@ -8,5 +8,5 @@ python-dotenv==1.0.0
 schedule==1.2.0
 openai>=1.0.0
 google-api-python-client>=2.100.0
-# torch and transformers are installed in nixpacks.toml for CPU version
+# torch와 transformers는 나중에 추가 (NLP 필터링 없이도 크롤러는 작동함)
 
