@@ -5,10 +5,19 @@ from collections import Counter
 from typing import List, Dict, Set, Optional
 import time
 import os
+import sys
 import math
 import json
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# 백그라운드 작업에서도 로그가 즉시 출력되도록 print를 래핑
+_original_print = print
+def print(*args, **kwargs):
+    """즉시 flush되는 print 함수"""
+    kwargs.setdefault('flush', True)
+    _original_print(*args, **kwargs)
+    sys.stdout.flush()
 
 # 환경변수 로드 (backend 디렉토리의 .env 파일 명시적으로 로드)
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -512,7 +521,7 @@ class Crawler:
                     
                     gallery_posts.append(post_data)
                     gallery_titles_count += 1
-                    
+                
                 # 게시물 수집 결과 로그
                 url_posts_after = len(gallery_posts)
                 url_posts_added = url_posts_after - url_posts_before
@@ -875,7 +884,7 @@ class Crawler:
                 
                 if is_profane:
                     print(f"[욕설필터] '{word}' → GPT 판별: 욕설/비속어 (제외)")
-                else:
+            else:
                     print(f"[욕설필터] '{word}' → GPT 판별: 안전")
             
             return results
@@ -1122,7 +1131,7 @@ class Crawler:
             
             # 확률이 임계값 미만이면 제외
             if nlp_probability < nlp_threshold:
-                continue
+                    continue
             
             filtered_by_nlp.append({
                 'word': word,

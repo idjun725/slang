@@ -5,6 +5,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Optional
 import os
+import sys
 import hashlib
 import secrets
 import json
@@ -16,6 +17,9 @@ from email_service import EmailService
 from crawler import Crawler
 from scheduler import start_scheduler_thread
 from youtube_service import YouTubeService
+
+# 백그라운드 작업에서도 로그가 즉시 출력되도록 설정
+sys.stdout.reconfigure(line_buffering=True) if hasattr(sys.stdout, 'reconfigure') else None
 
 # 환경변수 로드 (backend 디렉토리의 .env 파일 명시적으로 로드)
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -305,11 +309,15 @@ async def get_subscription_status(session_id: Optional[str] = None):
 def run_crawler_task():
     """백그라운드에서 실행할 크롤러 작업"""
     try:
-        print("[크롤러] 백그라운드 크롤링 시작...")
+        # 즉시 출력되도록 flush
+        print("[크롤러] 백그라운드 크롤링 시작...", flush=True)
+        sys.stdout.flush()
+        
         crawler = Crawler()
         result = crawler.crawl_and_analyze()
         
-        print(f"[크롤러] 크롤링 완료: {len(result)}개 신조어 발견")
+        print(f"[크롤러] 크롤링 완료: {len(result)}개 신조어 발견", flush=True)
+        sys.stdout.flush()
         
         # 데이터베이스에 저장
         added_count = 0
@@ -323,11 +331,14 @@ def run_crawler_task():
             ):
                 added_count += 1
         
-        print(f"[크롤러] 데이터베이스 저장 완료: {added_count}개 신조어 저장됨")
+        print(f"[크롤러] 데이터베이스 저장 완료: {added_count}개 신조어 저장됨", flush=True)
+        sys.stdout.flush()
     except Exception as e:
-        print(f"[크롤러] 크롤링 실패: {e}")
+        print(f"[크롤러] 크롤링 실패: {e}", flush=True)
+        sys.stdout.flush()
         import traceback
         traceback.print_exc()
+        sys.stdout.flush()
 
 @app.post("/crawl")
 async def trigger_crawl(background_tasks: BackgroundTasks):
