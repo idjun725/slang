@@ -1,16 +1,17 @@
 # Nixpacks가 Python을 자동으로 감지하도록 함
-# Python provider는 자동으로 pip를 포함함
+# backend/runtime.txt 또는 backend/requirements.txt를 보고 Python 감지
 
 [phases.setup]
 nixPkgs = ["wget", "unzip"]
 
 [phases.install]
-# Railway는 rootDirectory가 backend이므로 cd backend 필요
+# Railway는 rootDirectory가 backend이므로 현재 디렉토리가 backend임
 # Nixpacks가 Python을 자동으로 감지하고 가상 환경을 만듦
+# 하지만 rootDirectory가 backend이므로 실제로는 루트에서 실행됨
 cmds = [
-    "cd backend && pip install -r requirements.txt",
-    "cd backend && pip install torch --index-url https://download.pytorch.org/whl/cpu || cd backend && pip install torch",
-    "cd backend && pip install transformers>=4.30.0"
+    "cd backend && pip install -r requirements.txt || (cd backend && python3 -m pip install -r requirements.txt)",
+    "cd backend && pip install torch --index-url https://download.pytorch.org/whl/cpu || cd backend && pip install torch || (cd backend && python3 -m pip install torch --index-url https://download.pytorch.org/whl/cpu || cd backend && python3 -m pip install torch)",
+    "cd backend && pip install transformers>=4.30.0 || (cd backend && python3 -m pip install transformers>=4.30.0)"
 ]
 
 [phases.build]
