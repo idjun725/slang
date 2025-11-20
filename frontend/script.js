@@ -20,6 +20,15 @@ async function checkLogin() {
     
     try {
         const response = await fetch(`${API_BASE_URL}/me?session_id=${sessionId}`);
+        
+        // 응답이 JSON인지 확인
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('Non-JSON response for /me');
+            // 서버가 시작 중이거나 오류일 수 있음
+            return null;
+        }
+        
         const data = await response.json();
         
         if (data.success) {
@@ -32,7 +41,7 @@ async function checkLogin() {
         }
     } catch (error) {
         console.error('Error checking login:', error);
-        window.location.href = 'login.html';
+        // 서버 연결 실패 시에도 로그인 페이지로 이동하지 않음 (서버가 시작 중일 수 있음)
         return null;
     }
 }
@@ -202,6 +211,16 @@ async function loadRanking() {
     try {
         // limit을 크게 설정하여 모든 신조어 가져오기
         const response = await fetch(`${API_BASE_URL}/ranking?limit=200`);
+        
+        // 응답이 JSON인지 확인
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response:', text.substring(0, 200));
+            showError('서버 응답 오류: JSON이 아닌 응답을 받았습니다. 서버가 시작 중일 수 있습니다.');
+            return;
+        }
+        
         const data = await response.json();
         
         if (data.success) {
@@ -211,7 +230,7 @@ async function loadRanking() {
         }
     } catch (error) {
         console.error('Error loading ranking:', error);
-        showError('서버 연결에 실패했습니다.');
+        showError('서버 연결에 실패했습니다. 서버가 시작 중일 수 있습니다. 잠시 후 다시 시도해주세요.');
     }
 }
 
@@ -428,6 +447,14 @@ function formatNumber(num) {
 async function loadStats() {
     try {
         const response = await fetch(`${API_BASE_URL}/stats`);
+        
+        // 응답이 JSON인지 확인
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('Non-JSON response for stats');
+            return;
+        }
+        
         const data = await response.json();
         
         if (data.success) {
