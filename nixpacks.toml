@@ -1,9 +1,11 @@
 [phases.setup]
-nixPkgs = ["python311", "python311Packages.pip", "wget", "unzip"]
+nixPkgs = ["python311", "wget", "unzip"]
 
 [phases.install]
 # Railway는 rootDirectory가 backend이므로 cd backend 필요
+# pip를 먼저 설치한 후 사용
 cmds = [
+    "cd backend && python3 -m ensurepip --upgrade",
     "cd backend && python3 -m pip install --upgrade pip",
     "cd backend && python3 -m pip install -r requirements.txt",
     "cd backend && python3 -m pip install torch --index-url https://download.pytorch.org/whl/cpu || cd backend && python3 -m pip install torch",
