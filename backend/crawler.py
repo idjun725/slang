@@ -887,7 +887,7 @@ class Crawler:
             return results
     
     def _filter_profane_candidates(self, sorted_candidates: List[Dict], target_count: int) -> List[Dict]:
-        """GPT 욕설 판별을 통과한 상위 후보 선택"""
+        """NLP 상위 후보에 GPT 욕설 필터 적용 (비속어면 제외하고 다음 단어로 대체)"""
         if target_count <= 0:
             return []
         if not sorted_candidates:
@@ -897,83 +897,69 @@ class Crawler:
             print("[욕설필터] GPT 비활성화 상태이므로 욕설 필터를 건너뜁니다.")
             return sorted_candidates[:target_count]
         
-        print(f"[욕설필터] {len(sorted_candidates)}개 후보 중 욕설 필터링 시작...")
+        print(f"[욕설필터] NLP 상위 {target_count}개 후보에 욕설 필터링 적용...")
         
+        # 1단계: NLP 확률 기준으로 정렬된 리스트에서 상위 target_count개 선택
+        top_candidates = sorted_candidates[:target_count]
+        top_words = [c['word'] for c in top_candidates]
+        
+        print(f"[욕설필터] 상위 {len(top_words)}개 단어 배치 판별 시작...")
+        
+        # 2단계: 상위 20개에 비속어 필터 적용 (배치로)
+        batch_results = self._is_profane_words_batch(top_words)
+        
+        # 배치 처리 후 대기 (RPM 제한 준수)
+        wait_time = 10
+        print(f"[욕설필터] RPM 제한 준수를 위해 {wait_time}초 대기...")
+        time.sleep(wait_time)
+        
+        # 3단계: 비속어로 판별된 단어 제외하고 안전한 후보만 수집
         safe_candidates = []
-        idx = 0
+        profane_count = 0
         
-        # 처음 20개는 배치로 처리
-        batch_size = 20
-        batch_words = []
-        batch_indices = []
-        
-        while len(safe_candidates) < target_count and idx < len(sorted_candidates):
-            candidate = sorted_candidates[idx]
+        for candidate in top_candidates:
             word = candidate['word']
+            is_profane = batch_results.get(word, False)
             
-            # 처음 20개는 배치로 수집
-            if len(batch_words) < batch_size and idx < batch_size:
-                batch_words.append(word)
-                batch_indices.append(idx)
-                idx += 1
-                continue
-            
-            # 배치가 채워졌거나 20개를 넘었으면 배치 처리
-            if batch_words:
-                print(f"[욕설필터] 배치 처리 중: {len(batch_words)}개 단어")
-                batch_results = self._is_profane_words_batch(batch_words)
-                
-                # 배치 결과 적용
-                for i, word in enumerate(batch_words):
-                    candidate_idx = batch_indices[i]
-                    candidate = sorted_candidates[candidate_idx]
-                    if not batch_results.get(word, False):
-                        safe_candidates.append(candidate)
-                        if len(safe_candidates) >= target_count:
-                            break
-                
-                batch_words = []
-                batch_indices = []
-                
-                # 배치 처리 후 대기 (RPM 제한 준수)
-                if len(safe_candidates) < target_count:
-                    wait_time = 10
-                    print(f"[욕설필터] RPM 제한 준수를 위해 {wait_time}초 대기...")
-                    time.sleep(wait_time)
-                
-                if len(safe_candidates) >= target_count:
-                    break
-            
-            # 나머지는 개별 처리
-            if self._is_profane_word(word):
-                idx += 1
+            if is_profane:
+                profane_count += 1
+                print(f"[욕설필터] '{word}' → 욕설/비속어 판별 (제외)")
                 continue
             
             safe_candidates.append(candidate)
-            idx += 1
-            
-            # 개별 요청 후 대기 (RPM 제한 준수)
-            if len(safe_candidates) < target_count and idx < len(sorted_candidates):
-                wait_time = 2
-                time.sleep(wait_time)
         
-        # 남은 배치 처리
-        if batch_words and len(safe_candidates) < target_count:
-            print(f"[욕설필터] 남은 배치 처리 중: {len(batch_words)}개 단어")
-            batch_results = self._is_profane_words_batch(batch_words)
+        # 4단계: 비속어로 제외된 단어만큼 다음 순위 단어로 대체
+        if profane_count > 0 and len(safe_candidates) < target_count:
+            print(f"[욕설필터] {profane_count}개 비속어 제외됨. 다음 순위 단어로 대체 중...")
+            replace_count = target_count - len(safe_candidates)
+            next_idx = target_count
             
-            for i, word in enumerate(batch_words):
-                candidate_idx = batch_indices[i]
-                candidate = sorted_candidates[candidate_idx]
-                if not batch_results.get(word, False):
-                    safe_candidates.append(candidate)
-                    if len(safe_candidates) >= target_count:
-                        break
+            while len(safe_candidates) < target_count and next_idx < len(sorted_candidates):
+                candidate = sorted_candidates[next_idx]
+                word = candidate['word']
+                
+                # 개별 비속어 판별
+                if self._is_profane_word(word):
+                    print(f"[욕설필터] '{word}' → 욕설/비속어 판별 (제외)")
+                    next_idx += 1
+                    # 개별 요청 후 대기 (RPM 제한 준수)
+                    if next_idx < len(sorted_candidates):
+                        wait_time = 2
+                        time.sleep(wait_time)
+                    continue
+                
+                safe_candidates.append(candidate)
+                next_idx += 1
+                
+                # 개별 요청 후 대기 (RPM 제한 준수)
+                if len(safe_candidates) < target_count and next_idx < len(sorted_candidates):
+                    wait_time = 2
+                    time.sleep(wait_time)
         
         if len(safe_candidates) < target_count:
             print(f"[욕설필터] 충분한 안전 후보가 없어 {len(safe_candidates)}개만 선택되었습니다.")
         else:
-            print(f"[욕설필터] {len(safe_candidates)}개 안전한 후보 선택 완료")
+            print(f"[욕설필터] {len(safe_candidates)}개 안전한 후보 선택 완료 (비속어 {profane_count}개 제외)")
         
         if self._profane_cache_dirty:
             self._save_profane_cache()
