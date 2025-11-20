@@ -1,8 +1,9 @@
-// API URL 설정 (환경변수 또는 기본값)
+// API URL 설정 (config.js에서 설정된 값 사용)
+// config.js가 먼저 로드되어 window.API_BASE_URL을 설정해야 함
 const API_BASE_URL = window.API_BASE_URL || 
                      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
                       ? 'http://localhost:8000' 
-                      : 'https://your-backend-url.herokuapp.com'); // 백엔드 URL로 변경 필요
+                      : 'https://slang-production.up.railway.app');
 
 // 세션 ID 가져오기
 function getSessionId() {
