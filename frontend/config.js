@@ -11,7 +11,7 @@
         } else {
             // Netlify 환경변수에서 가져오기 (빌드 시 주입 필요)
             // 또는 여기에 실제 백엔드 URL을 직접 입력
-            window.API_BASE_URL = window.API_BASE_URL || 'https://slang-ko5f.onrender.com';
+            window.API_BASE_URL = window.API_BASE_URL || 'https://slang-production.up.railway.app';
         }
     }
 })();

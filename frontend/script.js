@@ -3,7 +3,7 @@
 const API_BASE_URL = window.API_BASE_URL || 
                      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
                       ? 'http://localhost:8000' 
-                      : 'https://slang-ko5f.onrender.com');
+                      : 'https://slang-production.up.railway.app');
 
 // 세션 ID 가져오기
 function getSessionId() {

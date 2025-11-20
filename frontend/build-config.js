@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 // 환경변수에서 API_BASE_URL 가져오기
-const apiBaseUrl = process.env.API_BASE_URL || 'https://slang-ko5f.onrender.com';
+const apiBaseUrl = process.env.API_BASE_URL || 'https://slang-production.up.railway.app';
 
 // config.js 파일 내용 생성
 const configContent = `// API URL 설정
