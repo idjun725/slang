@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["python311", "pip", "wget", "unzip"]
+nixPkgs = ["python311", "wget", "unzip"]
 
 [phases.install]
 # Railway는 rootDirectory가 backend이므로 cd backend 필요
