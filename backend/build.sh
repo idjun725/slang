@@ -4,10 +4,13 @@
 
 set -e
 
-echo "[빌드] torch CPU 버전 설치 중..."
-pip install torch --index-url https://download.pytorch.org/whl/cpu || pip install torch
+echo "[빌드] torch CPU 버전 설치 시작..."
+pip install torch --index-url https://download.pytorch.org/whl/cpu || {
+    echo "[빌드] CPU 버전 실패, 일반 버전 설치 시도..."
+    pip install torch
+}
 
-echo "[빌드] transformers 설치 중..."
+echo "[빌드] transformers 설치 시작..."
 pip install transformers>=4.30.0
 
 echo "[빌드] 완료!"
