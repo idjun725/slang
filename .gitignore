@@ -44,7 +44,9 @@ ENV/\r
 data/\r
 
 # Training models (large files)
-backend/training/\r
+# 모델 파일은 포함하되, 체크포인트는 제외
+backend/training/output/*/checkpoint-*/
+backend/training/output/*-prev/\r
 
 # Logs
 *.log\r

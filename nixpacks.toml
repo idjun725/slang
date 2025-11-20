@@ -5,7 +5,11 @@ python = "3.11"
 nixPkgs = ["python311", "pip"]
 
 [phases.install]
-cmds = ["cd backend && pip install -r requirements.txt"]
+cmds = [
+    "cd backend && pip install -r requirements.txt",
+    "cd backend && pip install torch --index-url https://download.pytorch.org/whl/cpu",
+    "cd backend && pip install transformers>=4.30.0"
+]
 
 [phases.build]
 cmds = ["echo 'Build complete'"]
