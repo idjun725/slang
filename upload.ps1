@@ -25,10 +25,17 @@ if (-not $hasChanges -and -not $hasStaged) {
 # 제외할 폴더 확인
 Write-Host ""
 Write-Host "[2/4] 파일 스테이징 중..." -ForegroundColor Yellow
-Write-Host "제외 폴더: backend/training, data, backend/__pycache__" -ForegroundColor Gray
+Write-Host "제외 폴더: backend/training, data, backend/__pycache__, backend/.env" -ForegroundColor Gray
 
 # 제외 폴더를 제외하고 스테이징
-git add . ':!backend/training' ':!data' ':!backend/__pycache__'
+git add . ':!backend/training' ':!data' ':!backend/__pycache__' ':!backend/.env'
+
+# .env 파일이 실수로 포함되었는지 확인
+$stagedFiles = git diff --cached --name-only
+if ($stagedFiles -contains 'backend/.env') {
+    Write-Host "경고: .env 파일이 스테이징되었습니다. 제거합니다..." -ForegroundColor Yellow
+    git reset HEAD backend/.env
+}
 
 Write-Host "스테이징 완료" -ForegroundColor Green
 
