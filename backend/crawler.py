@@ -408,165 +408,119 @@ class Crawler:
         
         for gallery in galleries:
             try:
-                list_urls = [
-                    f"{base_url}/board/lists/?id={gallery}"
-                ]
-                
-                # dcbest는 추천 목록이 없어 추가 URL 제외
-                if gallery != 'dcbest':
-                    list_urls.append(f"{base_url}/board/lists/?id={gallery}&exception_mode=recommend")
+                # 일반 목록만 크롤링
+                list_url = f"{base_url}/board/lists/?id={gallery}"
                 
                 gallery_posts = []
                 gallery_titles_count = 0
                 seen_links = set()
                 
-                for url_idx, list_url in enumerate(list_urls):
+                print(f"[크롤링] {gallery} 갤러리 크롤링 시작: {list_url}")
+                
+                response = requests.get(list_url, headers=self.headers)
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # 제목 추출 - 다양한 셀렉터 시도
+                title_elements = soup.find_all('td', class_='gall_tit')
+                if not title_elements:
+                    # 대체 셀렉터 시도
+                    title_elements = soup.find_all('a', class_='icon_txt')
+                if not title_elements:
+                    # 추가 대체 셀렉터
+                    title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                
+                # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
+                if not title_elements:
+                    print(f"[DEBUG] {gallery} 갤러리 HTML 구조 확인 중...")
+                    # 모든 링크 찾기 시도
+                    all_links = soup.find_all('a', href=True)
+                    print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
+                    if all_links:
+                        # 게시물 링크 패턴 확인
+                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
+                        print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
+                        if board_links:
+                            # 링크에서 제목 추출 시도
+                            title_elements = board_links
+                            print(f"[DEBUG] 대체 셀렉터로 {len(title_elements)}개 게시물 링크 발견")
+                    
+                    # 여전히 없으면 HTML 일부 출력
+                    if not title_elements:
+                        print(f"[WARNING] {gallery} 갤러리에서 게시물을 찾을 수 없습니다.")
+                        # HTML 구조 확인을 위한 샘플 출력
+                        sample_html = soup.prettify()[:500] if soup else "HTML 없음"
+                        print(f"[DEBUG] HTML 샘플 (처음 500자): {sample_html}")
+                
+                url_posts_before = len(gallery_posts)
+                url_found_count = 0  # 발견된 게시물 수 (중복 포함)
+                
+                for title_elem in title_elements:
                     if len(gallery_posts) >= max_posts_per_gallery:
                         break
                     
-                    # URL 타입 확인 (일반 목록 vs 추천 목록)
-                    url_type = "추천 목록" if "exception_mode=recommend" in list_url else "일반 목록"
-                    print(f"[크롤링] {gallery} 갤러리 - {url_type} 크롤링 시작: {list_url}")
-                    
-                    response = requests.get(list_url, headers=self.headers)
-                    response.raise_for_status()
-                    
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    
-                    # 추천 목록인 경우 다른 셀렉터 우선 시도
-                    is_recommend = "exception_mode=recommend" in list_url
-                    title_elements = []
-                    
-                    if is_recommend:
-                        # 추천 목록 전용 셀렉터 우선 시도
-                        print(f"[DEBUG] 추천 목록 전용 셀렉터 시도 중...")
-                        # 1. 게시물 링크 직접 찾기
-                        all_links = soup.find_all('a', href=True)
-                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
-                        if board_links:
-                            title_elements = board_links
-                            print(f"[DEBUG] 추천 목록: 게시물 링크 직접 찾기로 {len(title_elements)}개 발견")
-                        
-                        # 2. 테이블 행에서 찾기
-                        if not title_elements:
-                            rows = soup.find_all('tr')
-                            for row in rows:
-                                link = row.find('a', href=lambda x: x and '/board/view/' in x)
-                                if link:
-                                    if not title_elements:
-                                        title_elements = []
-                                    title_elements.append(link)
-                            if title_elements:
-                                print(f"[DEBUG] 추천 목록: 테이블 행에서 {len(title_elements)}개 발견")
-                        
-                        # 3. 일반 셀렉터 시도
-                        if not title_elements:
-                            title_elements = soup.find_all('td', class_='gall_tit')
-                            if title_elements:
-                                print(f"[DEBUG] 추천 목록: 일반 셀렉터로 {len(title_elements)}개 발견")
+                    if title_elem.name == 'a':
+                        link = title_elem
                     else:
-                        # 일반 목록: 기존 셀렉터 순서대로 시도
-                        title_elements = soup.find_all('td', class_='gall_tit')
-                        if not title_elements:
-                            title_elements = soup.find_all('a', class_='icon_txt')
-                        if not title_elements:
-                            title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                        link = title_elem.find('a')
                     
-                    # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
-                    if not title_elements:
-                        print(f"[DEBUG] {gallery} 갤러리 ({url_type}) HTML 구조 확인 중...")
-                        # 모든 링크 찾기 시도
-                        all_links = soup.find_all('a', href=True)
-                        print(f"[DEBUG] 전체 링크 개수: {len(all_links)}")
-                        if all_links:
-                            # 게시물 링크 패턴 확인
-                            board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
-                            print(f"[DEBUG] 게시물 링크 개수: {len(board_links)}")
-                            if board_links:
-                                # 링크에서 제목 추출 시도
-                                title_elements = board_links
-                                print(f"[DEBUG] 대체 셀렉터로 {len(title_elements)}개 게시물 링크 발견")
-                        
-                        # 여전히 없으면 HTML 일부 출력
-                        if not title_elements:
-                            print(f"[WARNING] {gallery} 갤러리 ({url_type})에서 게시물을 찾을 수 없습니다.")
-                            # HTML 구조 확인을 위한 샘플 출력
-                            sample_html = soup.prettify()[:500] if soup else "HTML 없음"
-                            print(f"[DEBUG] HTML 샘플 (처음 500자): {sample_html}")
+                    if not link:
+                        continue
                     
-                    url_posts_before = len(gallery_posts)
-                    url_found_count = 0  # 발견된 게시물 수 (중복 포함)
+                    title_text = link.text.strip() if hasattr(link, 'text') else link.get_text(strip=True)
+                    if not title_text:
+                        continue
                     
-                    # 추천 목록에서 게시물을 찾지 못한 경우 경고 (하지만 계속 진행)
-                    if not title_elements and is_recommend:
-                        print(f"[WARNING] {gallery} 갤러리 - 추천 목록에서 게시물을 찾을 수 없습니다. 추천 목록이 비어있거나 구조가 변경되었을 수 있습니다.")
-                        # 로그만 남기고 계속 진행 (일반 목록은 계속 크롤링)
-                    
-                    for title_elem in title_elements:
-                        if len(gallery_posts) >= max_posts_per_gallery:
-                            break
-                        
-                        if title_elem.name == 'a':
-                            link = title_elem
+                    # href 추출
+                    href = link.get('href', '')
+                    if href and not href.startswith('http'):
+                        if href.startswith('/'):
+                            full_link = base_url + href
                         else:
-                            link = title_elem.find('a')
-                        
-                        if not link:
-                            continue
-                        
-                        title_text = link.text.strip() if hasattr(link, 'text') else link.get_text(strip=True)
-                        if not title_text:
-                            continue
-                        
-                        # href 추출
-                        href = link.get('href', '')
-                        if href and not href.startswith('http'):
-                            if href.startswith('/'):
-                                full_link = base_url + href
-                            else:
-                                full_link = base_url + '/' + href
-                        else:
-                            full_link = href if href else ''
-                        
-                        # 잘못된 링크 필터링
-                        if not full_link or full_link.startswith('javascript:') or 'javascript:;' in full_link:
-                            continue
-                        
-                        # 디시인사이드 게시글 링크인지 확인
-                        if '/board/view/' not in full_link:
-                            continue
-                        
-                        url_found_count += 1
-                        
-                        # 동일 게시글 중복 수집 방지
-                        if full_link in seen_links:
-                            continue
-                        seen_links.add(full_link)
-                        
-                        post_data = {
-                            'title': title_text,
-                            'source': f"DCInside {gallery}",
-                            'link': full_link,
-                            'content': ''  # 기본값
-                        }
-                        
-                        # 게시글 내용 가져오기
-                        if include_content and full_link:
-                            content = self.fetch_post_content(full_link)
-                            post_data['content'] = content
-                            time.sleep(0.5)  # 서버 부하 방지를 위한 대기
-                        
-                        gallery_posts.append(post_data)
-                        gallery_titles_count += 1
-                    
-                    # 각 URL에서 가져온 게시물 수 로그
-                    url_posts_after = len(gallery_posts)
-                    url_posts_added = url_posts_after - url_posts_before
-                    duplicate_count = url_found_count - url_posts_added
-                    if url_posts_added > 0:
-                        print(f"[크롤링] {gallery} 갤러리 - {url_type}: {url_posts_added}개 게시물 수집 (발견: {url_found_count}개, 중복 제외: {duplicate_count}개)")
+                            full_link = base_url + '/' + href
                     else:
-                        print(f"[크롤링] {gallery} 갤러리 - {url_type}: 게시물 없음 (발견: {url_found_count}개)")
+                        full_link = href if href else ''
+                    
+                    # 잘못된 링크 필터링
+                    if not full_link or full_link.startswith('javascript:') or 'javascript:;' in full_link:
+                        continue
+                    
+                    # 디시인사이드 게시글 링크인지 확인
+                    if '/board/view/' not in full_link:
+                        continue
+                    
+                    url_found_count += 1
+                    
+                    # 동일 게시글 중복 수집 방지
+                    if full_link in seen_links:
+                        continue
+                    seen_links.add(full_link)
+                    
+                    post_data = {
+                        'title': title_text,
+                        'source': f"DCInside {gallery}",
+                        'link': full_link,
+                        'content': ''  # 기본값
+                    }
+                    
+                    # 게시글 내용 가져오기
+                    if include_content and full_link:
+                        content = self.fetch_post_content(full_link)
+                        post_data['content'] = content
+                        time.sleep(0.5)  # 서버 부하 방지를 위한 대기
+                    
+                    gallery_posts.append(post_data)
+                    gallery_titles_count += 1
+                    
+                # 게시물 수집 결과 로그
+                url_posts_after = len(gallery_posts)
+                url_posts_added = url_posts_after - url_posts_before
+                duplicate_count = url_found_count - url_posts_added
+                if url_posts_added > 0:
+                    print(f"[크롤링] {gallery} 갤러리: {url_posts_added}개 게시물 수집 (발견: {url_found_count}개, 중복 제외: {duplicate_count}개)")
+                else:
+                    print(f"[크롤링] {gallery} 갤러리: 게시물 없음 (발견: {url_found_count}개)")
                 
                 all_posts.extend(gallery_posts)
                 print(f"[OK] {gallery} 갤러리에서 총 {gallery_titles_count}개 제목 수집" + 
