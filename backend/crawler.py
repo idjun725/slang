@@ -433,22 +433,22 @@ class Crawler:
                     
                     soup = BeautifulSoup(response.text, 'html.parser')
                     
-                    # 제목 추출 - 다양한 셀렉터 시도
-                    title_elements = soup.find_all('td', class_='gall_tit')
-                    if not title_elements:
-                        # 대체 셀렉터 시도
-                        title_elements = soup.find_all('a', class_='icon_txt')
-                    if not title_elements:
-                        # 추가 대체 셀렉터
-                        title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
+                    # 추천 목록인 경우 다른 셀렉터 우선 시도
+                    is_recommend = "exception_mode=recommend" in list_url
+                    title_elements = []
                     
-                    # 추천 목록 전용 셀렉터 시도 (추천 목록은 다른 구조일 수 있음)
-                    if not title_elements and "exception_mode=recommend" in list_url:
+                    if is_recommend:
+                        # 추천 목록 전용 셀렉터 우선 시도
                         print(f"[DEBUG] 추천 목록 전용 셀렉터 시도 중...")
-                        # 추천 목록의 다른 가능한 셀렉터들
-                        title_elements = soup.select('td.gall_tit a, .gall_tit a, a[href*="/board/view/"]')
+                        # 1. 게시물 링크 직접 찾기
+                        all_links = soup.find_all('a', href=True)
+                        board_links = [a for a in all_links if '/board/view/' in a.get('href', '')]
+                        if board_links:
+                            title_elements = board_links
+                            print(f"[DEBUG] 추천 목록: 게시물 링크 직접 찾기로 {len(title_elements)}개 발견")
+                        
+                        # 2. 테이블 행에서 찾기
                         if not title_elements:
-                            # 테이블 행에서 찾기
                             rows = soup.find_all('tr')
                             for row in rows:
                                 link = row.find('a', href=lambda x: x and '/board/view/' in x)
@@ -456,8 +456,21 @@ class Crawler:
                                     if not title_elements:
                                         title_elements = []
                                     title_elements.append(link)
-                        if title_elements:
-                            print(f"[DEBUG] 추천 목록 전용 셀렉터로 {len(title_elements)}개 발견")
+                            if title_elements:
+                                print(f"[DEBUG] 추천 목록: 테이블 행에서 {len(title_elements)}개 발견")
+                        
+                        # 3. 일반 셀렉터 시도
+                        if not title_elements:
+                            title_elements = soup.find_all('td', class_='gall_tit')
+                            if title_elements:
+                                print(f"[DEBUG] 추천 목록: 일반 셀렉터로 {len(title_elements)}개 발견")
+                    else:
+                        # 일반 목록: 기존 셀렉터 순서대로 시도
+                        title_elements = soup.find_all('td', class_='gall_tit')
+                        if not title_elements:
+                            title_elements = soup.find_all('a', class_='icon_txt')
+                        if not title_elements:
+                            title_elements = soup.select('td.gall_tit a, a.icon_txt, .gall_tit a')
                     
                     # 디버깅: 셀렉터 결과가 없으면 HTML 구조 확인
                     if not title_elements:
@@ -484,11 +497,10 @@ class Crawler:
                     url_posts_before = len(gallery_posts)
                     url_found_count = 0  # 발견된 게시물 수 (중복 포함)
                     
-                    # 추천 목록에서 게시물을 찾지 못한 경우 경고
-                    if not title_elements and "exception_mode=recommend" in list_url:
+                    # 추천 목록에서 게시물을 찾지 못한 경우 경고 (하지만 계속 진행)
+                    if not title_elements and is_recommend:
                         print(f"[WARNING] {gallery} 갤러리 - 추천 목록에서 게시물을 찾을 수 없습니다. 추천 목록이 비어있거나 구조가 변경되었을 수 있습니다.")
-                        # 추천 목록을 건너뛰고 다음 갤러리로
-                        continue
+                        # 로그만 남기고 계속 진행 (일반 목록은 계속 크롤링)
                     
                     for title_elem in title_elements:
                         if len(gallery_posts) >= max_posts_per_gallery:
