@@ -1,7 +1,7 @@
 [build]
   publish = "frontend"
-  # 빌드 명령 없음 (정적 파일만 배포)
-  command = ""
+  # 빌드 시 config.js 생성 (환경변수 주입)
+  command = "node frontend/build-config.js"
 
 # SPA 라우팅을 위한 리다이렉트는 frontend/_redirects 파일에서 처리
 
