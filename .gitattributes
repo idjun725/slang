@@ -1,1 +1,2 @@
 *.safetensors filter=lfs diff=lfs merge=lfs -text
+backend/training/output/KR-ELECTRA-discriminator/*.safetensors filter=lfs diff=lfs merge=lfs -text
