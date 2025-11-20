@@ -1,24 +1,21 @@
-[providers]
-python = "3.11"
-
 [phases.setup]
 nixPkgs = ["python311", "pip", "wget", "unzip"]
 
 [phases.install]
-# Railway는 rootDirectory가 backend이므로 현재 디렉토리가 backend임
+# Railway는 rootDirectory가 backend이므로 cd backend 필요
 cmds = [
-    "pip install -r requirements.txt",
-    "pip install torch --index-url https://download.pytorch.org/whl/cpu || pip install torch",
-    "pip install transformers>=4.30.0"
+    "cd backend && pip install -r requirements.txt",
+    "cd backend && pip install torch --index-url https://download.pytorch.org/whl/cpu || cd backend && pip install torch",
+    "cd backend && pip install transformers>=4.30.0"
 ]
 
 [phases.build]
 cmds = [
-    "cd .. && chmod +x download_model.sh || true",
-    "cd .. && ./download_model.sh || echo '[경고] 모델 다운로드 실패 - NLP 필터링이 비활성화됩니다.'",
+    "chmod +x download_model.sh || true",
+    "./download_model.sh || echo '[경고] 모델 다운로드 실패 - NLP 필터링이 비활성화됩니다.'",
     "echo 'Build complete'"
 ]
 
 [start]
-cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT"
+cmd = "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
 
