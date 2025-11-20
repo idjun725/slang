@@ -1,15 +1,16 @@
+# Nixpacks가 Python을 자동으로 감지하도록 함
+# Python provider는 자동으로 pip를 포함함
+
 [phases.setup]
-nixPkgs = ["python311", "wget", "unzip"]
+nixPkgs = ["wget", "unzip"]
 
 [phases.install]
 # Railway는 rootDirectory가 backend이므로 현재 디렉토리가 backend임
-# pip를 먼저 설치한 후 사용
+# Nixpacks가 Python을 자동으로 감지하고 가상 환경을 만듦
 cmds = [
-    "python3 -m ensurepip --upgrade",
-    "python3 -m pip install --upgrade pip",
-    "python3 -m pip install -r requirements.txt",
-    "python3 -m pip install torch --index-url https://download.pytorch.org/whl/cpu || python3 -m pip install torch",
-    "python3 -m pip install transformers>=4.30.0"
+    "pip install -r requirements.txt",
+    "pip install torch --index-url https://download.pytorch.org/whl/cpu || pip install torch",
+    "pip install transformers>=4.30.0"
 ]
 
 [phases.build]
