@@ -7,8 +7,7 @@ python-dotenv==1.0.0
 schedule==1.2.0
 openai>=1.0.0
 google-api-python-client>=2.100.0
-# NLP 필터링을 위한 패키지 (CPU 버전) - torch는 매우 큰 패키지이므로 설치 시간이 오래 걸릴 수 있습니다
---extra-index-url https://download.pytorch.org/whl/cpu
-torch>=2.0.0
-transformers>=4.30.0
+# NLP 필터링을 위한 패키지 (torch, transformers)는 선택적입니다
+# USE_NLP_FILTER=true로 설정하고 NLP 필터링이 필요한 경우에만 설치하세요
+# 설치 방법: pip install torch --index-url https://download.pytorch.org/whl/cpu transformers>=4.30.0
 
