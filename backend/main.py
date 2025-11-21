@@ -61,8 +61,14 @@ app.add_middleware(
 
 # 데이터베이스 초기화
 print("[서버 시작] 데이터베이스 초기화 중...")
-db = Database()
-print("[서버 시작] 데이터베이스 초기화 완료")
+try:
+    db = Database()
+    print("[서버 시작] 데이터베이스 초기화 완료")
+except Exception as e:
+    print(f"[서버 시작] 데이터베이스 초기화 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
 
 # 전역 크롤러 (수동 의미 사전 접근용) - 지연 로딩
 global_crawler_for_meanings = None
