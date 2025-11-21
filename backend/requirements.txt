@@ -3,12 +3,11 @@ uvicorn==0.24.0
 beautifulsoup4==4.12.2
 requests==2.31.0
 python-multipart==0.0.6
-jinja2==3.1.2
 python-dotenv==1.0.0
 schedule==1.2.0
 openai>=1.0.0
 google-api-python-client>=2.100.0
-# NLP 필터링을 위한 패키지 (CPU 버전)
+# NLP 필터링을 위한 패키지 (CPU 버전) - torch는 매우 큰 패키지이므로 설치 시간이 오래 걸릴 수 있습니다
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch>=2.0.0
 transformers>=4.30.0
