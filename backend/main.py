@@ -132,6 +132,16 @@ def get_user_from_session(session_id: str = None):
 async def root():
     return {"message": "Slang Bridge API", "version": "1.0.0"}
 
+@app.get("/health")
+async def health_check():
+    """서버 상태 확인 엔드포인트"""
+    import time
+    return {
+        "status": "healthy",
+        "timestamp": time.time(),
+        "message": "서버가 정상적으로 실행 중입니다"
+    }
+
 @app.post("/register")
 async def register(request: RegisterRequest):
     """회원가입"""
@@ -815,7 +825,14 @@ async def search_slang(word: str):
 
 if __name__ == "__main__":
     # 스케줄러 시작
+    print("[서버 시작] 스케줄러 시작 중...")
     start_scheduler_thread()
+    print("[서버 시작] 스케줄러 시작 완료")
+    
+    print("=" * 60)
+    print("[서버 시작] Uvicorn 서버 시작 중...")
+    print("[서버 시작] 서버가 시작되면 이 메시지가 표시됩니다.")
+    print("=" * 60)
     
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
