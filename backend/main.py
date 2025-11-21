@@ -36,6 +36,14 @@ else:
 
 app = FastAPI(title="Slang Bridge API", version="1.0.0")
 
+# 서버 시작 시 상세 로그 출력
+print("=" * 60)
+print("[서버 시작] FastAPI 애플리케이션 초기화 중...")
+print(f"[서버 시작] Python 버전: {sys.version}")
+print(f"[서버 시작] 작업 디렉토리: {os.getcwd()}")
+print(f"[서버 시작] 현재 파일 경로: {current_dir}")
+print("=" * 60)
+
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
@@ -52,9 +60,13 @@ app.add_middleware(
 )
 
 # 데이터베이스 초기화
+print("[서버 시작] 데이터베이스 초기화 중...")
 db = Database()
+print("[서버 시작] 데이터베이스 초기화 완료")
+
 # 전역 크롤러 (수동 의미 사전 접근용) - 지연 로딩
 global_crawler_for_meanings = None
+print("[서버 시작] 전역 변수 초기화 완료")
 
 def get_global_crawler():
     """전역 크롤러를 지연 로딩으로 가져오기 (서버 시작 시 메모리 부족 방지)"""
