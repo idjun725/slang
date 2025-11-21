@@ -12,11 +12,51 @@ import json
 import re
 from dotenv import load_dotenv
 
-from database import Database
-from email_service import EmailService
-from crawler import Crawler
-from scheduler import start_scheduler_thread
-from youtube_service import YouTubeService
+# 모듈 import 시 에러 처리
+try:
+    from database import Database
+    print("[서버 시작] database 모듈 로드 완료")
+except Exception as e:
+    print(f"[서버 시작] database 모듈 로드 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
+
+try:
+    from email_service import EmailService
+    print("[서버 시작] email_service 모듈 로드 완료")
+except Exception as e:
+    print(f"[서버 시작] email_service 모듈 로드 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
+
+try:
+    from crawler import Crawler
+    print("[서버 시작] crawler 모듈 로드 완료")
+except Exception as e:
+    print(f"[서버 시작] crawler 모듈 로드 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
+
+try:
+    from scheduler import start_scheduler_thread
+    print("[서버 시작] scheduler 모듈 로드 완료")
+except Exception as e:
+    print(f"[서버 시작] scheduler 모듈 로드 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
+
+try:
+    from youtube_service import YouTubeService
+    print("[서버 시작] youtube_service 모듈 로드 완료")
+except Exception as e:
+    print(f"[서버 시작] youtube_service 모듈 로드 실패: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
 
 # 백그라운드 작업에서도 로그가 즉시 출력되도록 설정
 sys.stdout.reconfigure(line_buffering=True) if hasattr(sys.stdout, 'reconfigure') else None
