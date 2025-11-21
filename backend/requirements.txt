@@ -1,11 +1,5 @@
-# 기본 서버 실행에 필요한 패키지 (NLP 제외)
+# 최소한의 패키지만 - 서버 실행만 가능
 fastapi==0.104.1
 uvicorn==0.24.0
 python-dotenv==1.0.0
-beautifulsoup4==4.12.2
-requests==2.31.0
-python-multipart==0.0.6
-schedule==1.2.0
-openai>=1.0.0
-google-api-python-client>=2.100.0
 
