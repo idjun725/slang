@@ -219,6 +219,8 @@ async def register(request: RegisterRequest):
 @app.post("/login")
 async def login(request: LoginRequest):
     """로그인"""
+    if db is None:
+        raise HTTPException(status_code=503, detail="데이터베이스가 초기화되지 않았습니다. 필요한 패키지를 설치해주세요.")
     try:
         user = db.get_user_by_email(request.email)
         if not user:
@@ -282,6 +284,8 @@ async def get_ranking(limit: int = 100, period: Optional[str] = None):
         limit: 반환할 최대 개수 (기본값: 100)
         period: 시간 필터 ('today', 'week', 'month', None=전체)
     """
+    if db is None:
+        return {"success": True, "data": [], "message": "데이터베이스가 초기화되지 않았습니다. 필요한 패키지를 설치해주세요."}
     try:
         if period and period not in ['today', 'week', 'month']:
             raise HTTPException(status_code=400, detail="period는 'today', 'week', 'month' 중 하나여야 합니다.")
@@ -423,6 +427,8 @@ async def trigger_crawl(background_tasks: BackgroundTasks):
 @app.get("/stats")
 async def get_stats():
     """통계 정보 조회"""
+    if db is None:
+        return {"success": True, "data": {"total_slangs": 0, "total_users": 0}, "message": "데이터베이스가 초기화되지 않았습니다."}
     try:
         stats = db.get_stats()
         return {"success": True, "data": stats}

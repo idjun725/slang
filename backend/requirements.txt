@@ -1,5 +1,7 @@
-# 최소한의 패키지만 - 서버 실행만 가능
+# 프론트엔드 연결에 필요한 최소 패키지
 fastapi==0.104.1
 uvicorn==0.24.0
 python-dotenv==1.0.0
+# 데이터베이스는 sqlite3 (표준 라이브러리) 사용
+# 크롤링 기능은 나중에 수동 설치: pip install beautifulsoup4 requests
 
