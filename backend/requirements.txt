@@ -1,13 +1,8 @@
+# 기본 서버 실행에 필요한 최소 패키지
 fastapi==0.104.1
 uvicorn==0.24.0
-beautifulsoup4==4.12.2
-requests==2.31.0
-python-multipart==0.0.6
 python-dotenv==1.0.0
-schedule==1.2.0
-openai>=1.0.0
-google-api-python-client>=2.100.0
-# NLP 필터링을 위한 패키지 (torch, transformers)는 선택적입니다
-# USE_NLP_FILTER=true로 설정하고 NLP 필터링이 필요한 경우에만 설치하세요
-# 설치 방법: pip install torch --index-url https://download.pytorch.org/whl/cpu transformers>=4.30.0
+
+# 나머지 패키지는 수동으로 설치하세요:
+# pip install beautifulsoup4 requests python-multipart schedule openai google-api-python-client
 
