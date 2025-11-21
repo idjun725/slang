@@ -2,7 +2,7 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "pip install torch --index-url https://download.pytorch.org/whl/cpu || pip install torch; pip install transformers>=4.30.0"
+    "buildCommand": "echo '[빌드] torch 설치 시작...' && (pip install torch --index-url https://download.pytorch.org/whl/cpu || (echo '[빌드] CPU 버전 실패, 일반 버전 설치...' && pip install torch)) && echo '[빌드] transformers 설치 시작...' && pip install transformers>=4.30.0 && echo '[빌드] 완료!'"
   },
   "deploy": {
     "startCommand": "uvicorn main:app --host 0.0.0.0 --port $PORT",
