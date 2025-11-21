@@ -1,8 +1,11 @@
-# 기본 서버 실행에 필요한 최소 패키지
+# 기본 서버 실행에 필요한 패키지 (NLP 제외)
 fastapi==0.104.1
 uvicorn==0.24.0
 python-dotenv==1.0.0
-
-# 나머지 패키지는 수동으로 설치하세요:
-# pip install beautifulsoup4 requests python-multipart schedule openai google-api-python-client
+beautifulsoup4==4.12.2
+requests==2.31.0
+python-multipart==0.0.6
+schedule==1.2.0
+openai>=1.0.0
+google-api-python-client>=2.100.0
 
