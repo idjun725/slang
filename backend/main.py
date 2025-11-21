@@ -156,6 +156,8 @@ def get_current_user(session_id: Optional[str] = None) -> Optional[Dict]:
     """현재 로그인한 사용자 조회"""
     if not session_id or session_id not in sessions:
         return None
+    if db is None:
+        return None
     user_id = sessions[session_id]
     return db.get_user_by_id(user_id)
 
@@ -864,10 +866,16 @@ async def search_slang(word: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    # 스케줄러 시작
-    print("[서버 시작] 스케줄러 시작 중...")
-    start_scheduler_thread()
-    print("[서버 시작] 스케줄러 시작 완료")
+    # 스케줄러 시작 (선택적)
+    if start_scheduler_thread:
+        print("[서버 시작] 스케줄러 시작 중...")
+        try:
+            start_scheduler_thread()
+            print("[서버 시작] 스케줄러 시작 완료")
+        except Exception as e:
+            print(f"[서버 시작] 스케줄러 시작 실패 (선택적): {e}")
+    else:
+        print("[서버 시작] 스케줄러 모듈이 없어 스케줄러가 비활성화됩니다")
     
     print("=" * 60)
     print("[서버 시작] Uvicorn 서버 시작 중...")
