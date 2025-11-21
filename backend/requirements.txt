@@ -8,5 +8,8 @@ python-dotenv==1.0.0
 schedule==1.2.0
 openai>=1.0.0
 google-api-python-client>=2.100.0
-# torch와 transformers는 나중에 추가 (NLP 필터링 없이도 크롤러는 작동함)
+# NLP 필터링을 위한 패키지 (CPU 버전)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.0.0
+transformers>=4.30.0
 
